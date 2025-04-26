@@ -2,7 +2,6 @@
 import { useState, useEffect } from "react";
 import { VaultData } from "@/types/vault";
 import { useWallet } from "@/hooks/useWallet";
-import { vaultService } from "@/services/vaultService";
 import { useMutation } from "@tanstack/react-query";
 import { toast } from "@/components/ui/use-toast";
 import { useNavigate } from "react-router-dom";
@@ -17,7 +16,7 @@ interface UseDepositDrawerProps {
 
 export const useDepositDrawer = (props?: UseDepositDrawerProps) => {
   const navigate = useNavigate();
-  const { balance } = useWallet();
+  const { balance, deposit } = useWallet();
   const [amount, setAmount] = useState<string>("");
   const [selectedLockup, setSelectedLockup] = useState<number>(30);
   const [step, setStep] = useState<'details' | 'confirmation' | 'success'>('details');
@@ -52,16 +51,17 @@ export const useDepositDrawer = (props?: UseDepositDrawerProps) => {
 
   // Deposit mutation
   const depositMutation = useMutation({
-    mutationFn: (params: { vaultId: string; amount: number; lockupPeriod: number }) => {
-      return vaultService.deposit(params.vaultId, params.amount, params.lockupPeriod);
+    mutationFn: async (params: { vaultId: string; amount: number; lockupPeriod: number }) => {
+      // Use the wallet.deposit function instead of service
+      return await deposit(params.vaultId, params.amount, params.lockupPeriod);
     },
     onSuccess: () => {
       setStep('success');
       setShowConfetti(true);
       setTimeout(() => setShowConfetti(false), 3000);
       if (props?.vault) {
-        window.dispatchEvent(new CustomEvent('deposit-success', { 
-          detail: { amount: parseFloat(amount), vaultId: props.vault.id } 
+        window.dispatchEvent(new CustomEvent('deposit-success', {
+          detail: { amount: parseFloat(amount), vaultId: props.vault.id }
         }));
       }
     },
@@ -97,7 +97,7 @@ export const useDepositDrawer = (props?: UseDepositDrawerProps) => {
       setValidationError("");
       return;
     }
-    
+
     const numVal = parseFloat(value);
     if (isNaN(numVal) || numVal <= 0) {
       setValidationError("Min 1 USDC required");
@@ -155,8 +155,8 @@ export const useDepositDrawer = (props?: UseDepositDrawerProps) => {
         });
       },
       openDepositDrawer: (vault: VaultData) => {
-        window.dispatchEvent(new CustomEvent('open-deposit-drawer', { 
-          detail: { vault } 
+        window.dispatchEvent(new CustomEvent('open-deposit-drawer', {
+          detail: { vault }
         }));
       },
     },

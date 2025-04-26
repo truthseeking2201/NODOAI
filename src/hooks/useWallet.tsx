@@ -1,19 +1,26 @@
-
 import { create } from 'zustand'
-import { useCallback, useEffect } from 'react'
+import { useCallback, useEffect, useState } from 'react'
+
+type WalletType = 'sui' | 'phantom' | 'martian';
 
 interface WalletState {
   address: string | null
   isConnected: boolean
   isConnecting: boolean
   isModalOpen: boolean
+  isWalletDialogOpen: boolean
+  walletType: WalletType | null
   balance: {
     usdc: number
+    receiptTokens: number
   }
-  connect: () => Promise<void>
+  connect: (walletType: WalletType) => Promise<void>
   disconnect: () => void
   openModal: () => void
   closeModal: () => void
+  openWalletDialog: () => void
+  closeWalletDialog: () => void
+  addReceiptTokens: (amount: number) => void
 }
 
 const useWalletStore = create<WalletState>((set) => ({
@@ -21,87 +28,212 @@ const useWalletStore = create<WalletState>((set) => ({
   isConnected: false,
   isConnecting: false,
   isModalOpen: false,
+  isWalletDialogOpen: false,
+  walletType: null,
   balance: {
-    usdc: 0
+    usdc: 0,
+    receiptTokens: 0
   }, // Initialize with default values
-  connect: async () => {
+  connect: async (walletType) => {
     set({ isConnecting: true })
     // Simulate connecting
     await new Promise(resolve => setTimeout(resolve, 1000))
-    set({ 
+    set({
       address: '0x7d783c975da6e3b5ff8259436d4f7da675da6',
       isConnected: true,
       isConnecting: false,
       isModalOpen: false,
+      walletType,
       balance: {
-        usdc: 1250.45
+        usdc: 1250.45,
+        receiptTokens: 0
       }
     })
   },
   disconnect: () => {
-    set({ 
-      address: null, 
+    set({
+      address: null,
       isConnected: false,
       isModalOpen: false,
+      walletType: null,
       balance: {
-        usdc: 0
+        usdc: 0,
+        receiptTokens: 0
       }
     })
   },
   openModal: () => set({ isModalOpen: true }),
-  closeModal: () => set({ isModalOpen: false })
+  closeModal: () => set({ isModalOpen: false }),
+  openWalletDialog: () => set({ isWalletDialogOpen: true }),
+  closeWalletDialog: () => set({ isWalletDialogOpen: false }),
+  addReceiptTokens: (amount) => set((state) => ({
+    balance: {
+      ...state.balance,
+      receiptTokens: state.balance.receiptTokens + amount
+    }
+  }))
 }))
 
 export const useWallet = () => {
-  const { 
-    address, 
-    isConnected, 
+  const {
+    address,
+    isConnected,
     isConnecting,
     isModalOpen,
+    isWalletDialogOpen,
+    walletType,
     balance,
-    connect, 
+    connect,
     disconnect,
     openModal,
-    closeModal
+    closeModal,
+    openWalletDialog,
+    closeWalletDialog,
+    addReceiptTokens
   } = useWalletStore()
+
+  const [isConnectModalOpen, setIsConnectModalOpen] = useState(false);
+  const [isSignatureDialogOpen, setIsSignatureDialogOpen] = useState(false);
+  const [currentTransaction, setCurrentTransaction] = useState<{
+    type: 'deposit' | 'withdraw';
+    amount?: string;
+    vaultName?: string;
+  } | null>(null);
 
   // Automatically reconnect if previously connected
   useEffect(() => {
     const hasConnectedBefore = localStorage.getItem('wallet-connected') === 'true'
-    if (hasConnectedBefore && !isConnected && !isConnecting) {
-      connect()
+    const savedWalletType = localStorage.getItem('wallet-type') as WalletType | null
+
+    if (hasConnectedBefore && !isConnected && !isConnecting && savedWalletType) {
+      connect(savedWalletType)
     }
   }, [connect, isConnected, isConnecting])
 
   // Save connection state to localStorage
   useEffect(() => {
-    if (isConnected) {
+    if (isConnected && walletType) {
       localStorage.setItem('wallet-connected', 'true')
+      localStorage.setItem('wallet-type', walletType)
     } else {
       localStorage.removeItem('wallet-connected')
+      localStorage.removeItem('wallet-type')
     }
-  }, [isConnected])
+  }, [isConnected, walletType])
 
   // Function to open wallet modal specifically for connection
-  const openWalletModal = useCallback(() => {
-    openModal();
-    
-    // Add a data attribute to the document body to trigger the modal
-    document.querySelector('[data-wallet-connect]')?.dispatchEvent(
-      new MouseEvent('click', { bubbles: true })
-    );
-  }, [openModal]);
+  const openConnectModal = useCallback(() => {
+    setIsConnectModalOpen(true);
+  }, []);
 
-  return { 
-    address, 
-    isConnected, 
+  const closeConnectModal = useCallback(() => {
+    setIsConnectModalOpen(false);
+  }, []);
+
+  // Function to handle transaction signing
+  const signTransaction = useCallback((transactionType: 'deposit' | 'withdraw', amount?: string, vaultName?: string) => {
+    setCurrentTransaction({
+      type: transactionType,
+      amount,
+      vaultName
+    });
+    setIsSignatureDialogOpen(true);
+
+    return new Promise<void>((resolve) => {
+      // Add a function to window to be called when signature is complete
+      window.signatureComplete = () => {
+        setIsSignatureDialogOpen(false);
+        setCurrentTransaction(null);
+        resolve();
+      };
+    });
+  }, []);
+
+  const handleSignatureComplete = useCallback(() => {
+    if (window.signatureComplete) {
+      window.signatureComplete();
+    }
+  }, []);
+
+  // Function for deposit that includes signing
+  const deposit = useCallback(async (vaultId: string, amount: number, lockupPeriod: number) => {
+    if (!isConnected) {
+      openConnectModal();
+      return { success: false, txId: '' };
+    }
+
+    try {
+      // First sign the transaction
+      await signTransaction('deposit', amount.toString(), vaultId);
+
+      // After signature, add receipt tokens
+      const receiptTokenAmount = amount * 0.98; // 98% of deposit amount
+      addReceiptTokens(receiptTokenAmount);
+
+      // Return success
+      return {
+        success: true,
+        txId: `tx${Math.random().toString(36).substring(2, 10)}`
+      };
+    } catch (error) {
+      console.error("Deposit failed:", error);
+      return { success: false, txId: '' };
+    }
+  }, [isConnected, openConnectModal, signTransaction, addReceiptTokens]);
+
+  // Function for withdrawal that includes signing
+  const withdraw = useCallback(async (vaultId: string, amount: number) => {
+    if (!isConnected) {
+      openConnectModal();
+      return { success: false, txId: '' };
+    }
+
+    try {
+      // First sign the transaction
+      await signTransaction('withdraw', amount.toString(), vaultId);
+
+      // After signature, reduce receipt tokens
+      const receiptTokenAmount = amount * 0.98; // 98% of withdrawal amount
+      addReceiptTokens(-receiptTokenAmount);
+
+      // Return success
+      return {
+        success: true,
+        txId: `tx${Math.random().toString(36).substring(2, 10)}`
+      };
+    } catch (error) {
+      console.error("Withdrawal failed:", error);
+      return { success: false, txId: '' };
+    }
+  }, [isConnected, openConnectModal, signTransaction, addReceiptTokens]);
+
+  return {
+    address,
+    isConnected,
     isConnecting,
     isModalOpen,
+    walletType,
     balance,
-    connect, 
+    connect,
     disconnect,
     openModal,
     closeModal,
-    openWalletModal
+    isConnectModalOpen,
+    openConnectModal,
+    closeConnectModal,
+    isSignatureDialogOpen,
+    setIsSignatureDialogOpen,
+    currentTransaction,
+    handleSignatureComplete,
+    signTransaction,
+    deposit,
+    withdraw
+  }
+}
+
+// Add signatureComplete function to window type
+declare global {
+  interface Window {
+    signatureComplete?: () => void;
   }
 }

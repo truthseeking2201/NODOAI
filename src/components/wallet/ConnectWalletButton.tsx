@@ -1,5 +1,4 @@
 
-import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Copy, LogOut, Wallet } from "lucide-react";
 import { TokenIcon } from "@/components/shared/TokenIcons";
@@ -12,12 +11,24 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { WalletModal } from "./WalletModal";
+import { ConnectWalletModal } from "./ConnectWalletModal";
+import { WalletSignatureDialog } from "./WalletSignatureDialog";
 import { useWallet } from "@/hooks/useWallet";
 
 export function ConnectWalletButton() {
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const { isConnected, address, balance, disconnect } = useWallet();
+  const {
+    isConnected,
+    address,
+    balance,
+    disconnect,
+    isConnectModalOpen,
+    openConnectModal,
+    closeConnectModal,
+    isSignatureDialogOpen,
+    currentTransaction,
+    handleSignatureComplete
+  } = useWallet();
+
   const { toast } = useToast();
 
   const formatAddress = (address: string) => {
@@ -25,23 +36,21 @@ export function ConnectWalletButton() {
   };
 
   const handleCopyAddress = async () => {
-    await navigator.clipboard.writeText(address);
-    toast({
-      title: "Address copied",
-      duration: 2000,
-    });
-  };
-
-  const handleOpenModal = () => {
-    setIsModalOpen(true);
+    if (address) {
+      await navigator.clipboard.writeText(address);
+      toast({
+        title: "Address copied",
+        duration: 2000,
+      });
+    }
   };
 
   return (
     <>
       {!isConnected ? (
-        <Button 
-          onClick={handleOpenModal} 
-          className="gradient-bg-nova text-[#0E0F11] hover:shadow-neon-nova transition-all duration-300"
+        <Button
+          onClick={openConnectModal}
+          className="bg-gradient-to-r from-amber-500 to-orange-500 text-[#0E0F11] hover:shadow-lg hover:shadow-orange-500/20 transition-all duration-300"
           data-wallet-connect="true"
         >
           <Wallet className="mr-2 h-4 w-4" /> Connect Wallet
@@ -50,26 +59,26 @@ export function ConnectWalletButton() {
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="outline" className="border-white/20 bg-white/5">
-              <span className="font-mono mr-2">{formatAddress(address)}</span>
-              <span className="hidden sm:inline font-mono text-emerald">
+              <span className="font-mono mr-2">{formatAddress(address || '')}</span>
+              <span className="hidden sm:inline font-mono text-amber-500">
                 {balance.usdc !== undefined ? `${balance.usdc} USDC` : ''}
               </span>
             </Button>
           </DropdownMenuTrigger>
-          <DropdownMenuContent 
-            align="end" 
-            className="w-[320px] p-6 rounded-[20px] border border-white/[0.06] bg-white/[0.04] shadow-lg backdrop-blur-xl"
+          <DropdownMenuContent
+            align="end"
+            className="w-[320px] p-6 rounded-[20px] border border-white/[0.06] bg-[#101112] shadow-lg backdrop-blur-xl"
           >
             <div className="flex flex-col space-y-6">
               {/* Header */}
               <div className="flex items-center gap-2">
-                <Wallet className="w-5 h-5 text-[#FF8800]" />
+                <Wallet className="w-5 h-5 text-amber-500" />
                 <span className="text-white font-bold">Wallet</span>
               </div>
 
               {/* Address */}
               <div className="relative">
-                <button 
+                <button
                   onClick={handleCopyAddress}
                   className="w-full text-left bg-black/40 rounded-xl px-3 py-2 hover:bg-[#1A1B1E] transition-colors group wallet-address"
                 >
@@ -91,6 +100,16 @@ export function ConnectWalletButton() {
                   </div>
                   <span className="font-mono text-sm text-emerald">{balance.usdc}</span>
                 </div>
+
+                {balance.receiptTokens > 0 && (
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-2">
+                      <TokenIcon token="RECEIPT" size={16} />
+                      <span className="text-gray-400 text-sm">Vault Receipt</span>
+                    </div>
+                    <span className="font-mono text-sm text-amber-500">{balance.receiptTokens.toFixed(2)}</span>
+                  </div>
+                )}
               </div>
 
               <DropdownMenuSeparator className="bg-[#262B30] my-0" />
@@ -108,7 +127,20 @@ export function ConnectWalletButton() {
         </DropdownMenu>
       )}
 
-      <WalletModal open={isModalOpen} onClose={() => setIsModalOpen(false)} />
+      {/* New Connect Wallet Modal */}
+      <ConnectWalletModal
+        open={isConnectModalOpen}
+        onClose={closeConnectModal}
+      />
+
+      {/* Wallet Signature Dialog */}
+      <WalletSignatureDialog
+        open={isSignatureDialogOpen}
+        onComplete={handleSignatureComplete}
+        transactionType={currentTransaction?.type || 'deposit'}
+        amount={currentTransaction?.amount}
+        vaultName={currentTransaction?.vaultName}
+      />
     </>
   );
 }

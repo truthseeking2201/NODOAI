@@ -27,13 +27,13 @@ interface DepositDrawerProps {
 
 export function DepositDrawer({ open, onClose, vault }: DepositDrawerProps) {
   const { balance } = useWallet();
-  
+
   // Properly initialize the deposit drawer hook with vault and onClose
-  const depositDrawer = useDepositDrawer({ 
-    vault, 
-    onClose 
+  const depositDrawer = useDepositDrawer({
+    vault,
+    onClose
   });
-  
+
   // Destructure all needed properties and methods from the hook
   const {
     state: {
@@ -78,27 +78,25 @@ export function DepositDrawer({ open, onClose, vault }: DepositDrawerProps) {
   useEffect(() => {
     if (open) {
       window.addEventListener('keydown', handleKeyDown);
-      
+
       return () => {
         window.removeEventListener('keydown', handleKeyDown);
       };
     }
   }, [open, handleKeyDown]);
 
-  // Handle close button click
-  const handleCloseClick = (e: React.MouseEvent) => {
-    e.stopPropagation();
-    onClose();
-  };
-
   // If the drawer is not open, don't render anything
   if (!open) return null;
 
   return (
-    <Drawer open={open} onOpenChange={(isOpen) => {
-      if (!isOpen) onClose();
-    }}>
-      <DrawerContent 
+    <Drawer
+      open={open}
+      onOpenChange={(isOpen) => {
+        if (!isOpen) onClose();
+      }}
+      modal={true}
+    >
+      <DrawerContent
         className="sm:max-w-[420px] p-0 overflow-hidden"
       >
         <div className="pt-8 pb-6 px-7">
@@ -113,13 +111,14 @@ export function DepositDrawer({ open, onClose, vault }: DepositDrawerProps) {
                 {step === 'success' && "Your deposit was successful!"}
               </DrawerDescription>
             </DrawerHeader>
-            <button 
-              onClick={handleCloseClick}
-              className="rounded-full h-8 w-8 flex items-center justify-center bg-white/5 hover:bg-white/10 transition-colors cursor-pointer"
-            >
-              <X className="h-4 w-4" />
-              <span className="sr-only">Close</span>
-            </button>
+            <DrawerClose asChild>
+              <button
+                className="rounded-full h-8 w-8 flex items-center justify-center bg-white/5 hover:bg-white/10 transition-colors cursor-pointer"
+              >
+                <X className="h-4 w-4" />
+                <span className="sr-only">Close</span>
+              </button>
+            </DrawerClose>
           </div>
 
           {step === 'details' && (
@@ -167,7 +166,7 @@ export function DepositDrawer({ open, onClose, vault }: DepositDrawerProps) {
 
           <DrawerFooter>
             <DrawerClose asChild>
-              <Button variant="outline" className="w-full" onClick={onClose}>
+              <Button variant="outline" className="w-full">
                 Close
               </Button>
             </DrawerClose>
@@ -177,4 +176,3 @@ export function DepositDrawer({ open, onClose, vault }: DepositDrawerProps) {
     </Drawer>
   );
 }
-

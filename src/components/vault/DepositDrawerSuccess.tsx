@@ -1,6 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import ReactConfetti from "react-confetti";
+import { CheckCircle, Info } from "lucide-react";
+import { useToast } from "@/components/ui/use-toast";
+import { Alert, AlertDescription } from "@/components/ui/alert";
 
 interface DepositDrawerSuccessProps {
   vault: { name: string };
@@ -22,6 +25,7 @@ export function DepositDrawerSuccess({
   onDepositAgain
 }: DepositDrawerSuccessProps) {
   const [isConfettiRunning, setIsConfettiRunning] = useState(showConfetti);
+  const { toast } = useToast();
 
   useEffect(() => {
     let timeoutId: NodeJS.Timeout;
@@ -31,17 +35,25 @@ export function DepositDrawerSuccess({
       }, 30000); // 30 seconds
     }
 
+    // Show the vault receipt token minted toast
+    toast({
+      title: "Vault Receipt Token minted",
+      description: "Your non-transferable receipt token has been minted to your wallet.",
+      variant: "default",
+      duration: 5000,
+    });
+
     return () => {
       if (timeoutId) clearTimeout(timeoutId);
     };
-  }, [showConfetti]);
+  }, [showConfetti, toast]);
 
   const transactionHash = "0xABCDEF1234567890ABCDEF1234567890ABCDEF12";
 
   const formatCurrency = (value?: number) => {
     if (value === undefined) return '-';
-    return new Intl.NumberFormat('en-US', { 
-      style: 'currency', 
+    return new Intl.NumberFormat('en-US', {
+      style: 'currency',
       currency: 'USD',
       maximumFractionDigits: 2
     }).format(value);
@@ -67,7 +79,7 @@ export function DepositDrawerSuccess({
           />
         </div>
       )}
-      
+
       <div className="flex justify-center">
         <div className="w-16 h-16 rounded-full bg-[#10B981] flex items-center justify-center">
           <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -77,7 +89,7 @@ export function DepositDrawerSuccess({
       </div>
 
       <div>
-        <h3 
+        <h3
           ref={(el) => {
             if (el) el.setAttribute('aria-live', 'assertive');
           }}
@@ -106,13 +118,30 @@ export function DepositDrawerSuccess({
             <span className="text-xs text-[#9CA3AF]">Unlock Date</span>
             <span className="font-mono text-sm">{getUnlockDate()}</span>
           </div>
+
+          <div className="flex justify-between">
+            <span className="text-xs text-[#9CA3AF] flex items-center gap-1">
+              Receipt Tokens
+              <Info className="h-3 w-3 text-[#9CA3AF]" />
+            </span>
+            <span className="font-mono text-sm">{(parseFloat(amount) * 0.98).toFixed(2)}</span>
+          </div>
         </div>
-        
+
+        <div className="mt-4 mb-1">
+          <Alert className="bg-amber-500/10 border border-amber-500/20 py-2">
+            <CheckCircle className="h-4 w-4 text-amber-500 mt-0.5" />
+            <AlertDescription className="text-xs text-white/80">
+              Vault Receipt Token minted to your wallet. Burns on withdrawal — non-transferable.
+            </AlertDescription>
+          </Alert>
+        </div>
+
         <div className="mt-3 text-center">
-          <a 
-            href={`https://explorer.sui.io/transaction/${transactionHash}`} 
-            target="_blank" 
-            rel="noopener noreferrer" 
+          <a
+            href={`https://explorer.sui.io/transaction/${transactionHash}`}
+            target="_blank"
+            rel="noopener noreferrer"
             className="text-xs text-[#9CA3AF] hover:text-[#F59E0B] inline-flex items-center transition-colors"
           >
             Tx {transactionHash.substring(0, 6)}...{transactionHash.substring(transactionHash.length - 4)} ↗
@@ -121,15 +150,15 @@ export function DepositDrawerSuccess({
       </div>
 
       <div className="flex flex-col space-y-3">
-        <Button 
+        <Button
           onClick={onViewDashboard}
           className="w-full h-12 bg-[#10B981] hover:bg-[#0d9668] shadow-[0_3px_6px_-2px_rgba(16,185,129,0.4)] rounded-xl"
         >
           View Dashboard
         </Button>
-        
-        <Button 
-          variant="outline" 
+
+        <Button
+          variant="outline"
           className="bg-white/5 border-[#374151] hover:bg-white/10 rounded-xl"
           onClick={onDepositAgain}
         >
