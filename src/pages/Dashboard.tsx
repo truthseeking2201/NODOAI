@@ -64,6 +64,7 @@ export default function Dashboard() {
       const growthFactor = 1 + (Math.sin(i/5) * 0.01) + (dayFactor * 0.08);
       const baseValue = totalPrincipal * growthFactor;
 
+      // Handle transactions in the new TransactionHistory format
       const depositsOnThisDay = transactions?.filter(tx =>
         tx.type === 'deposit' && tx.timestamp.split('T')[0] === dateStr
       ) || [];

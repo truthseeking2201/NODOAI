@@ -231,9 +231,19 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .glow-animation {
+  .glow-animation, .animate-spin-once {
     animation: none;
   }
+}
+
+/* Spin animation that runs just once */
+@keyframes spin-once {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.animate-spin-once {
+  animation: spin-once 0.5s cubic-bezier(0.25, 0.1, 0.25, 1) forwards;
 }
 
 /* Subtle parallax effect */

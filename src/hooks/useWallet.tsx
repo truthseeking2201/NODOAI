@@ -24,16 +24,17 @@ interface WalletState {
 }
 
 const useWalletStore = create<WalletState>((set) => ({
-  address: null,
-  isConnected: false,
+  // Set default to connected for demo purposes
+  address: '0x7d783c975da6e3b5ff8259436d4f7da675da6',
+  isConnected: true,
   isConnecting: false,
   isModalOpen: false,
   isWalletDialogOpen: false,
-  walletType: null,
+  walletType: 'sui',
   balance: {
-    usdc: 0,
-    receiptTokens: 0
-  }, // Initialize with default values
+    usdc: 1250.45,
+    receiptTokens: 125.2
+  }, // Initialize with demo values
   connect: async (walletType) => {
     set({ isConnecting: true })
     // Simulate connecting
@@ -146,6 +147,14 @@ export const useWallet = () => {
         setCurrentTransaction(null);
         resolve();
       };
+
+      // Add an automatic timeout to resolve the promise after 10 seconds
+      // This prevents the UI from getting stuck if there's an issue
+      setTimeout(() => {
+        if (window.signatureComplete) {
+          window.signatureComplete();
+        }
+      }, 10000);
     });
   }, []);
 
@@ -212,12 +221,15 @@ export const useWallet = () => {
     isConnected,
     isConnecting,
     isModalOpen,
+    isWalletDialogOpen,
     walletType,
     balance,
     connect,
     disconnect,
     openModal,
     closeModal,
+    openWalletDialog,
+    closeWalletDialog,
     isConnectModalOpen,
     openConnectModal,
     closeConnectModal,
