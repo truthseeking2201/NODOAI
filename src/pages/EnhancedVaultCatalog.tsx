@@ -26,7 +26,8 @@ import {
   Filter,
   Search,
   Cpu,
-  Lock
+  Lock,
+  Network
 } from "lucide-react";
 
 // Vault filter types
@@ -140,9 +141,9 @@ export default function EnhancedVaultCatalog() {
           />
         </div>
 
-        {/* Hero section with 3D effects */}
+        {/* Hero section with 3D effects - further reduced padding */}
         <motion.section
-          className="py-10 md:py-16 relative"
+          className="py-2 md:py-4 relative"
           style={{ opacity }}
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
@@ -151,96 +152,12 @@ export default function EnhancedVaultCatalog() {
           <EnhancedHeroSection />
         </motion.section>
 
-        {/* AI Neural Activity Ticker */}
+        {/* Vaults Section - moved higher up in the page */}
         <motion.section
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.5, duration: 0.8 }}
-          className="mb-14 px-4"
-        >
-          <EnhancedNeuralActivityTicker />
-        </motion.section>
-
-        {/* AI Insights Module */}
-        <motion.section
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.6, duration: 0.8 }}
-          className="px-4"
-        >
-          <AIInsightsModule />
-        </motion.section>
-
-        {/* AI Processing Visualization Section */}
-        <motion.section
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.7, duration: 0.8 }}
-          className="pt-6 pb-16 px-4"
-        >
-          <div className="max-w-screen-lg mx-auto bg-black/30 backdrop-blur-md border border-white/10 rounded-xl overflow-hidden shadow-lg">
-            <div className="flex flex-col md:flex-row">
-              <div className="w-full md:w-1/2 p-6 border-b md:border-b-0 md:border-r border-white/10">
-                <div className="flex items-center gap-3 mb-4">
-                  <div className="p-2 rounded-lg bg-gradient-to-br from-nova/20 to-nova/5">
-                    <Cpu size={20} className="text-nova" />
-                  </div>
-                  <div>
-                    <h2 className="text-xl font-bold">Neural Network</h2>
-                    <p className="text-sm text-white/60">Optimization Engine</p>
-                  </div>
-                </div>
-
-                <p className="text-white/70 text-sm mb-4">
-                  Watch NODO's AI continuously analyze market data and optimize yield strategies in real-time.
-                  The neural network processes thousands of data points per second to maximize returns.
-                </p>
-
-                <div className="bg-black/40 rounded-lg border border-white/5 p-4 mb-4">
-                  <div className="grid grid-cols-2 gap-3 text-center">
-                    <div>
-                      <div className="text-xs text-white/50 mb-1">DATA PROCESSED</div>
-                      <div className="text-lg font-mono text-white">2.4M+</div>
-                    </div>
-                    <div>
-                      <div className="text-xs text-white/50 mb-1">OPTIMIZATIONS</div>
-                      <div className="text-lg font-mono text-white">984</div>
-                    </div>
-                    <div>
-                      <div className="text-xs text-white/50 mb-1">SUCCESS RATE</div>
-                      <div className="text-lg font-mono text-emerald">98.7%</div>
-                    </div>
-                    <div>
-                      <div className="text-xs text-white/50 mb-1">APR INCREASE</div>
-                      <div className="text-lg font-mono text-nova">+3.8%</div>
-                    </div>
-                  </div>
-                </div>
-
-                <div className="flex items-center gap-2 text-xs text-white/50">
-                  <Lock size={12} />
-                  <span>Secure zero-knowledge processing</span>
-                </div>
-              </div>
-
-              <div className="w-full md:w-1/2 p-6 flex items-center justify-center">
-                <AIProcessingVisualizer
-                  size="lg"
-                  type="optimization"
-                  autoAnimate={true}
-                  processingTime={8000}
-                />
-              </div>
-            </div>
-          </div>
-        </motion.section>
-
-        {/* Vaults Section */}
-        <motion.section
-          className="py-14 relative px-4"
+          className="pt-4 pb-6 px-4 relative"
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.7, duration: 0.8 }}
+          transition={{ delay: 0.3, duration: 0.8 }}
         >
           <div className="max-w-screen-xl mx-auto">
             {/* Section Header with AI Animation */}
@@ -277,7 +194,7 @@ export default function EnhancedVaultCatalog() {
                   )}
                 </div>
                 <div>
-                  <h2 className="text-2xl font-bold text-white">
+                  <h2 className="text-2xl font-bold text-white mb-0.5">
                     AI-Powered <span className="text-transparent bg-clip-text bg-gradient-to-r from-nova via-amber-500 to-orange-500">Yield Vaults</span>
                   </h2>
                   <p className="text-white/60 text-sm">
@@ -385,12 +302,96 @@ export default function EnhancedVaultCatalog() {
           </div>
         </motion.section>
 
+        {/* AI Neural Activity Ticker */}
+        <motion.section
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.5, duration: 0.8 }}
+          className="mb-6 px-4"
+        >
+          <EnhancedNeuralActivityTicker />
+        </motion.section>
+
+        {/* AI Insights Module */}
+        <motion.section
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.6, duration: 0.8 }}
+          className="px-4 mb-6"
+        >
+          <AIInsightsModule />
+        </motion.section>
+
+        {/* AI Processing Visualization Section */}
+        <motion.section
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.7, duration: 0.8 }}
+          className="pt-4 pb-8 px-4"
+        >
+          <div className="max-w-screen-lg mx-auto bg-black/30 backdrop-blur-md border border-white/10 rounded-xl overflow-hidden shadow-lg">
+            <div className="flex flex-col md:flex-row">
+              <div className="w-full md:w-1/2 p-6 border-b md:border-b-0 md:border-r border-white/10">
+                <div className="flex items-center gap-3 mb-4">
+                  <div className="p-2 rounded-lg bg-gradient-to-br from-nova/20 to-nova/5">
+                    <Cpu size={20} className="text-nova" />
+                  </div>
+                  <div>
+                    <h2 className="text-xl font-bold mb-0.5">Neural Network</h2>
+                    <p className="text-sm text-white/60">Optimization Engine</p>
+                  </div>
+                </div>
+
+                <p className="text-white/70 text-sm mb-4">
+                  Watch NODO's AI continuously analyze market data and optimize yield strategies in real-time.
+                  The neural network processes thousands of data points per second to maximize returns.
+                </p>
+
+                <div className="bg-black/40 rounded-lg border border-white/5 p-4 mb-4">
+                  <div className="grid grid-cols-2 gap-3 text-center">
+                    <div>
+                      <div className="text-xs text-white/50 mb-1">DATA PROCESSED</div>
+                      <div className="text-lg font-mono text-white">2.4M+</div>
+                    </div>
+                    <div>
+                      <div className="text-xs text-white/50 mb-1">OPTIMIZATIONS</div>
+                      <div className="text-lg font-mono text-white">984</div>
+                    </div>
+                    <div>
+                      <div className="text-xs text-white/50 mb-1">SUCCESS RATE</div>
+                      <div className="text-lg font-mono text-emerald">98.7%</div>
+                    </div>
+                    <div>
+                      <div className="text-xs text-white/50 mb-1">APR INCREASE</div>
+                      <div className="text-lg font-mono text-nova">+3.8%</div>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="flex items-center gap-2 text-xs text-white/50">
+                  <Lock size={12} />
+                  <span>Secure zero-knowledge processing</span>
+                </div>
+              </div>
+
+              <div className="w-full md:w-1/2 p-6 flex items-center justify-center">
+                <AIProcessingVisualizer
+                  size="lg"
+                  type="optimization"
+                  autoAnimate={true}
+                  processingTime={8000}
+                />
+              </div>
+            </div>
+          </div>
+        </motion.section>
+
         {/* Activity Feed Section */}
         <motion.section
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.8, duration: 0.8 }}
-          className="pb-20 px-4"
+          className="pb-12 px-4"
         >
           <div className="max-w-screen-xl mx-auto">
             <EnhancedActivitySection />

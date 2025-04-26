@@ -100,14 +100,26 @@ export function VaultMetricsCard({
       return {
         text: "Connect Wallet",
         icon: <Wallet className="ml-2 h-4 w-4" />,
-        className: "w-full h-12 bg-gradient-to-r from-[#FF8A00] to-[#FF6B00] text-white transition-all hover:scale-[0.98] shadow-[0_4px_12px_-2px_rgba(255,138,0,0.3)] text-base font-semibold",
+        className: `w-full h-12 text-white transition-all hover:scale-[0.98] shadow-lg text-base font-semibold ${
+          vault.type === 'nova'
+            ? 'bg-gradient-to-r from-orange-600 to-amber-500 hover:from-orange-500 hover:to-amber-400'
+            : vault.type === 'orion'
+              ? 'bg-gradient-to-r from-amber-600 to-yellow-500 hover:from-amber-500 hover:to-yellow-400'
+              : 'bg-gradient-to-r from-emerald to-green-500 hover:from-emerald/90 hover:to-green-400'
+        }`,
         variant: "default" as const
       };
     } else {
       return {
         text: "Deposit Now",
         icon: <ArrowRight className="ml-2 h-4 w-4" />,
-        className: "w-full h-12 bg-gradient-to-r from-[#FF8A00] to-[#FF6B00] text-white transition-all hover:scale-[0.98] active:scale-95 shadow-[0_4px_12px_-2px_rgba(255,138,0,0.3)] text-base font-semibold",
+        className: `w-full h-12 text-white transition-all hover:scale-[0.98] active:scale-95 shadow-lg text-base font-semibold ${
+          vault.type === 'nova'
+            ? 'bg-gradient-to-r from-orange-600 to-amber-500 hover:from-orange-500 hover:to-amber-400'
+            : vault.type === 'orion'
+              ? 'bg-gradient-to-r from-amber-600 to-yellow-500 hover:from-amber-500 hover:to-yellow-400'
+              : 'bg-gradient-to-r from-emerald to-green-500 hover:from-emerald/90 hover:to-green-400'
+        }`,
         variant: "default" as const
       };
     }
@@ -146,8 +158,12 @@ export function VaultMetricsCard({
   const riskBadgeProps = getRiskBadgeProps();
 
   return (
-    <Card className="glass-card rounded-[20px] overflow-hidden border border-white/[0.06] bg-white/[0.04] shadow-[inset_0_0_0_1px_rgba(255,255,255,0.06)] transition-shadow hover:shadow-[0_0_20px_-4px_rgba(111,59,255,0.15)]">
-      <div className="h-1 bg-gradient-to-r from-[#FF8A00] to-[#FF6B00]" />
+    <Card className="glass-card bg-black/30 backdrop-blur-sm border border-white/10 rounded-xl overflow-hidden shadow-lg">
+      <div className={`h-1 ${
+        vault.type === 'nova' ? 'bg-gradient-to-r from-orange-600 to-amber-500' :
+        vault.type === 'orion' ? 'bg-gradient-to-r from-amber-600 to-yellow-500' :
+        'bg-gradient-to-r from-emerald to-green-500'
+      }`} />
       <CardHeader className="px-6 pt-6 pb-2 flex flex-row items-center justify-between">
         <CardTitle className="text-lg font-medium text-[#E5E7EB]">Vault Metrics</CardTitle>
         <div className="flex items-center gap-2">

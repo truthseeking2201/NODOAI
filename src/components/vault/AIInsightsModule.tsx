@@ -181,7 +181,7 @@ export function AIInsightsModule() {
             <Brain size={20} className="text-nova" />
           </div>
           <div>
-            <h2 className="text-xl font-bold">AI-Powered Insights</h2>
+            <h2 className="text-xl font-bold mb-0.5">AI-Powered Insights</h2>
             <p className="text-sm text-white/60">Real-time neural network analysis and optimization</p>
           </div>
         </motion.div>

@@ -17,6 +17,9 @@ import { useWallet } from "@/hooks/useWallet";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { VaultSecurityInfo } from "@/components/vault/VaultSecurityInfo";
 import { VaultData } from "@/types/vault";
+import { motion, useScroll, useTransform } from "framer-motion";
+import { NeuralNetworkBackground } from "@/components/vault/NeuralNetworkBackground";
+import { Brain, Shield, TrendingUp } from "lucide-react";
 
 export default function VaultDetail() {
   const { vaultId } = useParams<{ vaultId: string }>();
@@ -26,9 +29,21 @@ export default function VaultDetail() {
   const [projectedAmount, setProjectedAmount] = useState<string>("1000");
   const [unlockProgress, setUnlockProgress] = useState<number>(0);
   const nodoaixCardRef = useRef<HTMLDivElement>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
   const [hasInteracted, setHasInteracted] = useState(false);
   const [activeTab, setActiveTab] = useState("strategy");
   const [customVaultData, setCustomVaultData] = useState<VaultData | null>(null);
+  const [wasManuallyClosedRef, setWasManuallyClosedRef] = useState(false);
+
+  // Add scroll animation variables similar to the catalog page
+  const { scrollYProgress } = useScroll({
+    target: containerRef,
+    offset: ["start start", "end start"]
+  });
+
+  const y1 = useTransform(scrollYProgress, [0, 1], [0, -150]);
+  const y2 = useTransform(scrollYProgress, [0, 1], [0, -75]);
+  const opacity = useTransform(scrollYProgress, [0, 0.5], [1, 0.6]);
 
   const {
     vault,
@@ -38,10 +53,10 @@ export default function VaultDetail() {
   } = useVaultDetail(vaultId || '');
 
   useEffect(() => {
-    if (isConnected && hasInteracted && !isDepositDrawerOpen) {
+    if (isConnected && hasInteracted && !isDepositDrawerOpen && !wasManuallyClosedRef) {
       setIsDepositDrawerOpen(true);
     }
-  }, [isConnected, hasInteracted, isDepositDrawerOpen]);
+  }, [isConnected, hasInteracted, isDepositDrawerOpen, wasManuallyClosedRef]);
 
   useEffect(() => {
     const handleDepositSuccess = (e: CustomEvent) => {
@@ -97,6 +112,7 @@ export default function VaultDetail() {
   const handleCloseDrawer = () => {
     setIsDepositDrawerOpen(false);
     setCustomVaultData(null);
+    setWasManuallyClosedRef(true);
   };
 
   if (isLoading) {
@@ -152,78 +168,199 @@ export default function VaultDetail() {
   );
 
   return (
-    <PageContainer className="page-container">
-      <VaultDetailLayout
-        children={<VaultDetailHeader vaultName={vault.name} styles={styles} />}
-        leftColumn={
-          <>
-            <VaultPerformanceSection
-              vault={vault}
-              timeRange={timeRange}
-              onTimeRangeChange={setTimeRange}
-              styles={styles}
-            />
-            <Card className="glass-card rounded-xl overflow-hidden">
-              <CardHeader className="card-header">
-                <CardTitle className="card-title">Strategy & Security</CardTitle>
-                <CardDescription className="card-description">Understanding this vault's approach and protections</CardDescription>
-              </CardHeader>
-              <CardContent className="card-content pt-0">
-                <Tabs defaultValue="strategy" className="w-full" onValueChange={setActiveTab}>
-                  <TabsList className="grid grid-cols-2 mb-6 bg-white/5 rounded-lg p-1">
-                    <TabsTrigger value="strategy" className="data-[state=active]:bg-nova/20 data-[state=active]:text-nova">
-                      Strategy
-                    </TabsTrigger>
-                    <TabsTrigger value="security" className="data-[state=active]:bg-nova/20 data-[state=active]:text-nova">
-                      Security
-                    </TabsTrigger>
-                  </TabsList>
-                  <TabsContent value="strategy" className="mt-0">
-                    {renderStrategyTab()}
-                  </TabsContent>
-                  <TabsContent value="security" className="mt-0">
-                    {renderSecurityTab()}
-                  </TabsContent>
-                </Tabs>
-              </CardContent>
-            </Card>
-            <Card className="glass-card rounded-xl overflow-hidden">
-              <CardHeader className="card-header">
-                <CardTitle className="card-title">Vault Activity</CardTitle>
-                <CardDescription className="card-description">Recent deposits and withdrawals</CardDescription>
-              </CardHeader>
-              <CardContent className="card-content pt-0">
-                <VaultActivityTicker maxRows={5} />
-              </CardContent>
-            </Card>
-          </>
-        }
-        rightColumn={
-          <>
-            <VaultMetricsCard
-              vault={vault}
-              styles={styles}
-              projectedAmount={projectedAmount}
-              onProjectedAmountChange={setProjectedAmount}
-              isConnected={isConnected}
-              onActionClick={handleActionClick}
-            />
-            <div ref={nodoaixCardRef}>
-              <NODOAIxCard
-                balance={1000}
-                principal={1000}
-                fees={12.3}
-                unlockTime={new Date(Date.now() + 24 * 60 * 60 * 1000)}
-                holderCount={1203}
-                contractAddress="0xAB1234567890ABCDEF1234567890ABCDEF123456"
-                auditUrl="/audit.pdf"
-                styles={styles}
-                unlockProgress={unlockProgress}
-              />
+    <PageContainer className="min-h-screen overflow-x-hidden bg-[#0A0B0D]">
+      <div ref={containerRef} className="relative z-0">
+        {/* Neural network background */}
+        <div className="absolute inset-0 overflow-hidden pointer-events-none">
+          {/* Advanced Neural Network Visualization */}
+          <NeuralNetworkBackground
+            nodeCount={40}
+            connectionDensity={0.2}
+            nodesColor={vault.type === 'nova' ? "rgba(249, 115, 22, 0.6)" :
+                       vault.type === 'orion' ? "rgba(245, 158, 11, 0.6)" :
+                       "rgba(16, 185, 129, 0.6)"}
+            connectionsColor={vault.type === 'nova' ? "rgba(249, 115, 22, 0.15)" :
+                            vault.type === 'orion' ? "rgba(245, 158, 11, 0.15)" :
+                            "rgba(16, 185, 129, 0.15)"}
+            activeNodeColor={vault.type === 'nova' ? "rgba(249, 115, 22, 0.9)" :
+                            vault.type === 'orion' ? "rgba(245, 158, 11, 0.9)" :
+                            "rgba(16, 185, 129, 0.9)"}
+            flowSpeed={0.8}
+            className="opacity-30"
+          />
+
+          {/* Gradient orbs for additional depth */}
+          <motion.div
+            className={`absolute -top-40 -left-40 w-[600px] h-[600px] rounded-full ${
+              vault.type === 'nova' ? 'bg-nova/10' :
+              vault.type === 'orion' ? 'bg-orion/10' :
+              'bg-emerald/10'
+            } blur-[120px]`}
+            style={{ y: y1 }}
+            animate={{ opacity: [0.2, 0.4, 0.2] }}
+            transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
+          />
+          <motion.div
+            className={`absolute top-60 -right-40 w-[500px] h-[500px] rounded-full ${
+              vault.type === 'nova' ? 'bg-orange-500/10' :
+              vault.type === 'orion' ? 'bg-amber-500/10' :
+              'bg-green-500/10'
+            } blur-[120px]`}
+            style={{ y: y2 }}
+            animate={{ opacity: [0.2, 0.3, 0.2] }}
+            transition={{ duration: 10, repeat: Infinity, ease: "easeInOut", delay: 2 }}
+          />
+        </div>
+
+        {/* VaultDetail Header with enhanced styling */}
+        <motion.section
+          className="py-4 md:py-6 relative"
+          style={{ opacity }}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.8 }}
+        >
+          <VaultDetailHeader vaultName={vault.name} styles={styles} />
+        </motion.section>
+
+        {/* Main Content Layout with animation */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.3, duration: 0.8 }}
+          className="px-4"
+        >
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 mb-24">
+            <div className="lg:col-span-7 space-y-6">
+              <Card className="glass-card bg-black/30 backdrop-blur-sm border border-white/10 rounded-xl overflow-hidden shadow-lg">
+                <CardContent className="p-6">
+                  <VaultPerformanceSection
+                    vault={vault}
+                    timeRange={timeRange}
+                    onTimeRangeChange={setTimeRange}
+                    styles={styles}
+                  />
+                </CardContent>
+              </Card>
+
+              <Card className="glass-card bg-black/30 backdrop-blur-sm border border-white/10 rounded-xl overflow-hidden shadow-lg">
+                <CardHeader className="p-6 pb-3">
+                  <div className="flex items-center gap-3 mb-2">
+                    <div className={`p-2 rounded-lg ${
+                      vault.type === 'nova' ? 'bg-gradient-to-br from-nova/20 to-nova/5' :
+                      vault.type === 'orion' ? 'bg-gradient-to-br from-orion/20 to-orion/5' :
+                      'bg-gradient-to-br from-emerald/20 to-emerald/5'
+                    }`}>
+                      <TrendingUp size={20} className={
+                        vault.type === 'nova' ? 'text-nova' :
+                        vault.type === 'orion' ? 'text-orion' :
+                        'text-emerald'} />
+                    </div>
+                    <div>
+                      <CardTitle className="text-xl font-bold mb-0.5">Strategy & Security</CardTitle>
+                      <CardDescription className="text-sm text-white/60">
+                        Understanding this vault's approach and protections
+                      </CardDescription>
+                    </div>
+                  </div>
+                </CardHeader>
+                <CardContent className="p-6 pt-0">
+                  <Tabs defaultValue="strategy" className="w-full" onValueChange={setActiveTab}>
+                    <TabsList className="grid grid-cols-2 mb-6 bg-white/5 rounded-lg p-1">
+                      <TabsTrigger
+                        value="strategy"
+                        className={`data-[state=active]:${
+                          vault.type === 'nova' ? 'bg-nova/20 data-[state=active]:text-nova' :
+                          vault.type === 'orion' ? 'bg-orion/20 data-[state=active]:text-orion' :
+                          'bg-emerald/20 data-[state=active]:text-emerald'
+                        }`}
+                      >
+                        Strategy
+                      </TabsTrigger>
+                      <TabsTrigger
+                        value="security"
+                        className={`data-[state=active]:${
+                          vault.type === 'nova' ? 'bg-nova/20 data-[state=active]:text-nova' :
+                          vault.type === 'orion' ? 'bg-orion/20 data-[state=active]:text-orion' :
+                          'bg-emerald/20 data-[state=active]:text-emerald'
+                        }`}
+                      >
+                        Security
+                      </TabsTrigger>
+                    </TabsList>
+                    <TabsContent value="strategy" className="mt-0">
+                      {renderStrategyTab()}
+                    </TabsContent>
+                    <TabsContent value="security" className="mt-0">
+                      {renderSecurityTab()}
+                    </TabsContent>
+                  </Tabs>
+                </CardContent>
+              </Card>
+
+              <Card className="glass-card bg-black/30 backdrop-blur-sm border border-white/10 rounded-xl overflow-hidden shadow-lg">
+                <CardHeader className="p-6 pb-3">
+                  <div className="flex items-center gap-3 mb-2">
+                    <div className={`p-2 rounded-lg ${
+                      vault.type === 'nova' ? 'bg-gradient-to-br from-nova/20 to-nova/5' :
+                      vault.type === 'orion' ? 'bg-gradient-to-br from-orion/20 to-orion/5' :
+                      'bg-gradient-to-br from-emerald/20 to-emerald/5'
+                    }`}>
+                      <Brain size={20} className={
+                        vault.type === 'nova' ? 'text-nova' :
+                        vault.type === 'orion' ? 'text-orion' :
+                        'text-emerald'} />
+                    </div>
+                    <div>
+                      <CardTitle className="text-xl font-bold mb-0.5">Vault Activity</CardTitle>
+                      <CardDescription className="text-sm text-white/60">
+                        Recent deposits and withdrawals
+                      </CardDescription>
+                    </div>
+                  </div>
+                </CardHeader>
+                <CardContent className="p-6 pt-0">
+                  <VaultActivityTicker maxRows={5} />
+                </CardContent>
+              </Card>
             </div>
-          </>
-        }
-      />
+            <div className="lg:col-span-5 space-y-6">
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.4, duration: 0.8 }}
+              >
+                <VaultMetricsCard
+                  vault={vault}
+                  styles={styles}
+                  projectedAmount={projectedAmount}
+                  onProjectedAmountChange={setProjectedAmount}
+                  isConnected={isConnected}
+                  onActionClick={handleActionClick}
+                />
+              </motion.div>
+              <motion.div
+                ref={nodoaixCardRef}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.5, duration: 0.8 }}
+              >
+                <NODOAIxCard
+                  balance={1000}
+                  principal={1000}
+                  fees={12.3}
+                  unlockTime={new Date(Date.now() + 24 * 60 * 60 * 1000)}
+                  holderCount={1203}
+                  contractAddress="0xAB1234567890ABCDEF1234567890ABCDEF123456"
+                  auditUrl="/audit.pdf"
+                  styles={styles}
+                  unlockProgress={unlockProgress}
+                />
+              </motion.div>
+            </div>
+          </div>
+        </motion.div>
+      </div>
 
       <VaultStickyBar
         isConnected={isConnected}

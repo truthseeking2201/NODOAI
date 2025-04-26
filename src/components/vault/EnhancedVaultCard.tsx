@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import {
   Sparkles,
   Shield,
@@ -31,6 +32,7 @@ export function EnhancedVaultCard({
   isConnected = false,
   balance
 }: VaultCardProps) {
+  const navigate = useNavigate();
   const [isHovered, setIsHovered] = useState(false);
 
   const handleMouseEnter = () => {
@@ -40,6 +42,10 @@ export function EnhancedVaultCard({
 
   const handleMouseLeave = () => {
     setIsHovered(false);
+  };
+
+  const handleDepositClick = () => {
+    navigate(`/vaults/${vault.id}`);
   };
 
   const getRiskBadgeClass = (riskLevel: string) => {
@@ -265,6 +271,7 @@ export function EnhancedVaultCard({
                 ? 'bg-gradient-to-r from-amber-600 to-yellow-500 hover:from-amber-500 hover:to-yellow-400'
                 : 'bg-gradient-to-r from-emerald to-green-500 hover:from-emerald/90 hover:to-green-400'
           } text-white shadow-lg flex items-center justify-center space-x-2 group`}
+          onClick={handleDepositClick}
         >
           <Zap size={16} className="group-hover:animate-pulse" />
           <span>Deposit Now</span>

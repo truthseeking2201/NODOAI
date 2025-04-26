@@ -159,7 +159,7 @@ export function EnhancedHeroSection() {
   ];
 
   return (
-    <div className="relative pb-14 mb-8">
+    <div className="relative pb-4 mb-2">
       {/* Dynamic Neural Network Background */}
       <div
         ref={networkRef}
@@ -168,35 +168,26 @@ export function EnhancedHeroSection() {
         {animateNetwork && createNetworkElements()}
       </div>
 
-      {/* Gradient Orbs */}
+      {/* Gradient Orbs - simplified */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none z-0">
         <motion.div
-          className="absolute -top-60 -left-60 w-[800px] h-[800px] rounded-full bg-nova/10 blur-[140px]"
+          className="absolute -top-60 -left-60 w-[600px] h-[600px] rounded-full bg-nova/10 blur-[120px]"
           animate={{
-            opacity: [0.4, 0.6, 0.4],
-            scale: [1, 1.05, 1],
+            opacity: [0.3, 0.5, 0.3]
           }}
           transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
         />
-        <motion.div
-          className="absolute top-40 -right-60 w-[600px] h-[600px] rounded-full bg-emerald/10 blur-[120px]"
-          animate={{
-            opacity: [0.3, 0.5, 0.3],
-            scale: [1, 1.05, 1],
-          }}
-          transition={{ duration: 10, repeat: Infinity, ease: "easeInOut", delay: 2 }}
-        />
       </div>
 
-      {/* Main content */}
+      {/* Main content - more concise */}
       <motion.div
-        className="relative z-10 max-w-[800px] mx-auto text-center mt-16 mb-12"
+        className="relative z-10 max-w-[800px] mx-auto text-center mt-4 mb-4"
         variants={containerVariants}
         initial="hidden"
         animate="visible"
       >
         <motion.div
-          className="flex justify-center mb-6"
+          className="flex justify-center mb-2"
           variants={itemVariants}
         >
           <motion.div
@@ -204,90 +195,75 @@ export function EnhancedHeroSection() {
             animate={controls}
           >
             <div className="absolute inset-0 bg-gradient-to-r from-nova to-amber-500 rounded-full blur-[20px] opacity-30 scale-150"></div>
-            <div className="relative bg-gradient-to-br from-nova via-nova to-amber-500 p-4 rounded-full shadow-lg shadow-nova/20">
-              <Brain size={36} className="text-white" />
+            <div className="relative bg-gradient-to-br from-nova via-nova to-amber-500 p-3 rounded-full shadow-lg shadow-nova/20">
+              <Brain size={28} className="text-white" />
             </div>
           </motion.div>
         </motion.div>
 
         <motion.h1
-          className="text-5xl md:text-7xl font-bold tracking-tight mb-5 bg-gradient-to-r from-white via-white to-white/80 bg-clip-text text-transparent"
+          className="text-3xl md:text-5xl font-bold tracking-tight mb-2 bg-gradient-to-r from-white via-white to-white/80 bg-clip-text text-transparent"
           variants={headingVariants}
         >
-          Discover <span className="text-transparent bg-clip-text bg-gradient-to-r from-nova via-amber-500 to-orange-500 font-extrabold">NODO AI</span> Vaults
+          <span className="text-transparent bg-clip-text bg-gradient-to-r from-nova via-amber-500 to-orange-500 font-extrabold">NODO AI</span> Vaults
         </motion.h1>
 
         <motion.p
-          className="text-[#9CA3AF] text-xl font-light max-w-[600px] mx-auto mb-8"
+          className="text-[#9CA3AF] text-base font-light max-w-[600px] mx-auto mb-4"
           variants={itemVariants}
         >
           AI-powered vaults maximizing returns with smart risk management
         </motion.p>
 
-        {/* Feature Pills */}
+        {/* Stats ribbon - more compact */}
         <motion.div
-          className="flex flex-wrap justify-center gap-3 mb-10"
+          className="relative z-10 mx-auto max-w-3xl bg-gradient-to-b from-black/40 to-black/60 backdrop-blur-lg border border-white/10 rounded-xl px-2 py-1 shadow-[0_0_20px_rgba(255,136,0,0.1)]"
           variants={itemVariants}
         >
-          {featureItems.map((item, index) => (
-            <motion.div
-              key={index}
-              className="flex items-center gap-2 bg-white/5 border border-white/10 rounded-full px-4 py-2 text-sm backdrop-blur-sm"
-              whileHover={{ scale: 1.05, backgroundColor: "rgba(255,255,255,0.1)" }}
-              transition={{ duration: 0.2 }}
-            >
-              {item.icon}
-              <span className="text-white/80">{item.text}</span>
-            </motion.div>
-          ))}
-        </motion.div>
-
-        {/* Stats ribbon with enhanced design */}
-        <motion.div
-          className="relative z-10 mx-auto max-w-4xl bg-gradient-to-b from-black/40 to-black/60 backdrop-blur-lg border border-white/10 rounded-2xl px-4 py-2 shadow-[0_0_40px_rgba(255,136,0,0.1)]"
-          variants={itemVariants}
-        >
-          <div className="flex flex-col md:flex-row justify-center items-center gap-6 md:gap-16 py-8">
-            <div className="stat-item flex items-center gap-4">
-              <div className="stat-icon bg-gradient-to-br from-emerald/30 to-emerald/5 p-4 rounded-2xl shadow-lg shadow-emerald/5">
-                <DollarSign size={24} className="text-emerald" />
+          <div className="flex flex-row justify-center items-center gap-6 md:gap-8 py-2">
+            <div className="stat-item flex items-center gap-2">
+              <div className="stat-icon bg-gradient-to-br from-emerald/30 to-emerald/5 p-2 rounded-lg shadow-md shadow-emerald/5">
+                <DollarSign size={16} className="text-emerald" />
               </div>
               <StatChip
-                label="Total TVL"
+                label="TVL"
                 value={kpiData.tvl}
                 delta={{ value: 0.5 }}
+                compact={true}
               />
             </div>
 
             <motion.div
-              className="hidden md:block h-12 w-px bg-gradient-to-b from-white/0 via-white/10 to-white/0"
+              className="hidden md:block h-8 w-px bg-gradient-to-b from-white/0 via-white/10 to-white/0"
               variants={itemVariants}
             />
 
-            <div className="stat-item flex items-center gap-4">
-              <div className="stat-icon bg-gradient-to-br from-nova/30 to-nova/5 p-4 rounded-2xl shadow-lg shadow-nova/5">
-                <TrendingUp size={24} className="text-nova" />
+            <div className="stat-item flex items-center gap-2">
+              <div className="stat-icon bg-gradient-to-br from-nova/30 to-nova/5 p-2 rounded-lg shadow-md shadow-nova/5">
+                <TrendingUp size={16} className="text-nova" />
               </div>
               <StatChip
-                label="Average APR"
+                label="APR"
                 value={kpiData.apr}
                 delta={{ value: 0.2 }}
+                compact={true}
               />
             </div>
 
             <motion.div
-              className="hidden md:block h-12 w-px bg-gradient-to-b from-white/0 via-white/10 to-white/0"
+              className="hidden md:block h-8 w-px bg-gradient-to-b from-white/0 via-white/10 to-white/0"
               variants={itemVariants}
             />
 
-            <div className="stat-item flex items-center gap-4">
-              <div className="stat-icon bg-gradient-to-br from-orion/30 to-orion/5 p-4 rounded-2xl shadow-lg shadow-orion/5">
-                <Users size={24} className="text-orion" />
+            <div className="stat-item flex items-center gap-2">
+              <div className="stat-icon bg-gradient-to-br from-orion/30 to-orion/5 p-2 rounded-lg shadow-md shadow-orion/5">
+                <Users size={16} className="text-orion" />
               </div>
               <StatChip
-                label="Active LPs"
+                label="Users"
                 value={kpiData.activeLPs}
                 delta={{ value: 0.8 }}
+                compact={true}
               />
             </div>
           </div>
@@ -296,15 +272,8 @@ export function EnhancedHeroSection() {
           <div className="absolute bottom-0 left-0 right-0 h-[1px] overflow-hidden">
             <motion.div
               className="h-full bg-gradient-to-r from-transparent via-nova to-transparent"
-              animate={{
-                x: ["-100%", "100%"]
-              }}
-              transition={{
-                duration: 3,
-                ease: "linear",
-                repeat: Infinity,
-                repeatType: "loop"
-              }}
+              animate={{ x: ["-100%", "100%"] }}
+              transition={{ duration: 3, ease: "linear", repeat: Infinity }}
             />
           </div>
         </motion.div>
