@@ -1,57 +1,47 @@
-import { useState, useMemo } from "react";
-import { useQuery } from "@tanstack/react-query";
+import React, { useState, useMemo } from "react";
 import { PageContainer } from "@/components/layout/PageContainer";
-import { useWallet } from "@/hooks/useWallet";
-import { vaultService } from "@/services/vaultService";
-import { UserInvestment, TransactionHistory } from "@/types/vault";
-import { EmptyState } from "@/components/dashboard/EmptyState";
-import { WithdrawModal } from "@/components/vault/WithdrawModal";
+import { DashboardHeader } from "@/components/dashboard/DashboardHeader";
+import { MetricsOverview } from "@/components/dashboard/MetricsOverview";
 import { ReceiptTokenCard } from "@/components/dashboard/ReceiptTokenCard";
-import { MetricsGrid } from "@/components/dashboard/MetricsGrid";
 import { PerformanceChart } from "@/components/dashboard/PerformanceChart";
 import { PositionsPanel } from "@/components/dashboard/PositionsPanel";
-import { ActivityFeedPanel } from "@/components/dashboard/ActivityFeedPanel";
+import { ActivityPanel } from "@/components/dashboard/ActivityPanel";
+import { useWallet } from "@/hooks/useWallet";
+import { useQuery } from "@tanstack/react-query";
+import { vaultService } from "@/services/vaultService";
+import { ConnectWalletPrompt } from "@/components/dashboard/ConnectWalletPrompt";
+import { UserInvestment, TransactionHistory } from "@/types/vault";
+import { WithdrawModal } from "@/components/vault/WithdrawModal";
 import { TxDrawer } from "@/components/dashboard/TxDrawer";
 
 export default function Dashboard() {
-  const { isConnected, address, balance, openConnectModal } = useWallet();
+  const { isConnected, balance } = useWallet();
   const [selectedInvestment, setSelectedInvestment] = useState<UserInvestment | null>(null);
   const [isWithdrawModalOpen, setIsWithdrawModalOpen] = useState(false);
   const [selectedTx, setSelectedTx] = useState<TransactionHistory | null>(null);
   const [isTxDrawerOpen, setIsTxDrawerOpen] = useState(false);
 
-  // Fetch user investments
-  const {
-    data: investments,
-    isLoading: isLoadingInvestments,
-  } = useQuery({
+  const { data: investments, isLoading: loadingInvestments } = useQuery({
     queryKey: ['userInvestments'],
     queryFn: vaultService.getUserInvestments,
     enabled: isConnected,
   });
 
-  // Fetch transaction history
-  const {
-    data: transactions,
-    isLoading: isLoadingTransactions,
-  } = useQuery({
+  const { data: activities, isLoading: loadingActivities } = useQuery({
     queryKey: ['transactionHistory'],
     queryFn: vaultService.getTransactionHistory,
     enabled: isConnected,
   });
 
-  // Calculate portfolio metrics
-  const totalInvestmentValue = investments?.reduce((sum, inv) => sum + inv.currentValue, 0) || 0;
-  const totalPrincipal = investments?.reduce((sum, inv) => sum + inv.principal, 0) || 0;
-  const totalProfit = investments?.reduce((sum, inv) => sum + inv.profit, 0) || 0;
-
-  // Generate performance data for chart
+  // Calculate performance data for chart
   const performanceData = useMemo(() => {
-    if (!transactions) return [];
+    if (!activities) return [];
 
     const now = new Date();
     const thirtyDaysAgo = new Date();
     thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 29);
+
+    const totalPrincipal = investments?.reduce((sum, inv) => sum + inv.principal, 0) || 0;
 
     const data = [];
     for (let i = 0; i <= 29; i++) {
@@ -64,7 +54,7 @@ export default function Dashboard() {
       const baseValue = totalPrincipal * growthFactor;
 
       // Handle transactions in the new TransactionHistory format
-      const depositsOnThisDay = transactions?.filter(tx =>
+      const depositsOnThisDay = activities?.filter(tx =>
         tx.type === 'deposit' && tx.timestamp.split('T')[0] === dateStr
       ) || [];
 
@@ -79,23 +69,7 @@ export default function Dashboard() {
     }
 
     return data;
-  }, [transactions, totalPrincipal]);
-
-  // Calculate weighted average APR
-  const averageAPR = useMemo(() => {
-    if (!investments || investments.length === 0) return 0;
-
-    const totalValueWithAPR = investments.reduce((sum, inv) => {
-      let aprEstimate = 0;
-      if (inv.vaultId.includes('deep')) aprEstimate = 24.8;
-      else if (inv.vaultId.includes('cetus')) aprEstimate = 18.7;
-      else aprEstimate = 12.5;
-
-      return sum + (inv.currentValue * aprEstimate);
-    }, 0);
-
-    return totalInvestmentValue > 0 ? totalValueWithAPR / totalInvestmentValue : 0;
-  }, [investments, totalInvestmentValue]);
+  }, [activities, investments]);
 
   // Handle withdraw click
   const handleWithdrawClick = (investment: UserInvestment) => {
@@ -109,80 +83,47 @@ export default function Dashboard() {
     setIsTxDrawerOpen(true);
   };
 
-  // If not connected, show connect prompt
   if (!isConnected) {
-    return (
-      <PageContainer className="mx-auto max-w-7xl">
-        <div className="max-w-md mx-auto mt-12">
-          <EmptyState
-            title="Connect Your Wallet"
-            description="Connect your wallet to access your personalized dashboard and view your investment portfolio."
-            actionLabel="Connect Wallet"
-            actionLink="#"
-            onActionClick={openConnectModal}
-          />
-        </div>
-      </PageContainer>
-    );
+    return <ConnectWalletPrompt />;
   }
 
-  // Show receipt token card only if user has balance
-  const showReceiptTokenCard = balance && balance.receiptTokens > 0;
+  // Calculate total metrics
+  const totalValue = investments?.reduce((sum, inv) => sum + inv.currentValue, 0) || 0;
+  const totalProfit = investments?.reduce((sum, inv) => sum + inv.profit, 0) || 0;
 
   return (
-    <PageContainer className="mx-auto max-w-7xl pb-20">
-      <div className="space-y-8">
-        {/* Dashboard Header */}
-        <div className="mb-8">
-          <h1 className="text-2xl md:text-3xl font-bold mb-1">
-            Your <span className="bg-gradient-to-r from-[#FF8A00] to-[#FF6B00] text-transparent bg-clip-text">Portfolio</span>
-          </h1>
-          <p className="text-white/60 text-sm">
-            Live snapshot of your vault positions
-          </p>
-        </div>
+    <PageContainer className="dashboard-container mx-auto max-w-7xl pb-20">
+      <DashboardHeader
+        totalValue={totalValue}
+        totalProfit={totalProfit}
+      />
 
-        {/* Metrics Grid */}
-        <MetricsGrid
-          isLoading={isLoadingInvestments}
-          totalDeposited={totalPrincipal}
-          totalValue={totalInvestmentValue}
-          totalProfit={totalProfit}
-          avgApr={averageAPR}
+      <div className="dashboard-grid space-y-8">
+        <MetricsOverview
           investments={investments || []}
+          isLoading={loadingInvestments}
         />
 
-        {/* Receipt Token Card */}
-        {showReceiptTokenCard && (
-          <ReceiptTokenCard />
+        {balance?.receiptTokens > 0 && (
+          <ReceiptTokenCard tokens={balance.receiptTokens} />
         )}
 
-        {/* Performance Chart */}
-        <div className="bg-black/20 rounded-xl border border-white/10 backdrop-blur-sm overflow-hidden">
-          <div className="p-4 border-b border-white/10">
-            <h2 className="text-lg font-medium">Portfolio Performance</h2>
-          </div>
-          <div className="p-4">
-            <PerformanceChart
-              data={performanceData}
-              transactions={transactions}
-              isLoading={isLoadingInvestments || isLoadingTransactions}
-              onTxClick={handleTxSelect}
-            />
-          </div>
-        </div>
+        <PerformanceChart
+          data={performanceData}
+          transactions={activities}
+          isLoading={loadingInvestments || loadingActivities}
+          onTxClick={handleTxSelect}
+        />
 
-        {/* Active Positions */}
         <PositionsPanel
           positions={investments || []}
-          isLoading={isLoadingInvestments}
+          isLoading={loadingInvestments}
           onWithdraw={handleWithdrawClick}
         />
 
-        {/* Activity Feed */}
-        <ActivityFeedPanel
-          activities={transactions || []}
-          isLoading={isLoadingTransactions}
+        <ActivityPanel
+          activities={activities || []}
+          isLoading={loadingActivities}
         />
       </div>
 

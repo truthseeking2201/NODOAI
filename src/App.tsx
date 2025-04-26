@@ -5,7 +5,7 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { MainLayout } from "@/components/layout/MainLayout";
-import VaultCatalog from "./pages/VaultCatalog";
+import EnhancedVaultCatalog from "./pages/EnhancedVaultCatalog";
 import VaultDetail from "./pages/VaultDetail";
 import Dashboard from "./pages/Dashboard";
 import NotFound from "./pages/NotFound";
@@ -28,7 +28,7 @@ const App = () => (
         <Routes>
           <Route path="/" element={
             <MainLayout>
-              <VaultCatalog />
+              <EnhancedVaultCatalog />
             </MainLayout>
           } />
           {/* Routes for backward compatibility with old URLs */}
