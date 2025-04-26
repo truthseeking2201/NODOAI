@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import { ArrowRight, Shield, Info, TrendingUp, Clock, ExternalLink, Brain } from "lucide-react";
 import { VaultData } from "@/types/vault";
 import { TokenIcon, PairIcon } from "@/components/shared/TokenIcons";
-import { 
+import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
@@ -24,15 +24,15 @@ interface VaultCardProps {
   onHover: () => void;
 }
 
-export function VaultCard({ 
-  vault, 
-  isConnected, 
-  hasBalance, 
+export function VaultCard({
+  vault,
+  isConnected,
+  hasBalance,
   isActive,
-  onHover 
+  onHover
 }: VaultCardProps) {
   const [showRoiOverlay, setShowRoiOverlay] = useState(false);
-  
+
   const getVaultStyles = (type: 'nova' | 'orion' | 'emerald') => {
     switch (type) {
       case 'nova':
@@ -42,7 +42,8 @@ export function VaultCard({
           accent: 'text-nova-light',
           border: 'border-nova/20',
           riskColor: 'bg-red-500/10 text-red-500',
-          riskText: 'High returns'
+          riskText: 'High returns',
+          buttonVariant: 'nova' as const
         };
       case 'orion':
         return {
@@ -51,7 +52,8 @@ export function VaultCard({
           accent: 'text-orion-light',
           border: 'border-orion/20',
           riskColor: 'bg-orion/10 text-orion',
-          riskText: 'Balanced'
+          riskText: 'Balanced',
+          buttonVariant: 'orion' as const
         };
       case 'emerald':
         return {
@@ -60,7 +62,8 @@ export function VaultCard({
           accent: 'text-emerald-light',
           border: 'border-emerald/20',
           riskColor: 'bg-emerald/10 text-emerald',
-          riskText: 'Stable'
+          riskText: 'Stable',
+          buttonVariant: 'emerald' as const
         };
     }
   };
@@ -71,35 +74,34 @@ export function VaultCard({
 
   return (
     <TooltipProvider>
-      <Card 
-        className={`group relative overflow-hidden rounded-[20px] border-0 bg-black/40 backdrop-blur-2xl transition-all duration-500 
-          hover:scale-[1.02] hover:shadow-2xl ${isActive ? 'ring-2 ring-white/20' : ''}`}
+      <Card
+        className={`group relative overflow-hidden rounded-xl border-0 bg-black/40 backdrop-blur-2xl transition-all duration-300
+          hover:scale-[1.02] hover:shadow-elevation-2 ${isActive ? 'ring-2 ring-white/20' : ''}`}
         onMouseEnter={() => {
           onHover();
           setShowRoiOverlay(true);
         }}
         onMouseLeave={() => setShowRoiOverlay(false)}
       >
-        <div className="absolute inset-0 bg-gradient-to-br from-white/[0.08] to-transparent opacity-0 
-          transition-opacity duration-500 group-hover:opacity-100" />
-        
+        <div className="absolute inset-0 bg-gradient-to-br from-white/[0.08] to-transparent opacity-0
+          transition-opacity duration-300 group-hover:opacity-100" />
+
         <div className={`h-1 ${styles.gradientBg} opacity-80`} />
-        
-        <CardHeader className="p-5">
+
+        <CardHeader className="card-padding-compact">
           <div className="flex justify-between items-start gap-2">
             <div className="flex items-center gap-3">
               <div className="relative">
-                {/* Pass the vault.id directly to PairIcon, which will handle the mapping */}
                 <PairIcon tokens={vault.id} size={28} />
                 <div className="absolute -bottom-1 -right-1">
                   <AIIndicator vaultType={vault.type} className="scale-75" />
                 </div>
               </div>
               <div>
-                <CardTitle className="text-lg font-medium text-white">
+                <CardTitle className="vault-name text-white">
                   {vault.name}
                 </CardTitle>
-                <CardDescription className="text-xs text-white/60">
+                <CardDescription className="vault-description text-white/60">
                   {vault.description}
                 </CardDescription>
               </div>
@@ -110,8 +112,8 @@ export function VaultCard({
           </div>
         </CardHeader>
 
-        <CardContent className="p-5 pt-0 space-y-4">
-          <div className="grid grid-cols-3 gap-6">
+        <CardContent className="card-content-compact pt-0 component-spacing">
+          <div className="grid grid-cols-3 gap-4">
             <div className="space-y-1">
               <p className="text-xs text-white/60 flex items-center gap-1">
                 APR
@@ -124,19 +126,19 @@ export function VaultCard({
                   </TooltipContent>
                 </Tooltip>
               </p>
-              <p className={`text-2xl font-mono font-semibold ${isActive ? styles.gradientText : 'text-white'}`}>
+              <p className={`metric-value ${isActive ? styles.gradientText : 'text-white'}`}>
                 {vault.apr.toFixed(1)}%
               </p>
             </div>
             <div className="space-y-1">
               <p className="text-xs text-white/60">TVL</p>
-              <p className="text-2xl font-mono font-semibold text-white">
+              <p className="metric-value text-white">
                 ${(vault.tvl / 1000000).toFixed(1)}M
               </p>
             </div>
             <div className="space-y-1">
               <p className="text-xs text-white/60">Users</p>
-              <p className="text-2xl font-mono font-semibold text-white">
+              <p className="metric-value text-white">
                 {Math.floor(vault.tvl / 25000)}
               </p>
             </div>
@@ -150,23 +152,22 @@ export function VaultCard({
           </div>
 
           <div className="pt-2">
-            <Button 
-              variant={hasBalance ? "default" : "secondary"}
-              className={`w-full py-6 text-sm font-medium relative overflow-hidden
-                ${hasBalance ? 'bg-[#F97316] text-white hover:bg-[#F97316]/90' : 'bg-white/5 hover:bg-white/10'}`}
+            <Button
+              variant={hasBalance ? styles.buttonVariant : "outline"}
+              className="w-full py-6 text-sm font-medium relative overflow-hidden"
               asChild
             >
               <Link to={`/vaults/${vault.id}`}>
-                {isConnected ? "Deposit Now" : "Connect Wallet"} 
+                {isConnected ? "Deposit Now" : "Connect Wallet"}
                 <ArrowRight className="ml-2 h-4 w-4" />
               </Link>
             </Button>
           </div>
         </CardContent>
-        
+
         {showRoiOverlay && (
-          <div className="absolute bottom-4 right-4 bg-black/80 backdrop-blur-xl px-3 py-2 
-            rounded-xl border border-white/10 text-xs font-medium animate-fade-in">
+          <div className="absolute bottom-4 right-4 bg-black/80 backdrop-blur-xl px-3 py-2
+            rounded-lg border border-white/10 text-xs font-medium animate-fade-in">
             ${monthlyReturn.toFixed(2)}/mo with $1,000
           </div>
         )}

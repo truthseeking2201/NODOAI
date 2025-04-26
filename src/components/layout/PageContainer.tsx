@@ -1,5 +1,6 @@
 
 import React from "react";
+import { cn } from "@/lib/utils";
 
 interface PageContainerProps {
   children: React.ReactNode;
@@ -8,7 +9,10 @@ interface PageContainerProps {
 
 export function PageContainer({ children, className = "" }: PageContainerProps) {
   return (
-    <main className={`flex-1 container px-4 py-8 md:py-12 ${className}`}>
+    <main className={cn(
+      "flex-1 container mx-auto px-4 sm:px-6 lg:px-8 py-8",
+      className
+    )}>
       {children}
     </main>
   );

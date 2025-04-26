@@ -1,7 +1,18 @@
 
+/* Base styles need to be imported first */
 @import './styles/base.css';
+
+/* Then typography and spacing */
+@import './styles/typography.css';
+@import './styles/spacing.css';
+
+/* Then component styles */
 @import './styles/components.css';
 @import './styles/gradients.css';
 @import './styles/animations.css';
+
+/* Then specific styles */
 @import './styles/vault.css';
+
+/* Theme styles should be last as they can override other styles */
 @import './styles/theme.css';

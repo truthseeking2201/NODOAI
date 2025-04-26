@@ -1,7 +1,9 @@
 
 @layer components {
+  /* Glass card styling - standardized */
   .glass-card {
-    @apply bg-white/5 backdrop-blur-glass border border-white/10 rounded-[24px] shadow-glass transition-all duration-300 hover:border-white/15;
+    @apply bg-white/5 backdrop-blur-glass border border-white/10 rounded-xl shadow-glass transition-all duration-300 hover:border-white/15;
+    position: relative;
   }
 
   .glass-card::before {
@@ -15,8 +17,9 @@
     pointer-events: none;
   }
 
+  /* Navigation links */
   .nav-link {
-    @apply relative px-3 py-1.5 text-white/90 transition-all duration-150 rounded-lg hover:bg-white/5;
+    @apply relative px-3 py-1.5 text-white/90 transition-all duration-300 rounded-lg hover:bg-white/5;
   }
 
   .nav-link::after {
@@ -50,18 +53,22 @@
     @apply w-full;
   }
 
+  /* Deposit button styling */
   .deposit-gradient-btn {
-    @apply bg-gradient-brand text-white;
+    @apply bg-gradient-brand text-white transition-all duration-300 hover:shadow-brand;
   }
 
+  /* Input styling */
   .deposit-input {
-    @apply bg-nodo-darker/80 border-white/10 text-white focus:border-brand-500;
+    @apply bg-card border-white/10 text-white focus:border-brand-500 transition-all duration-300;
   }
 
+  /* Card styling */
   .deposit-card {
-    @apply bg-white/[0.02] border border-white/[0.08] rounded-[24px];
+    @apply bg-white/[0.02] border border-white/[0.08] rounded-xl transition-all duration-300;
   }
 
+  /* Wallet address display */
   .wallet-address {
     display: block;
     max-width: 100%;
@@ -77,8 +84,14 @@
     position: relative;
     backdrop-filter: blur(20px);
     border: 1px solid rgba(255,255,255,0.08);
+    transition: all 0.3s cubic-bezier(0.25, 0.1, 0.25, 1);
   }
-  
+
+  .wallet-address:hover {
+    border-color: rgba(255,255,255,0.15);
+    background: rgba(11, 12, 16, 0.8);
+  }
+
   .wallet-address-icon {
     position: absolute;
     right: 10px;
@@ -86,11 +99,12 @@
     transform: translateY(-50%);
   }
 
+  /* Premium glass card styling */
   .glass-card-premium {
-    @apply bg-white/[0.05] backdrop-blur-glass border border-white/[0.08] rounded-[24px] shadow-glass;
+    @apply bg-white/[0.05] backdrop-blur-glass border border-white/[0.08] rounded-xl shadow-glass transition-all duration-300;
     position: relative;
   }
-  
+
   .glass-card-premium::before {
     content: "";
     position: absolute;
@@ -99,7 +113,7 @@
     border-radius: inherit;
     pointer-events: none;
   }
-  
+
   .glass-card-premium::after {
     content: "";
     position: absolute;
@@ -115,11 +129,11 @@
     mask-composite: exclude;
     pointer-events: none;
   }
-  
+
   .glass-card-premium:hover::after {
     opacity: 1;
   }
-  
+
   /* Activity section styling */
   .activity-item {
     @apply flex items-center gap-3 py-3 px-4 rounded-xl transition-all duration-300;
@@ -129,7 +143,7 @@
     position: relative;
     overflow: hidden;
   }
-  
+
   .activity-item::after {
     content: '';
     position: absolute;
@@ -141,16 +155,16 @@
     opacity: 0;
     transition: opacity 0.3s cubic-bezier(0.25, 0.1, 0.25, 1);
   }
-  
+
   .activity-item:hover::after {
     opacity: 1;
   }
-  
+
   /* AI glow effects */
   .ai-glow {
     position: relative;
   }
-  
+
   .ai-glow::after {
     content: '';
     position: absolute;
@@ -162,26 +176,36 @@
     opacity: 0;
     transition: opacity 0.3s cubic-bezier(0.25, 0.1, 0.25, 1);
   }
-  
+
   .ai-glow:hover::after {
     opacity: 1;
   }
-  
+
+  /* Colored glows */
   .violet-glow {
     box-shadow: 0 0 20px rgba(62, 22, 114, 0.18);
   }
-  
+
   .orange-glow {
     box-shadow: 0 0 20px rgba(236, 111, 5, 0.18);
   }
-  
+
   /* 3D effect for cards */
   .card-3d {
     transform: perspective(1000px) rotateX(0) rotateY(0);
     transition: transform 0.4s cubic-bezier(0.25, 0.1, 0.25, 1);
   }
-  
+
   .card-3d:hover {
     transform: perspective(1000px) rotateX(2deg) rotateY(-2deg);
+  }
+
+  /* Standard focus styles - consistent across all interactive elements */
+  .focus-ring {
+    @apply outline-none;
+  }
+
+  .focus-ring:focus-visible {
+    @apply outline-none ring-2 ring-brand-500/60 ring-offset-2 ring-offset-background;
   }
 }

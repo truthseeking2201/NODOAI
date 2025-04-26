@@ -1,0 +1,119 @@
+/* Typography standardization */
+
+@layer base {
+  /* Heading styles */
+  h1 {
+    @apply text-3xl md:text-4xl font-medium leading-tight tracking-tight;
+    @apply mb-6;
+  }
+
+  h2 {
+    @apply text-2xl md:text-3xl font-medium leading-tight tracking-tight;
+    @apply mb-5;
+  }
+
+  h3 {
+    @apply text-xl md:text-2xl font-medium leading-tight tracking-tight;
+    @apply mb-4;
+  }
+
+  h4 {
+    @apply text-lg md:text-xl font-medium leading-tight tracking-tight;
+    @apply mb-3;
+  }
+
+  h5 {
+    @apply text-base md:text-lg font-medium leading-tight tracking-tight;
+    @apply mb-2;
+  }
+
+  h6 {
+    @apply text-sm md:text-base font-medium leading-tight tracking-tight;
+    @apply mb-2;
+  }
+
+  /* Body text */
+  p {
+    @apply text-base leading-relaxed text-text-primary;
+    @apply mb-4;
+  }
+
+  .text-small {
+    @apply text-sm leading-relaxed text-text-secondary;
+  }
+
+  .text-tiny {
+    @apply text-xs leading-normal text-text-secondary;
+  }
+
+  /* Font weights */
+  .font-regular {
+    @apply font-normal;
+  }
+
+  .font-medium {
+    @apply font-medium;
+  }
+
+  .font-bold {
+    @apply font-bold;
+  }
+
+  /* Monospace text */
+  .mono {
+    @apply font-mono text-sm tracking-tight;
+  }
+}
+
+@layer components {
+  /* Card typography */
+  .card-title {
+    @apply text-lg font-medium text-text-primary mb-1;
+  }
+
+  .card-description {
+    @apply text-sm text-text-secondary mb-4;
+  }
+
+  /* Section typography */
+  .section-title {
+    @apply text-xl font-medium text-text-primary mb-4;
+  }
+
+  .section-description {
+    @apply text-base text-text-secondary mb-6;
+  }
+
+  /* Dashboard typography */
+  .metric-value {
+    @apply text-2xl font-mono font-medium;
+  }
+
+  .metric-label {
+    @apply text-xs text-text-secondary uppercase tracking-wider;
+  }
+
+  /* Vault typography */
+  .vault-name {
+    @apply text-xl font-medium;
+  }
+
+  .vault-description {
+    @apply text-sm text-text-secondary;
+  }
+
+  /* Input labels */
+  .input-label {
+    @apply text-sm font-medium text-text-primary mb-1;
+  }
+
+  /* Helper text */
+  .helper-text {
+    @apply text-xs text-text-secondary mt-1;
+  }
+
+  /* Error text */
+  .error-text {
+    @apply text-xs text-red-500 mt-1;
+  }
+}

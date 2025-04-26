@@ -1,4 +1,13 @@
 
+/* Standardized animation durations:
+   - Micro interactions: 0.2s
+   - UI transitions: 0.3s
+   - Emphasis animations: 0.5s
+   - Background effects: 1-3s
+
+   Standard easing: cubic-bezier(0.25, 0.1, 0.25, 1) (standard ease-out)
+*/
+
 /* Spinner animation */
 @keyframes slow-spin {
   from {
@@ -16,15 +25,15 @@
 /* Pulsing effect */
 @keyframes pulse {
   0% {
-    transform: scale(0.97);
+    transform: scale(0.98);
     opacity: 0.8;
   }
   50% {
-    transform: scale(1.03);
+    transform: scale(1.02);
     opacity: 1;
   }
   100% {
-    transform: scale(0.97);
+    transform: scale(0.98);
     opacity: 0.8;
   }
 }
@@ -33,55 +42,60 @@
   animation: pulse 2s cubic-bezier(0.25, 0.1, 0.25, 1) infinite;
 }
 
-/* Glowing text effects */
-@keyframes glow-emerald {
+/* Glowing text effects - standardized for different colors */
+@keyframes glow {
   0% {
-    text-shadow: 0 0 4px rgba(16, 185, 129, 0.2);
+    filter: drop-shadow(0 0 4px rgba(var(--glow-color, 236, 111, 5), 0.2));
   }
   50% {
-    text-shadow: 0 0 10px rgba(16, 185, 129, 0.5);
+    filter: drop-shadow(0 0 10px rgba(var(--glow-color, 236, 111, 5), 0.5));
   }
   100% {
-    text-shadow: 0 0 4px rgba(16, 185, 129, 0.2);
+    filter: drop-shadow(0 0 4px rgba(var(--glow-color, 236, 111, 5), 0.2));
   }
 }
 
 .text-glow-emerald {
-  animation: glow-emerald 3s cubic-bezier(0.25, 0.1, 0.25, 1) infinite;
+  --glow-color: 16, 185, 129;
+  animation: glow 3s cubic-bezier(0.25, 0.1, 0.25, 1) infinite;
 }
 
-/* Brand orange glow effect */
-@keyframes brand-pulse {
+.text-glow-nova {
+  --glow-color: 236, 111, 5;
+  animation: glow 3s cubic-bezier(0.25, 0.1, 0.25, 1) infinite;
+}
+
+.text-glow-orion {
+  --glow-color: 245, 158, 11;
+  animation: glow 3s cubic-bezier(0.25, 0.1, 0.25, 1) infinite;
+}
+
+/* Box shadow glow effects */
+@keyframes box-glow {
   0% {
-    box-shadow: 0 0 5px rgba(236, 111, 5, 0.18);
+    box-shadow: 0 0 5px rgba(var(--glow-color, 236, 111, 5), 0.18);
   }
   50% {
-    box-shadow: 0 0 20px rgba(236, 111, 5, 0.3);
+    box-shadow: 0 0 20px rgba(var(--glow-color, 236, 111, 5), 0.3);
   }
   100% {
-    box-shadow: 0 0 5px rgba(236, 111, 5, 0.18);
+    box-shadow: 0 0 5px rgba(var(--glow-color, 236, 111, 5), 0.18);
   }
 }
 
 .brand-glow {
-  animation: brand-pulse 3s cubic-bezier(0.25, 0.1, 0.25, 1) infinite;
+  --glow-color: 236, 111, 5;
+  animation: box-glow 3s cubic-bezier(0.25, 0.1, 0.25, 1) infinite;
 }
 
-/* Brand orange text glow */
-@keyframes brand-text-pulse {
-  0% {
-    text-shadow: 0 0 4px rgba(236, 111, 5, 0.18);
-  }
-  50% {
-    text-shadow: 0 0 12px rgba(236, 111, 5, 0.3);
-  }
-  100% {
-    text-shadow: 0 0 4px rgba(236, 111, 5, 0.18);
-  }
+.emerald-glow {
+  --glow-color: 16, 185, 129;
+  animation: box-glow 3s cubic-bezier(0.25, 0.1, 0.25, 1) infinite;
 }
 
-.brand-text-glow {
-  animation: brand-text-pulse 3s cubic-bezier(0.25, 0.1, 0.25, 1) infinite;
+.orion-glow {
+  --glow-color: 245, 158, 11;
+  animation: box-glow 3s cubic-bezier(0.25, 0.1, 0.25, 1) infinite;
 }
 
 /* AI working animation */
@@ -149,12 +163,77 @@
 
 /* 3D transform effect for cards */
 .transform-3d {
-  transition: transform 0.4s cubic-bezier(0.25, 0.1, 0.25, 1), box-shadow 0.4s cubic-bezier(0.25, 0.1, 0.25, 1);
+  transition: transform 0.3s cubic-bezier(0.25, 0.1, 0.25, 1),
+              box-shadow 0.3s cubic-bezier(0.25, 0.1, 0.25, 1);
 }
 
 .transform-3d:hover {
   transform: translateY(-5px);
   box-shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.2);
+}
+
+/* Standardized fade animations */
+@keyframes fade-in {
+  0% {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-in {
+  animation: fade-in 0.3s cubic-bezier(0.25, 0.1, 0.25, 1) forwards;
+}
+
+@keyframes fade-out {
+  0% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+}
+
+.animate-fade-out {
+  animation: fade-out 0.3s cubic-bezier(0.25, 0.1, 0.25, 1) forwards;
+}
+
+/* Scale animations */
+@keyframes scale-in {
+  0% {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.animate-scale-in {
+  animation: scale-in 0.3s cubic-bezier(0.25, 0.1, 0.25, 1) forwards;
+}
+
+/* Card success glow animation */
+@keyframes card-glow {
+  0% { transform: scale(1); box-shadow: 0 0 0 rgba(236, 111, 5, 0); }
+  50% { transform: scale(1.02); box-shadow: 0 0 20px rgba(236, 111, 5, 0.6); }
+  100% { transform: scale(1); box-shadow: 0 0 0 rgba(236, 111, 5, 0); }
+}
+
+.glow-animation {
+  animation: card-glow 0.6s cubic-bezier(0.25, 0.1, 0.25, 1);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .glow-animation {
+    animation: none;
+  }
 }
 
 /* Subtle parallax effect */

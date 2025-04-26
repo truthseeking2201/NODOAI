@@ -1,21 +1,4 @@
-:root {
-  --background-color: #101112;
-  --card-background: #181A1E;
-  --border-light: rgba(255, 255, 255, 0.06);
-  --text-primary: #E5E7EB;
-  --text-secondary: #9CA3AF;
-
-  /* Brand colors */
-  --color-nova: #FF8A00;
-  --color-nova-light: #FF9D30;
-  --color-nova-dark: #E67800;
-  --color-orion: #3B82F6;
-  --color-emerald: #10B981;
-
-  /* Theme-consistent CTA gradient */
-  --cta-gradient: linear-gradient(to right, #FF8A00, #F59E0B);
-  --cta-hover-gradient: linear-gradient(to right, #E67800, #D97706);
-}
+/* Theme CSS file - Contains only styles that reference variables from base.css */
 
 /* Apply the dark background to the entire app */
 body {
@@ -27,11 +10,11 @@ body {
 .glass-card {
   background-color: var(--card-background);
   border: 1px solid var(--border-light);
-  border-radius: 20px;
+  border-radius: var(--radius);
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
 }
 
-/* CTA Button styling with Neural-Orange gradient */
+/* CTA Button styling with Nova gradient */
 .cta-button {
   background: var(--cta-gradient);
   color: #ffffff;

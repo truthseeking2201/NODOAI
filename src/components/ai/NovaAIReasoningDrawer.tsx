@@ -249,32 +249,32 @@ export function NovaAIReasoningDrawer({ open, onClose, action }: NovaAIReasoning
       onOpenChange={(newOpen) => !newOpen && onClose()}
       modal={true}
     >
-      <DrawerContent className="max-w-[450px] sm:max-w-[550px] h-[90vh] rounded-t-xl">
-        <div className="bg-[#101112] h-full rounded-t-xl overflow-hidden">
+      <DrawerContent className="max-w-[450px] sm:max-w-[550px] h-[90vh] rounded-t-xl bg-card border-t border-white/10">
+        <div className="h-full rounded-t-xl overflow-hidden">
           <DrawerHeader className="border-b border-white/10 px-6 py-4 flex justify-between items-center">
             <div className="flex items-center gap-2">
               <DrawerClose asChild>
-                <Button variant="ghost" size="icon" className="h-8 w-8">
+                <Button variant="ghost" size="icon" className="h-8 w-8 focus-ring">
                   <ChevronLeft className="h-4 w-4" />
                 </Button>
               </DrawerClose>
               <DrawerTitle className="text-lg font-medium flex items-center gap-2">
-                <div className="w-6 h-6 rounded-full bg-gradient-to-br from-orange-500 to-amber-500 flex items-center justify-center animate-pulse">
+                <div className="w-6 h-6 rounded-full bg-gradient-to-br from-nova to-nova-dark flex items-center justify-center animate-pulse">
                 </div>
                 Nova AI Reasoning
               </DrawerTitle>
             </div>
             <DrawerClose asChild>
-              <Button variant="ghost" size="icon" className="h-8 w-8">
+              <Button variant="ghost" size="icon" className="h-8 w-8 focus-ring">
                 <X className="h-4 w-4" />
               </Button>
             </DrawerClose>
           </DrawerHeader>
 
-          <div ref={contentRef} className="p-6 overflow-y-auto h-[calc(90vh-64px)]">
+          <div ref={contentRef} className="card-padding overflow-y-auto h-[calc(90vh-64px)]">
             <div className="flex items-center justify-between mb-4">
               <div className="flex items-center gap-2">
-                <div className="w-8 h-8 rounded-full bg-gradient-to-br from-orange-500 to-amber-500 flex items-center justify-center">
+                <div className="w-8 h-8 rounded-full bg-gradient-to-br from-nova to-nova-dark flex items-center justify-center">
                   <span className="text-xs font-bold">N</span>
                 </div>
                 <div>
@@ -283,7 +283,7 @@ export function NovaAIReasoningDrawer({ open, onClose, action }: NovaAIReasoning
                 </div>
               </div>
               <div className="flex items-center gap-1 px-2 py-1 rounded-full bg-white/5">
-                <div className={`w-2 h-2 rounded-full ${confidence === 100 ? 'bg-lime-500' : 'bg-amber-500'} animate-pulse`}></div>
+                <div className={`w-2 h-2 rounded-full ${confidence === 100 ? 'bg-emerald' : 'bg-nova'} animate-pulse`}></div>
                 <span className="text-xs font-medium">
                   {confidence === 100 ? "Action Complete" : "Processing..."}
                 </span>
@@ -297,10 +297,10 @@ export function NovaAIReasoningDrawer({ open, onClose, action }: NovaAIReasoning
                   {new Date(action.timestamp).toLocaleTimeString()} | Confidence: {confidence.toFixed(0)}%
                 </span>
               </div>
-              <Progress value={confidence} className="h-1 bg-white/5" indicatorClassName="bg-gradient-to-r from-amber-500 to-lime-500" />
+              <Progress value={confidence} className="h-1 bg-white/5" indicatorClassName="bg-gradient-to-r from-nova to-nova-dark" />
             </div>
 
-            <div className="space-y-6">
+            <div className="component-spacing">
               {/* Step 1: Trigger */}
               <div className="bg-white/5 rounded-lg p-4">
                 <div className="flex items-center gap-2 mb-2">
@@ -358,12 +358,12 @@ export function NovaAIReasoningDrawer({ open, onClose, action }: NovaAIReasoning
                           <p className="text-sm text-white/80">{getHypothesis()}</p>
                           <div className="mt-3 bg-white/5 rounded p-3">
                             <div className="flex items-center gap-2 mb-2">
-                              <LineChart size={16} className="text-amber-500" />
+                              <LineChart size={16} className="text-nova" />
                               <span className="text-xs font-medium">Projected APR Impact</span>
                             </div>
-                            <div className="h-20 bg-[#0F1011] rounded relative">
+                            <div className="h-20 bg-card rounded relative">
                               <div className="absolute inset-0 flex items-center justify-center">
-                                <span className={`text-lg font-bold ${action.expectedAprChange > 0 ? 'text-emerald-500' : 'text-red-500'}`}>
+                                <span className={`text-lg font-mono font-semibold ${action.expectedAprChange > 0 ? 'text-emerald' : 'text-red-500'}`}>
                                   {action.expectedAprChange > 0 ? '+' : ''}{action.expectedAprChange.toFixed(2)}%
                                 </span>
                               </div>
@@ -414,12 +414,12 @@ export function NovaAIReasoningDrawer({ open, onClose, action }: NovaAIReasoning
                           <div className="space-y-3">
                             <div>
                               <div className="flex items-center gap-2 mb-1">
-                                <ThumbsUp size={14} className="text-emerald-500" />
-                                <span className="text-sm font-medium text-emerald-500">Pros</span>
+                                <ThumbsUp size={14} className="text-emerald" />
+                                <span className="text-sm font-medium text-emerald">Pros</span>
                               </div>
                               <ul className="space-y-1 pl-6 text-sm text-white/80">
                                 {evaluation.pros.map((pro, index) => (
-                                  <li key={`pro-${index}`} className="list-disc text-emerald-500">
+                                  <li key={`pro-${index}`} className="list-disc text-emerald">
                                     <span className="text-white/80">{pro}</span>
                                   </li>
                                 ))}
@@ -443,7 +443,7 @@ export function NovaAIReasoningDrawer({ open, onClose, action }: NovaAIReasoning
                           <div className="mt-4">
                             <button
                               onClick={() => setShowDecisionTree(!showDecisionTree)}
-                              className="flex items-center gap-2 text-xs font-medium text-white/60 hover:text-white/80 transition-colors"
+                              className="flex items-center gap-2 text-xs font-medium text-white/60 hover:text-white/80 transition-all duration-300 focus-ring p-2 -m-2 rounded"
                             >
                               <GitBranch size={14} />
                               {showDecisionTree ? 'Hide decision tree' : 'Show decision tree'}
@@ -455,7 +455,7 @@ export function NovaAIReasoningDrawer({ open, onClose, action }: NovaAIReasoning
                                 animate={{ opacity: 1, height: "auto" }}
                                 exit={{ opacity: 0, height: 0 }}
                                 transition={{ duration: 0.3 }}
-                                className="mt-2 p-3 bg-[#0F1011] rounded text-xs"
+                                className="mt-2 p-3 bg-card rounded text-xs"
                               >
                                 <div className="text-center text-white/60">Decision Tree Visualization</div>
                                 {/* Placeholder for actual decision tree visualization */}
@@ -509,16 +509,17 @@ export function NovaAIReasoningDrawer({ open, onClose, action }: NovaAIReasoning
             <div className="mt-8 flex justify-between">
               {step < 3 ? (
                 <Button
+                  variant="nova"
                   onClick={goToNextStep}
-                  className="bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 text-white"
+                  className="focus-ring"
                 >
                   Continue
                 </Button>
               ) : (
                 <Button
-                  onClick={runSimulation}
                   variant="outline"
-                  className="flex items-center gap-2 border-white/20"
+                  className="flex items-center gap-2 focus-ring"
+                  onClick={runSimulation}
                   disabled={isSimulating}
                 >
                   <Play size={14} />
@@ -526,7 +527,7 @@ export function NovaAIReasoningDrawer({ open, onClose, action }: NovaAIReasoning
                 </Button>
               )}
 
-              <Button variant="outline" className="border-white/20" onClick={onClose}>
+              <Button variant="outline" className="focus-ring" onClick={onClose}>
                 Close
               </Button>
             </div>
