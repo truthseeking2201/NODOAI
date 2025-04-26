@@ -5,7 +5,7 @@ import { TrendingUp, Flame, Shield } from 'lucide-react';
 
 interface FeaturedVaultPillProps {
   label: string;
-  vaultName: string;
+  vaultName: string;  // Internal reference, not displayed to users
   type: 'nova' | 'orion' | 'emerald';
   metric: string;
 }
@@ -44,6 +44,20 @@ export function FeaturedVaultPill({ label, vaultName, type, metric }: FeaturedVa
     }
   };
 
+  // Map category label to friendly display names - no direct pool names
+  const getCategoryLabel = () => {
+    switch (type) {
+      case 'nova':
+        return 'High Yield';
+      case 'orion':
+        return 'Balanced';
+      case 'emerald':
+        return 'Stable';
+      default:
+        return 'Standard';
+    }
+  };
+
   return (
     <Link to={`/vaults/${getVaultId()}`}>
       <motion.div
@@ -59,7 +73,7 @@ export function FeaturedVaultPill({ label, vaultName, type, metric }: FeaturedVa
           </div>
         </div>
         <div className="text-xs md:text-sm font-medium flex items-center space-x-2">
-          <span className="font-semibold">{vaultName}</span>
+          <span className="font-semibold">{getCategoryLabel()}</span>
           <span className="w-1 h-1 rounded-full bg-current opacity-40" />
           <span className="font-mono font-bold">{metric}</span>
         </div>

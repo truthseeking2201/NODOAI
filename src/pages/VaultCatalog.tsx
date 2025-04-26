@@ -142,7 +142,7 @@ export default function VaultCatalog() {
           </AnimatePresence>
         </motion.section>
 
-        {/* Featured vaults capsules */}
+        {/* Featured vaults capsules - internal pool names are hidden from users */}
         <motion.section
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}

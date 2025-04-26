@@ -1,30 +1,26 @@
 import { useState, useMemo } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { PageContainer } from "@/components/layout/PageContainer";
-import { Button } from "@/components/ui/button";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useWallet } from "@/hooks/useWallet";
 import { vaultService } from "@/services/vaultService";
 import { UserInvestment, TransactionHistory } from "@/types/vault";
-import { WalletIcon, Download } from "lucide-react";
-
-// Dashboard components
-import { VaultRowAccordion } from "@/components/dashboard/VaultRowAccordion";
-import { TxDrawer } from "@/components/dashboard/TxDrawer";
-import { PerformanceChart } from "@/components/dashboard/PerformanceChart";
 import { EmptyState } from "@/components/dashboard/EmptyState";
 import { WithdrawModal } from "@/components/vault/WithdrawModal";
-import { VaultMetricsHeader } from "@/components/dashboard/VaultMetricsHeader";
-import { DualActivityFeed } from "@/components/dashboard/DualActivityFeed";
+import { ReceiptTokenCard } from "@/components/dashboard/ReceiptTokenCard";
+import { MetricsGrid } from "@/components/dashboard/MetricsGrid";
+import { PerformanceChart } from "@/components/dashboard/PerformanceChart";
+import { PositionsPanel } from "@/components/dashboard/PositionsPanel";
+import { ActivityFeedPanel } from "@/components/dashboard/ActivityFeedPanel";
+import { TxDrawer } from "@/components/dashboard/TxDrawer";
 
 export default function Dashboard() {
-  const { isConnected, address, openWalletModal } = useWallet();
+  const { isConnected, address, balance, openConnectModal } = useWallet();
   const [selectedInvestment, setSelectedInvestment] = useState<UserInvestment | null>(null);
   const [isWithdrawModalOpen, setIsWithdrawModalOpen] = useState(false);
   const [selectedTx, setSelectedTx] = useState<TransactionHistory | null>(null);
   const [isTxDrawerOpen, setIsTxDrawerOpen] = useState(false);
-  const [exportingCSV, setExportingCSV] = useState(false);
 
+  // Fetch user investments
   const {
     data: investments,
     isLoading: isLoadingInvestments,
@@ -34,6 +30,7 @@ export default function Dashboard() {
     enabled: isConnected,
   });
 
+  // Fetch transaction history
   const {
     data: transactions,
     isLoading: isLoadingTransactions,
@@ -43,10 +40,12 @@ export default function Dashboard() {
     enabled: isConnected,
   });
 
+  // Calculate portfolio metrics
   const totalInvestmentValue = investments?.reduce((sum, inv) => sum + inv.currentValue, 0) || 0;
   const totalPrincipal = investments?.reduce((sum, inv) => sum + inv.principal, 0) || 0;
   const totalProfit = investments?.reduce((sum, inv) => sum + inv.profit, 0) || 0;
 
+  // Generate performance data for chart
   const performanceData = useMemo(() => {
     if (!transactions) return [];
 
@@ -82,14 +81,15 @@ export default function Dashboard() {
     return data;
   }, [transactions, totalPrincipal]);
 
+  // Calculate weighted average APR
   const averageAPR = useMemo(() => {
     if (!investments || investments.length === 0) return 0;
 
     const totalValueWithAPR = investments.reduce((sum, inv) => {
       let aprEstimate = 0;
-      if (inv.vaultId.includes('deep')) aprEstimate = 21.5;
-      else if (inv.vaultId.includes('cetus')) aprEstimate = 18.9;
-      else aprEstimate = 15.2;
+      if (inv.vaultId.includes('deep')) aprEstimate = 24.8;
+      else if (inv.vaultId.includes('cetus')) aprEstimate = 18.7;
+      else aprEstimate = 12.5;
 
       return sum + (inv.currentValue * aprEstimate);
     }, 0);
@@ -97,127 +97,103 @@ export default function Dashboard() {
     return totalInvestmentValue > 0 ? totalValueWithAPR / totalInvestmentValue : 0;
   }, [investments, totalInvestmentValue]);
 
+  // Handle withdraw click
   const handleWithdrawClick = (investment: UserInvestment) => {
     setSelectedInvestment(investment);
     setIsWithdrawModalOpen(true);
   };
 
+  // Handle transaction selection
   const handleTxSelect = (tx: TransactionHistory) => {
     setSelectedTx(tx);
     setIsTxDrawerOpen(true);
   };
 
-  const handleExportCSV = () => {
-    setExportingCSV(true);
-    setTimeout(() => {
-      setExportingCSV(false);
-      alert("Transactions exported to CSV");
-    }, 1500);
-  };
-
+  // If not connected, show connect prompt
   if (!isConnected) {
     return (
-      <PageContainer>
+      <PageContainer className="mx-auto max-w-7xl">
         <div className="max-w-md mx-auto mt-12">
           <EmptyState
             title="Connect Your Wallet"
             description="Connect your wallet to access your personalized dashboard and view your investment portfolio."
             actionLabel="Connect Wallet"
             actionLink="#"
+            onActionClick={openConnectModal}
           />
-          <Button
-            onClick={openWalletModal}
-            className="gradient-bg-nova hover:shadow-neon-nova w-full mt-4 hidden"
-            data-wallet-connect
-          >
-            <WalletIcon className="mr-2 h-4 w-4" /> Connect Wallet
-          </Button>
         </div>
       </PageContainer>
     );
   }
 
+  // Show receipt token card only if user has balance
+  const showReceiptTokenCard = balance && balance.receiptTokens > 0;
+
   return (
-    <PageContainer>
-      <div className="flex items-center justify-between mb-6">
-        <div>
+    <PageContainer className="mx-auto max-w-7xl pb-20">
+      <div className="space-y-8">
+        {/* Dashboard Header */}
+        <div className="mb-8">
           <h1 className="text-2xl md:text-3xl font-bold mb-1">
-            Your <span className="gradient-text-nova">Portfolio</span>
+            Your <span className="bg-gradient-to-r from-[#FF8A00] to-[#FF6B00] text-transparent bg-clip-text">Portfolio</span>
           </h1>
           <p className="text-white/60 text-sm">
             Live snapshot of your vault positions
           </p>
         </div>
-      </div>
 
-      {/* Replace KpiBar with VaultMetricsHeader */}
-      <VaultMetricsHeader
-        investments={investments || []}
-        className="mb-8"
-      />
+        {/* Metrics Grid */}
+        <MetricsGrid
+          isLoading={isLoadingInvestments}
+          totalDeposited={totalPrincipal}
+          totalValue={totalInvestmentValue}
+          totalProfit={totalProfit}
+          avgApr={averageAPR}
+          investments={investments || []}
+        />
 
-      <div className="grid grid-cols-1 gap-6 mb-8">
-        <div>
-          <PerformanceChart
-            data={performanceData}
-            transactions={transactions}
-            isLoading={isLoadingInvestments || isLoadingTransactions}
-            onTxClick={handleTxSelect}
-          />
-        </div>
-      </div>
+        {/* Receipt Token Card */}
+        {showReceiptTokenCard && (
+          <ReceiptTokenCard />
+        )}
 
-      <h2 className="text-xl font-bold mb-4">Active Positions</h2>
-
-      {isLoadingInvestments ? (
-        <div className="space-y-4 mb-8">
-          {[1, 2].map(i => (
-            <div key={i} className="glass-card h-24 animate-shimmer"></div>
-          ))}
-        </div>
-      ) : investments && investments.length > 0 ? (
-        <div className="mb-8">
-          {investments.map((investment) => (
-            <VaultRowAccordion
-              key={investment.vaultId}
-              investment={investment}
-              onWithdraw={handleWithdrawClick}
+        {/* Performance Chart */}
+        <div className="bg-black/20 rounded-xl border border-white/10 backdrop-blur-sm overflow-hidden">
+          <div className="p-4 border-b border-white/10">
+            <h2 className="text-lg font-medium">Portfolio Performance</h2>
+          </div>
+          <div className="p-4">
+            <PerformanceChart
+              data={performanceData}
+              transactions={transactions}
+              isLoading={isLoadingInvestments || isLoadingTransactions}
+              onTxClick={handleTxSelect}
             />
-          ))}
+          </div>
         </div>
-      ) : (
-        <div className="mb-8">
-          <EmptyState
-            title="No Active Investments"
-            description="You don't have any active investments. Start by exploring our vaults and making your first deposit."
-            actionLabel="Explore Vaults"
-            actionLink="/"
-          />
-        </div>
-      )}
 
-      <h2 className="text-xl font-bold mb-4">Activity</h2>
-      {isLoadingTransactions ? (
-        <div className="glass-card h-64 animate-shimmer"></div>
-      ) : transactions && transactions.length > 0 ? (
-        <DualActivityFeed
-          transactions={transactions || []}
+        {/* Active Positions */}
+        <PositionsPanel
+          positions={investments || []}
+          isLoading={isLoadingInvestments}
+          onWithdraw={handleWithdrawClick}
         />
-      ) : (
-        <EmptyState
-          title="No Activity Yet"
-          description="You haven't made any transactions yet. Make your first deposit to get started."
-          actionLabel="Explore Vaults"
-          actionLink="/"
-        />
-      )}
 
+        {/* Activity Feed */}
+        <ActivityFeedPanel
+          activities={transactions || []}
+          isLoading={isLoadingTransactions}
+        />
+      </div>
+
+      {/* Transaction Drawer */}
       <TxDrawer
         tx={selectedTx}
         open={isTxDrawerOpen}
         onClose={() => setIsTxDrawerOpen(false)}
       />
 
+      {/* Withdraw Modal */}
       {selectedInvestment && (
         <WithdrawModal
           open={isWithdrawModalOpen}

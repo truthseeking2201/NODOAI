@@ -55,10 +55,19 @@ export const useDepositDrawer = (props?: UseDepositDrawerProps) => {
       // Use the wallet.deposit function instead of service
       return await deposit(params.vaultId, params.amount, params.lockupPeriod);
     },
-    onSuccess: () => {
+    onSuccess: (data) => {
       setStep('success');
       setShowConfetti(true);
       setTimeout(() => setShowConfetti(false), 3000);
+
+      // Show the vault receipt token minted toast notification
+      toast({
+        title: "Vault Receipt Token Minted",
+        description: `${(parseFloat(amount) * 0.98).toFixed(2)} receipt tokens have been added to your wallet. These will burn automatically on withdrawal.`,
+        variant: "default",
+        duration: 5000,
+      });
+
       if (props?.vault) {
         window.dispatchEvent(new CustomEvent('deposit-success', {
           detail: { amount: parseFloat(amount), vaultId: props.vault.id }

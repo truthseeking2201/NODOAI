@@ -42,8 +42,9 @@ export function VaultCard({
           accent: 'text-nova-light',
           border: 'border-nova/20',
           riskColor: 'bg-red-500/10 text-red-500',
-          riskText: 'High returns',
-          buttonVariant: 'nova' as const
+          riskText: 'High Yield',
+          vaultCategory: 'Aggressive',
+          buttonVariant: 'neural-orange' as const // Using neural-orange for all CTAs
         };
       case 'orion':
         return {
@@ -53,7 +54,8 @@ export function VaultCard({
           border: 'border-orion/20',
           riskColor: 'bg-orion/10 text-orion',
           riskText: 'Balanced',
-          buttonVariant: 'orion' as const
+          vaultCategory: 'Moderate',
+          buttonVariant: 'neural-orange' as const // Using neural-orange for all CTAs
         };
       case 'emerald':
         return {
@@ -63,7 +65,8 @@ export function VaultCard({
           border: 'border-emerald/20',
           riskColor: 'bg-emerald/10 text-emerald',
           riskText: 'Stable',
-          buttonVariant: 'emerald' as const
+          vaultCategory: 'Conservative',
+          buttonVariant: 'neural-orange' as const // Using neural-orange for all CTAs
         };
     }
   };
@@ -99,7 +102,7 @@ export function VaultCard({
               </div>
               <div>
                 <CardTitle className="vault-name text-white">
-                  {vault.name}
+                  {styles.vaultCategory} Vault
                 </CardTitle>
                 <CardDescription className="vault-description text-white/60">
                   {vault.description}

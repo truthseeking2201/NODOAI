@@ -22,6 +22,7 @@ const buttonVariants = cva(
         nova: "bg-gradient-to-r from-nova-light to-nova text-white shadow-neon-nova hover:shadow-brand-hover",
         orion: "bg-gradient-to-r from-orion-light to-orion text-white shadow-neon-orion hover:opacity-90",
         emerald: "bg-gradient-to-r from-emerald-light to-emerald text-white shadow-neon-emerald hover:opacity-90",
+        "neural-orange": "bg-gradient-to-r from-[#FF8A00] to-[#FF6B00] text-white shadow-[0_4px_12px_-2px_rgba(255,138,0,0.3)] hover:shadow-[0_4px_16px_-2px_rgba(255,138,0,0.4)] hover:scale-[0.98] transition-all active:scale-95",
       },
       size: {
         default: "h-11 px-4 py-2",
