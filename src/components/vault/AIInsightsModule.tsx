@@ -7,11 +7,15 @@ import {
   LineChart,
   Lightbulb,
   Cpu,
-  Network,
   Shield,
   ArrowRight,
   ChevronRight,
-  ChevronLeft
+  ChevronLeft,
+  ChevronDown,
+  ChevronUp,
+  DollarSign,
+  Clock,
+  Info
 } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 
@@ -19,6 +23,8 @@ interface Insight {
   id: string;
   title: string;
   description: string;
+  plainLanguage: string;
+  benefit: string;
   metric?: {
     value: string;
     change: number;
@@ -32,6 +38,7 @@ export function AIInsightsModule() {
   const [insights] = useState<Insight[]>(generateInsights());
   const [activeInsight, setActiveInsight] = useState(0);
   const [autoplay, setAutoplay] = useState(true);
+  const [showTechnicalDetails, setShowTechnicalDetails] = useState(false);
 
   // Auto-rotate the insights
   useEffect(() => {
@@ -51,6 +58,8 @@ export function AIInsightsModule() {
         id: "insight-1",
         title: "APR Optimization",
         description: "Neural models have increased average vault APR by 2.4% over the past 30 days through dynamic rebalancing and position optimization.",
+        plainLanguage: "We adjusted your investments to earn higher returns",
+        benefit: "Your money is working harder for you with minimal effort on your part",
         metric: {
           value: "+2.4%",
           change: 2.4,
@@ -72,6 +81,8 @@ export function AIInsightsModule() {
         id: "insight-2",
         title: "Risk Management",
         description: "AI safeguards actively protected vaults from 3 major market volatility events last week, preventing potential losses of 1.8%.",
+        plainLanguage: "We protected your investment from recent market drops",
+        benefit: "You avoided losing 1.8% of your investment value during market volatility",
         metric: {
           value: "-1.8%",
           change: -1.8,
@@ -93,6 +104,8 @@ export function AIInsightsModule() {
         id: "insight-3",
         title: "Market Analysis",
         description: "Neural networks analyzed 3.2M on-chain data points to predict optimal entry points, achieving 94.3% accuracy in price movement predictions.",
+        plainLanguage: "We found the best times to enter and exit market positions",
+        benefit: "Your investments are timed to maximize your returns with high precision",
         metric: {
           value: "94.3%",
           change: 94.3,
@@ -114,6 +127,8 @@ export function AIInsightsModule() {
         id: "insight-4",
         title: "Position Optimization",
         description: "Deep learning algorithms detected inefficient liquidity provisioning and automatically rebalanced positions for 18.7% better capital utilization.",
+        plainLanguage: "We adjusted your investment allocations for better efficiency",
+        benefit: "Your capital is now 18.7% more productive, maximizing your potential returns",
         metric: {
           value: "+18.7%",
           change: 18.7,
@@ -151,9 +166,9 @@ export function AIInsightsModule() {
 
   function getMetricColor(change: number) {
     if (change > 0) {
-      return "text-emerald";
+      return "text-emerald drop-shadow-glow-green";
     } else if (change < 0) {
-      return "text-red-500";
+      return "text-red-500 drop-shadow-glow-red";
     }
     return "text-white";
   }
@@ -169,46 +184,52 @@ export function AIInsightsModule() {
   }
 
   return (
-    <div className="my-14 max-w-screen-lg mx-auto">
-      <div className="flex items-center justify-between mb-5">
+    <div className="my-10 max-w-screen-xl mx-auto relative">
+      {/* Background glow effect - more subtle */}
+      <div className="absolute -top-20 -left-20 w-[500px] h-[500px] rounded-full bg-nova/5 blur-[120px] opacity-30 pointer-events-none"></div>
+      <div className="absolute -bottom-20 -right-20 w-[400px] h-[400px] rounded-full bg-orion/5 blur-[100px] opacity-30 pointer-events-none"></div>
+
+      <div className="flex items-center justify-between mb-4 relative z-10">
         <motion.div
           initial={{ opacity: 0, x: -20 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.5 }}
           className="flex items-center gap-3"
         >
-          <div className="p-2 rounded-lg bg-gradient-to-br from-nova/20 to-nova/5">
-            <Brain size={20} className="text-nova" />
+          <div className="relative">
+            <div className="relative p-2 rounded-lg bg-gradient-to-br from-nova/20 to-nova/5 shadow-md">
+              <Brain size={20} className="text-nova" />
+            </div>
           </div>
           <div>
             <h2 className="text-xl font-bold mb-0.5">AI-Powered Insights</h2>
-            <p className="text-sm text-white/60">Real-time neural network analysis and optimization</p>
+            <p className="text-sm text-white/70">Helping your investments work smarter</p>
           </div>
         </motion.div>
 
         <div className="flex items-center gap-2">
           <button
             onClick={handlePrev}
-            className="p-2 rounded-lg bg-white/5 hover:bg-white/10 border border-white/10 transition-colors"
+            className="p-2 rounded-lg bg-black/40 hover:bg-black/60 border border-white/10 transition-colors"
           >
-            <ChevronLeft size={18} className="text-white/60" />
+            <ChevronLeft size={18} className="text-white/70" />
           </button>
           <button
             onClick={handleNext}
-            className="p-2 rounded-lg bg-white/5 hover:bg-white/10 border border-white/10 transition-colors"
+            className="p-2 rounded-lg bg-black/40 hover:bg-black/60 border border-white/10 transition-colors"
           >
-            <ChevronRight size={18} className="text-white/60" />
+            <ChevronRight size={18} className="text-white/70" />
           </button>
         </div>
       </div>
 
-      {/* Neural network visualization */}
-      <div className="relative mb-6 h-1">
+      {/* Simple indicator line */}
+      <div className="relative mb-4 h-1">
         <motion.div
           className="absolute inset-0 h-0.5 bg-gradient-to-r from-transparent via-nova/50 to-transparent rounded-full overflow-hidden"
           animate={{
             scaleX: [0.5, 1.2, 0.8, 1],
-            opacity: [0.3, 0.7, 0.5]
+            opacity: [0.3, 0.6, 0.4]
           }}
           transition={{
             duration: 6,
@@ -218,7 +239,7 @@ export function AIInsightsModule() {
         />
       </div>
 
-      <div className="relative h-[260px]">
+      <div className="relative">
         <AnimatePresence mode="wait">
           {insights.map((insight, index) => (
             index === activeInsight && (
@@ -228,73 +249,123 @@ export function AIInsightsModule() {
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -20 }}
                 transition={{ duration: 0.5 }}
-                className="absolute inset-0"
+                className="relative"
               >
-                <Card className="w-full h-full bg-black/30 border-white/10 backdrop-blur-md overflow-hidden">
-                  <CardContent className="p-6 h-full flex flex-col">
-                    <div className="flex items-start justify-between mb-4">
-                      <div className="flex items-center gap-3">
-                        <div className="p-2.5 rounded-lg bg-gradient-to-br from-nova/30 to-transparent">
-                          {getInsightIcon(insight.type)}
+                <Card className="w-full bg-gradient-to-b from-black/40 via-black/50 to-black/70 border-white/10 backdrop-blur-md overflow-hidden rounded-xl">
+                  <CardContent className="p-5 md:p-6">
+                    <div className="flex flex-col md:flex-row gap-5 md:gap-6">
+
+                      {/* Left side - User-friendly explanation */}
+                      <div className="flex-1 space-y-4">
+                        <div className="flex items-center gap-3 mb-1">
+                          <div className="p-2 rounded-lg bg-gradient-to-br from-nova/20 to-nova/5">
+                            {getInsightIcon(insight.type)}
+                          </div>
+                          <div className="flex-1">
+                            <div className="text-xs text-white/60 flex items-center gap-1.5">
+                              <div className="w-1.5 h-1.5 rounded-full bg-nova animate-pulse"></div>
+                              Recent Activity
+                            </div>
+                            <h3 className="text-xl font-bold">{insight.title}</h3>
+                          </div>
+                          {insight.metric && (
+                            <div className="flex flex-col items-end text-right">
+                              <div className="text-xs text-white/60">{insight.metric.label}</div>
+                              <div className={`text-2xl font-bold font-mono ${getMetricColor(insight.metric.change)}`}>
+                                {insight.metric.value}
+                              </div>
+                            </div>
+                          )}
                         </div>
-                        <div>
-                          <div className="text-xs text-white/60">AI INSIGHT</div>
-                          <h3 className="text-xl font-bold">{insight.title}</h3>
+
+                        <div className="space-y-4">
+                          {/* Simple explanation */}
+                          <div className="bg-black/30 rounded-lg p-4 border border-white/10">
+                            <h4 className="text-white font-medium mb-1 flex items-center gap-1.5">
+                              <Lightbulb size={14} className="text-orion" />
+                              What happened
+                            </h4>
+                            <p className="text-white/90 text-sm">{insight.plainLanguage}</p>
+                          </div>
+
+                          {/* User benefit */}
+                          <div className="bg-black/30 rounded-lg p-4 border border-white/10">
+                            <h4 className="text-white font-medium mb-1 flex items-center gap-1.5">
+                              <DollarSign size={14} className="text-emerald" />
+                              How you benefit
+                            </h4>
+                            <p className="text-white/90 text-sm">{insight.benefit}</p>
+                          </div>
+
+                          {/* Recent update timestamp */}
+                          <div className="flex items-center gap-1.5 text-xs text-white/50">
+                            <Clock size={12} />
+                            <span>Updated recently</span>
+                          </div>
                         </div>
                       </div>
 
-                      {insight.metric && (
-                        <div className="flex flex-col items-end">
-                          <div className="text-xs text-white/60">{insight.metric.label}</div>
-                          <div className={`text-2xl font-bold font-mono ${getMetricColor(insight.metric.change)}`}>
-                            {insight.metric.value}
-                          </div>
+                      {/* Right side - Chart visualization */}
+                      <div className="md:w-1/3 lg:w-2/5 flex flex-col">
+                        <div className="h-32 md:h-full min-h-[120px] flex items-center justify-center bg-gradient-to-b from-black/40 to-black/60 rounded-lg border border-white/5 p-3">
+                          {insight.chart && (
+                            <motion.div
+                              initial={{ opacity: 0.7 }}
+                              animate={{ opacity: [0.7, 1, 0.8] }}
+                              transition={{ duration: 3, repeat: Infinity, repeatType: "reverse" }}
+                              className="w-full h-full flex items-center justify-center"
+                              dangerouslySetInnerHTML={{ __html: insight.chart }}
+                            />
+                          )}
                         </div>
-                      )}
+                        <div className="text-xs text-white/50 text-center mt-2">
+                          {insight.type === 'performance' && 'APR Performance (30 days)'}
+                          {insight.type === 'market' && 'Prediction Accuracy (30 days)'}
+                          {insight.type === 'risk' && 'Protected Value (7 days)'}
+                          {insight.type === 'optimization' && 'Capital Efficiency Gains (30 days)'}
+                        </div>
+                      </div>
                     </div>
 
-                    <div className="grid grid-cols-1 md:grid-cols-[2fr_1fr] gap-6 flex-grow">
-                      <div className="space-y-4">
-                        <p className="text-white/80 text-sm md:text-base">{insight.description}</p>
+                    {/* Technical details accordion */}
+                    <div className="mt-4 pt-3 border-t border-white/10">
+                      <button
+                        onClick={() => setShowTechnicalDetails(!showTechnicalDetails)}
+                        className="w-full flex items-center justify-between text-white/60 hover:text-white/80 text-sm transition-colors"
+                      >
+                        <div className="flex items-center gap-1.5">
+                          <Info size={14} />
+                          <span>{showTechnicalDetails ? "Hide technical details" : "Show technical details"}</span>
+                        </div>
+                        {showTechnicalDetails ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
+                      </button>
 
-                        <div className="bg-white/5 rounded-lg p-3 border border-white/10 space-y-1">
-                          <div className="text-xs text-white/60">Neural Network Activity</div>
-                          <div className="grid grid-cols-3 gap-4">
-                            <div>
-                              <div className="text-[10px] text-white/50">DATA POINTS</div>
-                              <div className="text-sm font-mono">{Math.floor(Math.random() * 5000 + 1000).toLocaleString()}</div>
-                            </div>
-                            <div>
-                              <div className="text-[10px] text-white/50">MODEL CONFIDENCE</div>
-                              <div className="text-sm font-mono">{(Math.random() * 0.2 + 0.8).toFixed(4)}</div>
-                            </div>
-                            <div>
-                              <div className="text-[10px] text-white/50">LAST UPDATE</div>
-                              <div className="text-sm font-mono">{Math.floor(Math.random() * 10 + 1)}m ago</div>
+                      {showTechnicalDetails && (
+                        <motion.div
+                          initial={{ height: 0, opacity: 0 }}
+                          animate={{ height: 'auto', opacity: 1 }}
+                          exit={{ height: 0, opacity: 0 }}
+                          transition={{ duration: 0.3 }}
+                          className="mt-3 pt-3 border-t border-white/5 grid grid-cols-3 gap-4 text-center"
+                        >
+                          <div>
+                            <div className="text-[10px] text-white/50 mb-1">DATA POINTS</div>
+                            <div className="text-sm font-mono">
+                              {Math.floor(Math.random() * 5000 + 3000).toLocaleString()}
                             </div>
                           </div>
-                        </div>
-
-                        <button className="flex items-center gap-1 text-xs text-nova hover:text-nova/80 transition-colors">
-                          <span>View detailed analysis</span>
-                          <ArrowRight size={12} />
-                        </button>
-                      </div>
-
-                      <div className="flex flex-col items-center justify-center bg-gradient-to-b from-black/40 to-black/60 rounded-xl border border-white/5 p-4">
-                        {insight.chart && (
-                          <div
-                            className="w-full h-full flex items-center justify-center"
-                            dangerouslySetInnerHTML={{ __html: insight.chart }}
-                          />
-                        )}
-                        <div className="text-xs text-white/40 text-center mt-2">
-                          {insight.type === 'performance' && 'APR Performance Trend (30d)'}
-                          {insight.type === 'market' && 'Market Prediction Accuracy (30d)'}
-                          {insight.type === 'risk' && 'Risk Management Events (7d)'}
-                          {insight.type === 'optimization' && 'Capital Efficiency Gains (30d)'}
-                        </div>
-                      </div>
+                          <div>
+                            <div className="text-[10px] text-white/50 mb-1">MODEL CONFIDENCE</div>
+                            <div className="text-sm font-mono">
+                              {(Math.random() * 0.1 + 0.88).toFixed(4)}
+                            </div>
+                          </div>
+                          <div>
+                            <div className="text-[10px] text-white/50 mb-1">SUCCESS RATE</div>
+                            <div className="text-sm font-mono">98.7%</div>
+                          </div>
+                        </motion.div>
+                      )}
                     </div>
                   </CardContent>
                 </Card>
@@ -303,7 +374,7 @@ export function AIInsightsModule() {
           ))}
         </AnimatePresence>
 
-        {/* Pagination dots */}
+        {/* Simple pagination indicator */}
         <div className="flex justify-center mt-4">
           {insights.map((_, index) => (
             <button

@@ -159,7 +159,7 @@ export function EnhancedHeroSection() {
   ];
 
   return (
-    <div className="relative pb-4 mb-2">
+    <div className="relative pb-0 mb-0">
       {/* Dynamic Neural Network Background */}
       <div
         ref={networkRef}
@@ -179,37 +179,34 @@ export function EnhancedHeroSection() {
         />
       </div>
 
-      {/* Main content - more concise */}
+      {/* Main content with prominent headline */}
       <motion.div
-        className="relative z-10 max-w-[800px] mx-auto text-center mt-4 mb-4"
+        className="relative z-10 max-w-[900px] mx-auto text-center py-4 md:py-6"
         variants={containerVariants}
         initial="hidden"
         animate="visible"
       >
-        <motion.div
-          className="flex justify-center mb-2"
-          variants={itemVariants}
-        >
+        <div className="flex flex-col items-center text-center">
           <motion.div
-            className="relative"
+            className="relative mb-3"
             animate={controls}
           >
-            <div className="absolute inset-0 bg-gradient-to-r from-nova to-amber-500 rounded-full blur-[20px] opacity-30 scale-150"></div>
-            <div className="relative bg-gradient-to-br from-nova via-nova to-amber-500 p-3 rounded-full shadow-lg shadow-nova/20">
-              <Brain size={28} className="text-white" />
+            <div className="absolute inset-0 bg-gradient-to-r from-nova to-amber-500 rounded-full blur-[20px] opacity-40 scale-150"></div>
+            <div className="relative bg-gradient-to-br from-nova via-nova to-amber-500 p-3 md:p-4 rounded-full shadow-lg shadow-nova/20">
+              <Brain size={32} className="text-white" />
             </div>
           </motion.div>
-        </motion.div>
 
-        <motion.h1
-          className="text-3xl md:text-5xl font-bold tracking-tight mb-2 bg-gradient-to-r from-white via-white to-white/80 bg-clip-text text-transparent"
-          variants={headingVariants}
-        >
-          <span className="text-transparent bg-clip-text bg-gradient-to-r from-nova via-amber-500 to-orange-500 font-extrabold">NODO AI</span> Vaults
-        </motion.h1>
+          <motion.h1
+            className="text-5xl md:text-6xl lg:text-7xl font-bold tracking-tight bg-gradient-to-r from-white via-white to-white/80 bg-clip-text text-transparent leading-tight"
+            variants={headingVariants}
+          >
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-nova via-amber-500 to-orange-500 font-extrabold">NODO AI</span> Vaults
+          </motion.h1>
+        </div>
 
         <motion.p
-          className="text-[#9CA3AF] text-base font-light max-w-[600px] mx-auto mb-4"
+          className="text-[#9CA3AF] text-base md:text-lg font-light max-w-[700px] mx-auto mt-2 mb-5"
           variants={itemVariants}
         >
           AI-powered vaults maximizing returns with smart risk management
@@ -217,13 +214,13 @@ export function EnhancedHeroSection() {
 
         {/* Stats ribbon - more compact */}
         <motion.div
-          className="relative z-10 mx-auto max-w-3xl bg-gradient-to-b from-black/40 to-black/60 backdrop-blur-lg border border-white/10 rounded-xl px-2 py-1 shadow-[0_0_20px_rgba(255,136,0,0.1)]"
+          className="relative z-10 mx-auto max-w-2xl bg-gradient-to-b from-black/40 to-black/60 backdrop-blur-lg border border-white/10 rounded-xl px-2 shadow-[0_0_20px_rgba(255,136,0,0.1)]"
           variants={itemVariants}
         >
-          <div className="flex flex-row justify-center items-center gap-6 md:gap-8 py-2">
+          <div className="flex flex-row justify-center items-center gap-4 md:gap-6 py-2">
             <div className="stat-item flex items-center gap-2">
-              <div className="stat-icon bg-gradient-to-br from-emerald/30 to-emerald/5 p-2 rounded-lg shadow-md shadow-emerald/5">
-                <DollarSign size={16} className="text-emerald" />
+              <div className="stat-icon bg-gradient-to-br from-emerald/30 to-emerald/5 p-1.5 rounded-lg shadow-md shadow-emerald/5">
+                <DollarSign size={14} className="text-emerald" />
               </div>
               <StatChip
                 label="TVL"
@@ -234,13 +231,13 @@ export function EnhancedHeroSection() {
             </div>
 
             <motion.div
-              className="hidden md:block h-8 w-px bg-gradient-to-b from-white/0 via-white/10 to-white/0"
+              className="hidden md:block h-6 w-px bg-gradient-to-b from-white/0 via-white/10 to-white/0"
               variants={itemVariants}
             />
 
             <div className="stat-item flex items-center gap-2">
-              <div className="stat-icon bg-gradient-to-br from-nova/30 to-nova/5 p-2 rounded-lg shadow-md shadow-nova/5">
-                <TrendingUp size={16} className="text-nova" />
+              <div className="stat-icon bg-gradient-to-br from-nova/30 to-nova/5 p-1.5 rounded-lg shadow-md shadow-nova/5">
+                <TrendingUp size={14} className="text-nova" />
               </div>
               <StatChip
                 label="APR"
@@ -251,13 +248,13 @@ export function EnhancedHeroSection() {
             </div>
 
             <motion.div
-              className="hidden md:block h-8 w-px bg-gradient-to-b from-white/0 via-white/10 to-white/0"
+              className="hidden md:block h-6 w-px bg-gradient-to-b from-white/0 via-white/10 to-white/0"
               variants={itemVariants}
             />
 
             <div className="stat-item flex items-center gap-2">
-              <div className="stat-icon bg-gradient-to-br from-orion/30 to-orion/5 p-2 rounded-lg shadow-md shadow-orion/5">
-                <Users size={16} className="text-orion" />
+              <div className="stat-icon bg-gradient-to-br from-orion/30 to-orion/5 p-1.5 rounded-lg shadow-md shadow-orion/5">
+                <Users size={14} className="text-orion" />
               </div>
               <StatChip
                 label="Users"

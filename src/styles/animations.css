@@ -203,20 +203,14 @@
   animation: fade-out 0.3s cubic-bezier(0.25, 0.1, 0.25, 1) forwards;
 }
 
-/* Scale animations */
-@keyframes scale-in {
-  0% {
-    opacity: 0;
-    transform: scale(0.95);
-  }
-  100% {
-    opacity: 1;
-    transform: scale(1);
-  }
+/* Instant success animation */
+@keyframes instant-success {
+  0% { opacity: 0; transform: scale(0.95); }
+  100% { opacity: 1; transform: scale(1); }
 }
 
-.animate-scale-in {
-  animation: scale-in 0.3s cubic-bezier(0.25, 0.1, 0.25, 1) forwards;
+.animate-instant-success {
+  animation: instant-success 0.3s cubic-bezier(0.22, 0.61, 0.36, 1) forwards;
 }
 
 /* Card success glow animation */

@@ -161,7 +161,7 @@ export function EnhancedNeuralActivityTicker() {
   return (
     <div
       ref={containerRef}
-      className="w-full max-w-4xl mx-auto transition-all duration-300 ease-out group"
+      className="w-full max-w-5xl mx-auto transition-all duration-300 ease-out group z-10 relative"
       onMouseEnter={() => {
         setIsPaused(true);
         setShowDetails(true);
@@ -171,7 +171,7 @@ export function EnhancedNeuralActivityTicker() {
         setShowDetails(false);
       }}
     >
-      <div className="bg-gradient-to-r from-black/40 via-black/60 to-black/40 backdrop-blur-md rounded-xl border border-white/10 overflow-hidden shadow-[0_0_15px_rgba(255,136,0,0.15)] transition-all duration-300 hover:shadow-[0_0_25px_rgba(255,136,0,0.25)]">
+      <div className="bg-gradient-to-r from-black/40 via-black/60 to-black/40 backdrop-blur-md rounded-xl border border-nova/20 overflow-hidden shadow-[0_0_15px_rgba(255,136,0,0.2)] transition-all duration-300 hover:shadow-[0_0_30px_rgba(255,136,0,0.3)]">
         <div className="relative">
           {/* Ticker animation trails */}
           <div className="absolute inset-0 overflow-hidden pointer-events-none opacity-70">

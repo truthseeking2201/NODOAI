@@ -34,8 +34,8 @@ export function DepositDrawerReview({
 
   const formatCurrency = (value?: number) => {
     if (value === undefined) return '-';
-    return new Intl.NumberFormat('en-US', { 
-      style: 'currency', 
+    return new Intl.NumberFormat('en-US', {
+      style: 'currency',
       currency: 'USD',
       maximumFractionDigits: 2
     }).format(value);
@@ -99,23 +99,23 @@ export function DepositDrawerReview({
             </span>
           </div>
         </div>
-        
+
         <p className="text-[11px] text-[#6B7280] mt-3">
           APR may vary with pool fees.
         </p>
       </div>
 
       <div className="flex flex-col space-y-3">
-        <Button 
+        <Button
           onClick={onConfirm}
           disabled={isPending}
           className="w-full h-[52px] rounded-xl font-mono text-sm bg-gradient-to-r from-[#FF8800] to-[#FFA822] hover:shadow-[0_4px_12px_-2px_rgba(255,136,0,0.4)] transition-all duration-300 hover:scale-[0.98]"
         >
-          {isPending ? "Processing..." : "Confirm Deposit"}
+          Confirm Deposit
         </Button>
-        
-        <Button 
-          variant="outline" 
+
+        <Button
+          variant="outline"
           className="bg-white/5 border-[#374151] hover:bg-white/10 h-12 rounded-xl"
           disabled={isPending}
           onClick={onBack}

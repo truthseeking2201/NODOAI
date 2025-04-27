@@ -26,6 +26,23 @@
   box-shadow: 0 0 15px rgba(16, 185, 129, 0.3);
 }
 
+/* Text glow shadows */
+.drop-shadow-glow {
+  filter: drop-shadow(0 0 8px rgba(249, 115, 22, 0.5));
+}
+
+.drop-shadow-glow-green {
+  filter: drop-shadow(0 0 8px rgba(16, 185, 129, 0.5));
+}
+
+.drop-shadow-glow-amber {
+  filter: drop-shadow(0 0 8px rgba(245, 158, 11, 0.5));
+}
+
+.drop-shadow-glow-red {
+  filter: drop-shadow(0 0 8px rgba(239, 68, 68, 0.5));
+}
+
 /* Neural network nodes */
 .neural-node {
   position: absolute;

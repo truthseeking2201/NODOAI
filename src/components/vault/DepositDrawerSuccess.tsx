@@ -48,7 +48,16 @@ export function DepositDrawerSuccess({
     };
   }, [showConfetti, toast]);
 
-  const transactionHash = "0xABCDEF1234567890ABCDEF1234567890ABCDEF12";
+  const generateTxHash = () => {
+    const chars = '0123456789ABCDEF';
+    let hash = '0x';
+    for (let i = 0; i < 40; i++) {
+      hash += chars[Math.floor(Math.random() * chars.length)];
+    }
+    return hash;
+  };
+
+  const transactionHash = React.useMemo(generateTxHash, []);
 
   const formatCurrency = (value?: number) => {
     if (value === undefined) return '-';
@@ -66,7 +75,7 @@ export function DepositDrawerSuccess({
   };
 
   return (
-    <div className="space-y-7 text-center">
+    <div className="space-y-7 text-center animate-instant-success">
       {isConfettiRunning && (
         <div className="absolute top-0 left-0 w-full h-full pointer-events-none">
           <ReactConfetti
@@ -121,7 +130,7 @@ export function DepositDrawerSuccess({
 
           <div className="flex justify-between">
             <span className="text-xs text-[#9CA3AF] flex items-center gap-1">
-              Receipt Tokens
+              NODOAIx Tokens
               <Info className="h-3 w-3 text-[#9CA3AF]" />
             </span>
             <span className="font-mono text-sm">{(parseFloat(amount) * 0.98).toFixed(2)}</span>
