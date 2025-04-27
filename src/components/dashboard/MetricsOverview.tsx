@@ -97,7 +97,7 @@ export function MetricsOverview({ investments, isLoading }: MetricsOverviewProps
             <h3 className="metric-title text-sm font-medium text-white/70 mb-1">Total Deposited</h3>
             <p className="metric-value text-2xl font-bold font-mono">${Math.round(animatedTotalDeposited).toLocaleString()}</p>
             <p className="metric-subtitle text-xs text-white/50 mt-1">
-              Vault Receipt Tokens: {(animatedTotalDeposited * 0.98).toFixed(2)}
+              NODOAIx Tokens: {(animatedTotalDeposited * 0.98).toFixed(2)}
             </p>
           </div>
         </div>

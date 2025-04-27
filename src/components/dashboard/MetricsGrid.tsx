@@ -161,7 +161,7 @@ export function MetricsGrid({
                 ${Math.round(animatedDeposited).toLocaleString()}
               </div>
               <p className="text-xs text-white/50 mt-1">
-                Vault Receipt Tokens: {(animatedDeposited * 0.98).toFixed(2)}
+                NODOAIx Tokens: {(animatedDeposited * 0.98).toFixed(2)}
               </p>
             </div>
           </div>

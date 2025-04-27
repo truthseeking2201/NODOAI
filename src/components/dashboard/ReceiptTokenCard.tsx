@@ -52,10 +52,10 @@ export function ReceiptTokenCard({ tokens }: ReceiptTokenCardProps) {
         <div>
           <CardTitle className="flex items-center">
             <Ticket className="h-4 w-4 text-amber-500 mr-2" />
-            Vault Receipt Tokens
+            NODOAIx Tokens
           </CardTitle>
           <CardDescription>
-            Your vault position tokens that will burn on withdrawal
+            Your intelligent yield tokens that will burn on withdrawal
           </CardDescription>
         </div>
         <TooltipProvider>
@@ -66,9 +66,10 @@ export function ReceiptTokenCard({ tokens }: ReceiptTokenCardProps) {
               </button>
             </TooltipTrigger>
             <TooltipContent className="max-w-[300px] p-4 bg-[#0c0c10]/95 border border-white/20 text-white">
-              <h4 className="font-medium text-sm mb-2 text-amber-500">About Receipt Tokens</h4>
+              <h4 className="font-medium text-sm mb-2 text-amber-500">About NODOAIx Tokens</h4>
               <p className="text-sm text-white/80">
-                Receipt tokens represent your position in the vault and are automatically minted when you deposit.
+                NODOAIx Tokens represent your position in the AI-optimized vault and are automatically minted when you deposit.
+                These intelligent tokens adapt to market conditions, leveraging AI algorithms to maximize yield.
                 They serve as proof of your deposit and will burn automatically when you withdraw.
                 These tokens are non-transferable and remain linked to your wallet.
               </p>
@@ -88,7 +89,7 @@ export function ReceiptTokenCard({ tokens }: ReceiptTokenCardProps) {
                 transition={{ duration: 0.5 }}
               >
                 <div className="w-8 h-8 rounded-full bg-gradient-to-r from-amber-500 to-orange-500 flex items-center justify-center">
-                  <span className="text-xs font-bold text-white">RT</span>
+                  <span className="text-xs font-bold text-white">AIx</span>
                 </div>
               </motion.div>
             </div>

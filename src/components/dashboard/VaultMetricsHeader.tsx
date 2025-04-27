@@ -34,7 +34,7 @@ export function VaultMetricsHeader({ investments, className = "" }: VaultMetrics
   const riskLevel = "Low"; // Would be dynamically calculated based on investments
 
   // Token balance (mock)
-  const vaultReceiptTokens = investments.length > 0 ? totalDeposited * 0.98 : 0; // Simulated token balance
+  const nodoAIxTokens = investments.length > 0 ? totalDeposited * 0.98 : 0; // Simulated token balance
 
   const formatCurrency = (value: number) => {
     return new Intl.NumberFormat('en-US', {
@@ -62,12 +62,12 @@ export function VaultMetricsHeader({ investments, className = "" }: VaultMetrics
                 <TooltipProvider>
                   <Tooltip>
                     <TooltipTrigger className="flex items-center">
-                      <span>Vault Receipt Tokens: {vaultReceiptTokens.toFixed(2)}</span>
+                      <span>NODOAIx Tokens: {nodoAIxTokens.toFixed(2)}</span>
                       <Info className="h-3 w-3 ml-1 text-white/40" />
                     </TooltipTrigger>
                     <TooltipContent>
-                      <p className="max-w-[200px] text-xs">
-                        Burns on withdrawal — non-transferable
+                      <p className="max-w-[250px] text-xs">
+                        NODOAIx Tokens represent your AI-optimized yield position. They automatically adapt to market conditions, leveraging AI algorithms to maximize returns. Burns on withdrawal — non-transferable.
                       </p>
                     </TooltipContent>
                   </Tooltip>

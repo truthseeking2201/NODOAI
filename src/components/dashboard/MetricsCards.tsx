@@ -108,7 +108,7 @@ export function MetricsCards({
                   ${totalDeposited.toLocaleString()}
                 </span>
                 <span className="text-xs text-white/60 mt-1">
-                  Vault Receipt Tokens: {(totalDeposited * 0.98).toFixed(2)}
+                  NODOAIx Tokens: {(totalDeposited * 0.98).toFixed(2)}
                 </span>
               </div>
               <div className="h-10 w-10 rounded-full bg-white/[0.03] border border-white/[0.08] flex items-center justify-center">

@@ -35,10 +35,10 @@ export function DepositDrawerSuccess({
       }, 30000); // 30 seconds
     }
 
-    // Show the vault receipt token minted toast
+    // Show the NODOAIx token minted toast
     toast({
-      title: "Vault Receipt Token minted",
-      description: "Your non-transferable receipt token has been minted to your wallet.",
+      title: "NODOAIx Token minted",
+      description: "Your AI-powered yield token has been minted to your wallet.",
       variant: "default",
       duration: 5000,
     });
@@ -141,7 +141,7 @@ export function DepositDrawerSuccess({
           <Alert className="bg-amber-500/10 border border-amber-500/20 py-2">
             <CheckCircle className="h-4 w-4 text-amber-500 mt-0.5" />
             <AlertDescription className="text-xs text-white/80">
-              Vault Receipt Token minted to your wallet. Burns on withdrawal — non-transferable.
+              NODOAIx Token minted to your wallet. AI-optimized yield token that burns on withdrawal — non-transferable.
             </AlertDescription>
           </Alert>
         </div>
