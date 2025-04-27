@@ -32,10 +32,14 @@ Implemented an ActivityPanel component with:
 - An "explain" button for AI activities that opens the reasoning drawer
 - Clean, concise activity items with appropriate icons and statuses
 
-### 5. Receipt Token Card
-Updated the ReceiptTokenCard component to:
+### 5. NODOAIx Token Card
+Updated the NODOAIxTokenCard component to:
 - Display token balance with animated values
-- Provide helpful tooltips explaining receipt tokens
+- Provide helpful tooltips explaining NODOAIx Tokens and how they:
+  - Represent the user's share of the vault's assets
+  - Yield interest over time based on vault performance
+  - Automatically burn upon withdrawal, converting back to USDC with accrued returns
+  - Function as non-transferable proof of deposit
 - Use a consistent design language with the rest of the dashboard
 
 ### 6. Responsive Layout

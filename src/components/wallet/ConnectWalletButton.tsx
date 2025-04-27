@@ -105,7 +105,7 @@ export function ConnectWalletButton() {
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-2">
                       <TokenIcon token="RECEIPT" size={16} />
-                      <span className="text-gray-400 text-sm">Vault Receipt</span>
+                      <span className="text-gray-400 text-sm">NODOAIx</span>
                     </div>
                     <span className="font-mono text-sm text-amber-500">{balance.receiptTokens.toFixed(2)}</span>
                   </div>

@@ -60,10 +60,10 @@ export const useDepositDrawer = (props?: UseDepositDrawerProps) => {
       setShowConfetti(true);
       setTimeout(() => setShowConfetti(false), 3000);
 
-      // Show the vault receipt token minted toast notification
+      // Show the NODOAIx Token minted toast notification
       toast({
-        title: "Vault Receipt Token Minted",
-        description: `${(parseFloat(amount) * 0.98).toFixed(2)} receipt tokens have been added to your wallet. These will burn automatically on withdrawal.`,
+        title: "NODOAIx Token Minted",
+        description: `${(parseFloat(amount) * 0.98).toFixed(2)} NODOAIx Tokens have been added to your wallet. NODOAIx Tokens represent your share of the vault's assets and automatically burn upon withdrawal, functioning as proof of your deposit and yielding interest over time.`,
         variant: "default",
         duration: 5000,
       });
@@ -163,10 +163,10 @@ export const useDepositDrawer = (props?: UseDepositDrawerProps) => {
         setShowConfetti(true);
         setTimeout(() => setShowConfetti(false), 3000);
 
-        // Show vault receipt token minted toast
+        // Show NODOAIx Token minted toast
         toast({
-          title: "Vault Receipt Token Minted",
-          description: `${(parseFloat(amount) * 0.98).toFixed(2)} receipt tokens have been added to your wallet. These will burn automatically on withdrawal.`,
+          title: "NODOAIx Token Minted",
+          description: `${(parseFloat(amount) * 0.98).toFixed(2)} NODOAIx Tokens have been added to your wallet. NODOAIx Tokens represent your share of the vault's assets and automatically burn upon withdrawal, functioning as proof of your deposit and yielding interest over time.`,
           variant: "default",
           duration: 5000,
         });

@@ -14,10 +14,10 @@
    - Improved transaction signature dialog with visual feedback
    - Better error handling for wallet operations
 
-3. **Vault Receipt Token Visibility**
-   - Added toast notification "Vault Receipt Token minted" on successful deposits
-   - Created dedicated Receipt Token Card in Dashboard
-   - Added tooltip explaining token functionality (burns on withdrawal, non-transferable)
+3. **NODOAIx Token Visibility**
+   - Added toast notification "NODOAIx Token minted" on successful deposits
+   - Created dedicated NODOAIx Token Card in Dashboard
+   - Added tooltip explaining token functionality (burns on withdrawal, non-transferable, represents vault share, yields interest)
 
 4. **UI Metrics Refinement**
    - Replaced pie charts and pool tables with three focused headline metrics:

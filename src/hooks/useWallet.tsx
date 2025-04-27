@@ -12,7 +12,7 @@ interface WalletState {
   walletType: WalletType | null
   balance: {
     usdc: number
-    receiptTokens: number
+    receiptTokens: number  // NODOAIx Tokens - representing user's share of vault assets
   }
   connect: (walletType: WalletType) => Promise<void>
   disconnect: () => void
@@ -175,8 +175,10 @@ export const useWallet = () => {
       // First sign the transaction
       await signTransaction('deposit', amount.toString(), vaultId);
 
-      // After signature, add receipt tokens
-      const receiptTokenAmount = amount * 0.98; // 98% of deposit amount
+      // After signature, add NODOAIx Tokens
+      // NODOAIx Tokens represent the user's share of the vault's assets
+      // They are non-transferable, yield interest over time, and automatically burn upon withdrawal
+      const receiptTokenAmount = amount * 0.98; // 98% of deposit amount converted to NODOAIx Tokens
       addReceiptTokens(receiptTokenAmount);
 
       // Return success
@@ -201,8 +203,10 @@ export const useWallet = () => {
       // First sign the transaction
       await signTransaction('withdraw', amount.toString(), vaultId);
 
-      // After signature, reduce receipt tokens
-      const receiptTokenAmount = amount * 0.98; // 98% of withdrawal amount
+      // After signature, burn NODOAIx Tokens
+      // NODOAIx Tokens automatically burn upon withdrawal, converting back to USDC
+      // with accrued interest based on lockup period and vault performance
+      const receiptTokenAmount = amount * 0.98; // 98% of withdrawal amount in NODOAIx Tokens
       addReceiptTokens(-receiptTokenAmount);
 
       // Return success
