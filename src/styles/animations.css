@@ -257,3 +257,67 @@
 .parallax:hover .parallax-layer--2 {
   transform: translateZ(20px);
 }
+
+/* AI neural glow effects */
+@keyframes neural-pulse {
+  0% {
+    box-shadow: 0 0 5px rgba(var(--neural-color, 249, 115, 22), 0.3);
+  }
+  50% {
+    box-shadow: 0 0 15px rgba(var(--neural-color, 249, 115, 22), 0.6);
+  }
+  100% {
+    box-shadow: 0 0 5px rgba(var(--neural-color, 249, 115, 22), 0.3);
+  }
+}
+
+.neural-glow-nova {
+  --neural-color: 249, 115, 22;
+  animation: neural-pulse 3s ease-in-out infinite;
+}
+
+.neural-glow-orion {
+  --neural-color: 245, 158, 11;
+  animation: neural-pulse 3s ease-in-out infinite;
+}
+
+.neural-glow-emerald {
+  --neural-color: 16, 185, 129;
+  animation: neural-pulse 3s ease-in-out infinite;
+}
+
+/* Neural network animation */
+@keyframes network-flow {
+  0% {
+    stroke-dashoffset: 1000;
+    opacity: 0.2;
+  }
+  50% {
+    opacity: 0.8;
+  }
+  100% {
+    stroke-dashoffset: 0;
+    opacity: 0.2;
+  }
+}
+
+.network-line {
+  stroke-dasharray: 10;
+  animation: network-flow 5s linear infinite;
+}
+
+/* AI thinking animation */
+@keyframes ai-thinking {
+  0%, 100% {
+    transform: scale(0.8);
+    opacity: 0.3;
+  }
+  50% {
+    transform: scale(1.1);
+    opacity: 1;
+  }
+}
+
+.ai-thinking {
+  animation: ai-thinking 1.5s ease-in-out infinite;
+}

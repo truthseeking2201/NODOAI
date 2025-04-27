@@ -1,6 +1,6 @@
 
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { ArrowRight, Shield, Info, TrendingUp, Clock, ExternalLink, Brain } from "lucide-react";
@@ -31,6 +31,7 @@ export function VaultCard({
   isActive,
   onHover
 }: VaultCardProps) {
+  const navigate = useNavigate();
   const [showRoiOverlay, setShowRoiOverlay] = useState(false);
 
   const getVaultStyles = (type: 'nova' | 'orion' | 'emerald') => {
@@ -69,6 +70,10 @@ export function VaultCard({
           buttonVariant: 'neural-orange' as const // Using neural-orange for all CTAs
         };
     }
+  };
+
+  const handleDepositClick = () => {
+    navigate(`/vaults/${vault.id}`);
   };
 
   const styles = getVaultStyles(vault.type);
@@ -158,12 +163,10 @@ export function VaultCard({
             <Button
               variant={hasBalance ? styles.buttonVariant : "outline"}
               className="w-full py-6 text-sm font-medium relative overflow-hidden"
-              asChild
+              onClick={handleDepositClick}
             >
-              <Link to={`/vaults/${vault.id}`}>
-                {isConnected ? "Deposit Now" : "Connect Wallet"}
-                <ArrowRight className="ml-2 h-4 w-4" />
-              </Link>
+              {isConnected ? "Deposit Now" : "Connect Wallet"}
+              <ArrowRight className="ml-2 h-4 w-4" />
             </Button>
           </div>
         </CardContent>
