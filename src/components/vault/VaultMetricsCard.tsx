@@ -159,11 +159,6 @@ export function VaultMetricsCard({
 
   return (
     <Card className="overflow-hidden rounded-xl border-0 relative">
-      <div className={`h-1 ${
-        vault.type === 'nova' ? 'bg-gradient-to-r from-orange-600 to-amber-500' :
-        vault.type === 'orion' ? 'bg-gradient-to-r from-amber-600 to-yellow-500' :
-        'bg-gradient-to-r from-emerald to-green-500'
-      }`} />
       <CardHeader className="p-6 pb-3 flex flex-row items-center justify-between">
         <div>
           <CardTitle className="flex items-center gap-2 text-xl font-bold">

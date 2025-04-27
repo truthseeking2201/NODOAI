@@ -63,6 +63,16 @@ export default function VaultDetail() {
   const [wasManuallyClosedRef, setWasManuallyClosedRef] = useState(false);
   const [aiInsight, setAiInsight] = useState<string | null>(null);
   const [showAiInsight, setShowAiInsight] = useState(false);
+  const [showAiPerformanceInsights, setShowAiPerformanceInsights] = useState(() => {
+    // Check localStorage for saved preference, default to true if not found
+    const savedPreference = localStorage.getItem('showAiInsightsPanel');
+    return savedPreference === null ? true : savedPreference === 'true';
+  });
+
+  // Save AI insights panel visibility preference to localStorage
+  useEffect(() => {
+    localStorage.setItem('showAiInsightsPanel', showAiPerformanceInsights.toString());
+  }, [showAiPerformanceInsights]);
 
   // Animation effect for NODOAIx Token count
   useEffect(() => {
@@ -309,7 +319,7 @@ export default function VaultDetail() {
                 } />
               </div>
               <div className="text-sm font-medium text-white">
-                Neural Network Activity:
+                AI Working For You:
               </div>
             </div>
 
@@ -331,7 +341,7 @@ export default function VaultDetail() {
                     vault.type === 'orion' ? 'text-orion' :
                     'text-emerald'
                   } />
-                  Analyzing market liquidity conditions
+                  Finding the best money-making opportunities
                 </span>
                 <span className="h-1 w-1 rounded-full bg-white/30"></span>
                 <span className="flex items-center gap-1">
@@ -340,7 +350,7 @@ export default function VaultDetail() {
                     vault.type === 'orion' ? 'text-orion' :
                     'text-emerald'
                   } />
-                  Optimizing position parameters
+                  Making your investment work smarter
                 </span>
                 <span className="h-1 w-1 rounded-full bg-white/30"></span>
                 <span className="flex items-center gap-1">
@@ -349,7 +359,7 @@ export default function VaultDetail() {
                     vault.type === 'orion' ? 'text-orion' :
                     'text-emerald'
                   } />
-                  Risk assessment model running
+                  Keeping your money safe 24/7
                 </span>
                 <span className="h-1 w-1 rounded-full bg-white/30"></span>
                 <span className="flex items-center gap-1">
@@ -358,7 +368,7 @@ export default function VaultDetail() {
                     vault.type === 'orion' ? 'text-orion' :
                     'text-emerald'
                   } />
-                  APR improvement of {(Math.random() * 0.4 + 0.1).toFixed(2)}% detected
+                  Just found a way to earn {(Math.random() * 0.4 + 0.1).toFixed(2)}% more interest
                 </span>
                 <span className="h-1 w-1 rounded-full bg-white/30"></span>
                 <span className="flex items-center gap-1">
@@ -367,7 +377,7 @@ export default function VaultDetail() {
                     vault.type === 'orion' ? 'text-orion' :
                     'text-emerald'
                   } />
-                  Neural circuit optimizing swap routes
+                  AI is finding better ways to grow your money
                 </span>
                 <span className="h-1 w-1 rounded-full bg-white/30"></span>
                 <span className="flex items-center gap-1">
@@ -376,7 +386,7 @@ export default function VaultDetail() {
                     vault.type === 'orion' ? 'text-orion' :
                     'text-emerald'
                   } />
-                  Price prediction model: {Math.random() > 0.5 ? 'bullish' : 'neutral'} pattern detected
+                  Market trend looking: {Math.random() > 0.5 ? 'positive' : 'stable'} for your returns
                 </span>
                 <span className="h-1 w-1 rounded-full bg-white/30"></span>
                 <span className="flex items-center gap-1">
@@ -385,7 +395,7 @@ export default function VaultDetail() {
                     vault.type === 'orion' ? 'text-orion' :
                     'text-emerald'
                   } />
-                  Security protocols active and monitoring
+                  Extra security measures active to protect your funds
                 </span>
               </motion.div>
 
@@ -406,26 +416,14 @@ export default function VaultDetail() {
             {/* Main Content Area */}
             <div className="lg:col-span-8 space-y-6">
               {/* Performance Card */}
-              <Card className="overflow-hidden rounded-xl border border-white/20 shadow-lg relative">
-                {/* Gradient background based on vault type */}
-                <div className={`absolute inset-0 bg-gradient-to-br ${
-                  vault.type === 'nova' ? 'from-nova/20 via-nova/5 to-transparent' :
-                  vault.type === 'orion' ? 'from-orion/20 via-orion/5 to-transparent' :
-                  'from-emerald/20 via-emerald/5 to-transparent'
-                } opacity-50`} />
-
-                {/* Card content with backdrop blur */}
-                <div className="relative bg-black/50 backdrop-blur-md">
-                  <CardContent className="p-6">
-                    <VaultPerformanceSection
-                      vault={vault}
-                      timeRange={timeRange}
-                      onTimeRangeChange={setTimeRange}
-                      styles={styles}
-                    />
-                  </CardContent>
-                </div>
-              </Card>
+              <div className="overflow-hidden rounded-xl border border-white/20 shadow-lg relative bg-[#060708] p-6">
+                <VaultPerformanceSection
+                  vault={vault}
+                  timeRange={timeRange}
+                  onTimeRangeChange={setTimeRange}
+                  styles={styles}
+                />
+              </div>
 
               {/* AI Strategy Visualizer */}
               <AIStrategyVisualizer vaultType={vault.type} />
@@ -457,9 +455,9 @@ export default function VaultDetail() {
                           'text-emerald'} />
                       </div>
                       <div>
-                        <CardTitle className="text-xl font-bold mb-0.5">Strategy & Security</CardTitle>
+                        <CardTitle className="text-xl font-bold mb-0.5">How Your Money Grows Safely</CardTitle>
                         <CardDescription className="text-sm text-white/60">
-                          Neural network approach and protections
+                          Smart AI approach with extra safety features
                         </CardDescription>
                       </div>
                     </div>
@@ -475,7 +473,7 @@ export default function VaultDetail() {
                             'bg-emerald/20 data-[state=active]:text-emerald'
                           }`}
                         >
-                          AI Strategy
+                          How It Works
                         </TabsTrigger>
                         <TabsTrigger
                           value="security"
@@ -485,7 +483,7 @@ export default function VaultDetail() {
                             'bg-emerald/20 data-[state=active]:text-emerald'
                           }`}
                         >
-                          Security
+                          Safety Features
                         </TabsTrigger>
                       </TabsList>
                       <TabsContent value="strategy" className="mt-0 space-y-4">
@@ -496,7 +494,7 @@ export default function VaultDetail() {
                               vault.type === 'orion' ? 'text-orion' :
                               'text-emerald'
                             } />
-                            Neural Investment Strategy
+                            Smart Money Growth Approach
                           </h3>
                           <p className="text-text-secondary text-sm leading-relaxed">
                             {vault.strategy}
@@ -510,13 +508,13 @@ export default function VaultDetail() {
                                   vault.type === 'orion' ? 'text-orion' :
                                   'text-emerald'
                                 } />
-                                Neural Layer Count
+                                AI Power Level
                               </div>
                               <div className="text-base font-mono font-medium">
                                 {vault.type === 'nova' ? '24' : vault.type === 'orion' ? '18' : '12'} Layers
                               </div>
                               <div className="mt-1 text-[10px] text-white/50">
-                                Deeper networks enable more complex strategies
+                                More layers means smarter money management
                               </div>
                             </div>
 
@@ -527,13 +525,13 @@ export default function VaultDetail() {
                                   vault.type === 'orion' ? 'text-orion' :
                                   'text-emerald'
                                 } />
-                                AI Processing Units
+                                AI Speed
                               </div>
                               <div className="text-base font-mono font-medium">
                                 {vault.type === 'nova' ? '128' : vault.type === 'orion' ? '96' : '64'} Units
                               </div>
                               <div className="mt-1 text-[10px] text-white/50">
-                                Parallel processing for realtime market analysis
+                                More units means faster decision-making
                               </div>
                             </div>
                           </div>
@@ -546,7 +544,7 @@ export default function VaultDetail() {
                               vault.type === 'orion' ? 'text-orion' :
                               'text-emerald'
                             } />
-                            Risk Assessment
+                            Investment Comfort Level
                           </h3>
                           <div className="flex items-center gap-4">
                             <span className={`
@@ -575,14 +573,14 @@ export default function VaultDetail() {
                                 vault.type === 'orion' ? 'text-orion' :
                                 'text-emerald'
                               } />
-                              <span className="text-sm font-medium text-white">AI Risk Management</span>
+                              <span className="text-sm font-medium text-white">How We Keep Your Money Safe</span>
                             </div>
                             <p className="text-xs text-white/70">
                               {vault.type === 'nova' ?
-                                'Neural monitors continuously scan for black swan events and extreme volatility, ready to execute defensive strategies within milliseconds to protect assets.' :
+                                'Our AI constantly watches the market for any sudden changes or problems. If anything unusual happens, it can react in less than a second to protect your money.' :
                                 vault.type === 'orion' ?
-                                'Balanced risk parameters adjust dynamically based on market conditions, with AI models predicting volatility to optimize position sizing.' :
-                                'Conservative risk thresholds prioritize capital preservation with AI-driven circuit breakers that can pause trading during unusual market activity.'
+                                'Our smart system adjusts how it invests based on market conditions. It predicts market changes and adapts quickly to keep your investment growing safely.' :
+                                'This vault puts safety first. If the market looks risky, our AI can pause trading completely until things settle down, keeping your money protected.'
                               }
                             </p>
                           </div>
@@ -619,7 +617,7 @@ export default function VaultDetail() {
                 } opacity-50`} />
 
                 {/* Card content with backdrop blur */}
-                <div className="relative bg-black/50 backdrop-blur-md">
+                <div className="relative bg-[#060708] backdrop-blur-md">
                   <VaultMetricsCard
                     vault={vault}
                     styles={styles}
@@ -668,14 +666,8 @@ export default function VaultDetail() {
                 } opacity-50`} />
 
                 {/* Card content with backdrop blur */}
-                <div className="relative bg-black/50 backdrop-blur-md">
+                <div className="relative bg-[#060708] backdrop-blur-md">
                   <Card className="overflow-hidden rounded-xl border-0 relative">
-                    {/* Top gradient border */}
-                    <div className={`h-1 ${
-                      vault.type === 'nova' ? 'bg-gradient-to-r from-orange-600 to-amber-500' :
-                      vault.type === 'orion' ? 'bg-gradient-to-r from-amber-600 to-yellow-500' :
-                      'bg-gradient-to-r from-emerald to-green-500'
-                    }`} />
 
                     <CardHeader className="p-6 pb-3">
                       <div className="flex items-center gap-3 mb-2">
@@ -691,10 +683,10 @@ export default function VaultDetail() {
                         </div>
                         <div className="flex-1">
                           <CardTitle className="text-xl font-bold flex items-center justify-between">
-                            <span>NODOAIx Token</span>
+                            <span>Your Investment Receipt</span>
                           </CardTitle>
                           <CardDescription className="text-sm text-white/60">
-                            AI-powered governance & staking token
+                            Smart tokens that grow with your money
                           </CardDescription>
                         </div>
                         <TooltipProvider>
@@ -705,12 +697,12 @@ export default function VaultDetail() {
                               </button>
                             </TooltipTrigger>
                             <TooltipContent className="max-w-[300px] p-4 bg-[#0c0c10]/95 border border-white/20 text-white">
-                              <h4 className="font-medium text-sm mb-2 text-amber-500">About NODOAIx Tokens</h4>
+                              <h4 className="font-medium text-sm mb-2 text-amber-500">About Your Investment Receipt</h4>
                               <p className="text-sm text-white/80">
-                                NODOAIx Tokens represent your position in the AI-optimized vault and are automatically minted when you deposit.
-                                These intelligent tokens adapt to market conditions, leveraging AI algorithms to maximize yield.
-                                They serve as proof of your deposit and will burn automatically when you withdraw.
-                                These tokens are non-transferable and remain linked to your wallet.
+                                When you deposit money, you get these digital receipts that show how much you've invested.
+                                These aren't just regular receipts - they're smart! Our AI helps them grow in value over time.
+                                When you want your money back, just redeem these receipts. They're connected to your personal
+                                wallet and can't be transferred to anyone else, keeping your investment secure.
                               </p>
                             </TooltipContent>
                           </Tooltip>
@@ -811,21 +803,25 @@ export default function VaultDetail() {
       </div>
 
       {/* Add AIPerformanceInsights before the Performance section */}
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.9, duration: 0.8 }}
-        className={`fixed bottom-20 right-20 z-50 w-96 hidden lg:block ${
-          vault.type === 'nova' ? 'neural-glow-nova' :
-          vault.type === 'orion' ? 'neural-glow-orion' :
-          'neural-glow-emerald'
-        } rounded-xl`}
-      >
-        <AIPerformanceInsights
-          vaultType={vault.type}
-          apr={vault.apr}
-        />
-      </motion.div>
+      {showAiPerformanceInsights && (
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0, y: 20 }}
+          transition={{ delay: 0.9, duration: 0.8 }}
+          className={`fixed bottom-20 right-20 z-50 w-96 hidden lg:block ${
+            vault.type === 'nova' ? 'neural-glow-nova' :
+            vault.type === 'orion' ? 'neural-glow-orion' :
+            'neural-glow-emerald'
+          } rounded-xl`}
+        >
+          <AIPerformanceInsights
+            vaultType={vault.type}
+            apr={vault.apr}
+            onClose={() => setShowAiPerformanceInsights(false)}
+          />
+        </motion.div>
+      )}
 
       {/* Add AI Activity Notifications */}
       <AIActivityNotification
@@ -843,6 +839,24 @@ export default function VaultDetail() {
         styles={styles}
         onActionClick={handleActionClick}
       />
+
+      {/* Button to re-show AI Insights panel if hidden */}
+      {!showAiPerformanceInsights && (
+        <motion.button
+          initial={{ opacity: 0, scale: 0.9 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 0.3 }}
+          onClick={() => setShowAiPerformanceInsights(true)}
+          className={`fixed bottom-20 right-6 z-40 p-3 rounded-full ${
+            vault.type === 'nova' ? 'bg-nova hover:bg-nova/90' :
+            vault.type === 'orion' ? 'bg-orion hover:bg-orion/90' :
+            'bg-emerald hover:bg-emerald/90'
+          } text-white shadow-lg`}
+          aria-label="Show AI insights"
+        >
+          <Brain size={20} />
+        </motion.button>
+      )}
 
       <DepositDrawer
         open={isDepositDrawerOpen}

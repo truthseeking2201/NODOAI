@@ -1,6 +1,5 @@
 
 import React from "react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Area, AreaChart, CartesianGrid, Line, LineChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
 import { ChartContainer, ChartTooltipContent } from "@/components/ui/chart";
@@ -36,8 +35,8 @@ const formatValue = (value: number) => {
 };
 
 const getAnimationDuration = () => {
-  return typeof window !== 'undefined' && window.matchMedia('(prefers-reduced-motion: reduce)').matches 
-    ? 0 
+  return typeof window !== 'undefined' && window.matchMedia('(prefers-reduced-motion: reduce)').matches
+    ? 0
     : 1500;
 };
 
@@ -48,10 +47,10 @@ const getChartColor = (vaultType?: string, styles?: { gradientBg?: string }) => 
     if (styles.gradientBg.includes('nova')) return '#F97316';
     if (styles.gradientBg.includes('#F59E0B')) return '#F59E0B';
   }
-  
+
   switch (vaultType) {
     case 'emerald': return '#10B981';
-    case 'orion': return '#F59E0B'; 
+    case 'orion': return '#F59E0B';
     case 'nova': return '#F97316';
     default: return '#F59E0B'; // Default to the new orange color
   }
@@ -67,7 +66,7 @@ export const VaultPerformanceChart: React.FC<VaultPerformanceChartProps> = ({
   highlightLastDataPoint = true
 }) => {
   const chartColor = getChartColor(vaultType, styles);
-  
+
   const initialValue = data[0]?.value || 0;
   const lastValue = data[data.length - 1]?.value || 0;
   const percentageChange = ((lastValue - initialValue) / initialValue) * 100;
@@ -80,9 +79,9 @@ export const VaultPerformanceChart: React.FC<VaultPerformanceChartProps> = ({
     if (!highlightLastDataPoint || !isLast) return null;
 
     return (
-      <circle 
-        cx={cx} 
-        cy={cy} 
+      <circle
+        cx={cx}
+        cy={cy}
         r={6}
         stroke="transparent"
         fill={isPositive ? "#10B981" : "#EF4444"}
@@ -114,25 +113,25 @@ export const VaultPerformanceChart: React.FC<VaultPerformanceChartProps> = ({
                 <stop offset="95%" stopColor={chartColor} stopOpacity={0}/>
               </linearGradient>
             </defs>
-            
-            <CartesianGrid 
-              strokeDasharray="3 3" 
-              vertical={false} 
-              stroke="rgba(255,255,255,0.06)" 
+
+            <CartesianGrid
+              strokeDasharray="3 3"
+              vertical={false}
+              stroke="rgba(255,255,255,0.06)"
             />
-            
+
             {showAxisLabels && (
               <>
-                <XAxis 
-                  dataKey="dateFormatted" 
-                  tick={{ fill: '#9CA3AF', fontSize: 12, fontFamily: 'IBM Plex Mono' }} 
+                <XAxis
+                  dataKey="dateFormatted"
+                  tick={{ fill: '#9CA3AF', fontSize: 12, fontFamily: 'IBM Plex Mono' }}
                   axisLine={{ stroke: 'rgba(255,255,255,0.06)' }}
                   tickLine={false}
                   dy={8} // Increase spacing between labels and axis line
                 />
-                
-                <YAxis 
-                  tick={{ fill: '#9CA3AF', fontSize: 12, fontFamily: 'IBM Plex Mono' }} 
+
+                <YAxis
+                  tick={{ fill: '#9CA3AF', fontSize: 12, fontFamily: 'IBM Plex Mono' }}
                   axisLine={{ stroke: 'rgba(255,255,255,0.06)' }}
                   tickFormatter={formatValue}
                   tickLine={false}
@@ -140,8 +139,8 @@ export const VaultPerformanceChart: React.FC<VaultPerformanceChartProps> = ({
                 />
               </>
             )}
-            
-            <Tooltip 
+
+            <Tooltip
               content={({ active, payload }) => {
                 if (active && payload && payload.length) {
                   return (
@@ -155,7 +154,7 @@ export const VaultPerformanceChart: React.FC<VaultPerformanceChartProps> = ({
               }}
               cursor={{ stroke: 'rgba(255,255,255,0.1)' }}
             />
-            
+
             <Area
               type="monotone"
               dataKey="value"
@@ -163,10 +162,10 @@ export const VaultPerformanceChart: React.FC<VaultPerformanceChartProps> = ({
               strokeWidth={2}
               fillOpacity={1}
               fill="url(#colorGradient)"
-              animationDuration={animationDuration} 
+              animationDuration={animationDuration}
               animationEasing="ease"
             />
-            
+
             <Line
               type="monotone"
               dataKey="value"
@@ -184,13 +183,13 @@ export const VaultPerformanceChart: React.FC<VaultPerformanceChartProps> = ({
       </div>
     );
   }
-  
+
   // Full chart version with tabs
   return (
-    <Card className="glass-card rounded-[20px] overflow-visible border border-white/[0.06] bg-white/[0.04] shadow-[inset_0_0_0_1px_rgba(255,255,255,0.06)]">
-      <CardHeader className="px-6 pt-6 pb-0 flex flex-row items-center justify-between">
+    <div className="rounded-[20px] overflow-visible border border-white/[0.06] bg-[#131519] shadow-[inset_0_0_0_1px_rgba(255,255,255,0.06)]">
+      <div className="px-6 pt-6 pb-0 flex flex-row items-center justify-between">
         <div className="space-y-1">
-          <CardTitle className="text-lg font-medium text-[#E5E7EB]">Performance</CardTitle>
+          <div className="text-lg font-medium text-[#E5E7EB]">Performance</div>
           <div className="flex items-center gap-2">
             <span className={`text-xl font-mono font-medium ${isPositive ? 'text-[#10B981]' : 'text-[#EF4444]'}`}>
               {isPositive ? '+' : ''}{percentageChange.toFixed(2)}%
@@ -200,32 +199,32 @@ export const VaultPerformanceChart: React.FC<VaultPerformanceChartProps> = ({
             </span>
           </div>
         </div>
-        
+
         <Tabs value={timeRange} onValueChange={(v) => onTimeRangeChange(v as any)} className="ml-auto">
           <TabsList className="bg-[#1F2937]/30 border border-white/[0.06] h-8">
-            <TabsTrigger 
-              value="daily" 
+            <TabsTrigger
+              value="daily"
               className="text-xs px-3 h-6 data-[state=active]:bg-[#3B4455] data-[state=active]:text-white"
             >
               24H
             </TabsTrigger>
-            <TabsTrigger 
-              value="weekly" 
+            <TabsTrigger
+              value="weekly"
               className="text-xs px-3 h-6 data-[state=active]:bg-[#3B4455] data-[state=active]:text-white"
             >
               7D
             </TabsTrigger>
-            <TabsTrigger 
-              value="monthly" 
+            <TabsTrigger
+              value="monthly"
               className="text-xs px-3 h-6 data-[state=active]:bg-[#3B4455] data-[state=active]:text-white"
             >
               30D
             </TabsTrigger>
           </TabsList>
         </Tabs>
-      </CardHeader>
-      
-      <CardContent className="p-6 pb-8 h-[300px] md:h-[300px] vault-chart">
+      </div>
+
+      <div className="p-6 pb-8 h-[300px] md:h-[300px] vault-chart">
         <div className="h-full w-full overflow-visible">
           <ResponsiveContainer width="100%" height={276}>
             <LineChart
@@ -238,30 +237,30 @@ export const VaultPerformanceChart: React.FC<VaultPerformanceChartProps> = ({
                   <stop offset="95%" stopColor={chartColor} stopOpacity={0}/>
                 </linearGradient>
               </defs>
-              
-              <CartesianGrid 
-                strokeDasharray="3 3" 
-                vertical={false} 
-                stroke="rgba(255,255,255,0.06)" 
+
+              <CartesianGrid
+                strokeDasharray="3 3"
+                vertical={false}
+                stroke="rgba(255,255,255,0.06)"
               />
-              
-              <XAxis 
-                dataKey="dateFormatted" 
-                tick={{ fill: '#9CA3AF', fontSize: 12, fontFamily: 'IBM Plex Mono' }} 
+
+              <XAxis
+                dataKey="dateFormatted"
+                tick={{ fill: '#9CA3AF', fontSize: 12, fontFamily: 'IBM Plex Mono' }}
                 axisLine={{ stroke: 'rgba(255,255,255,0.06)' }}
                 tickLine={false}
                 dy={8} // Increase spacing between labels and axis line
               />
-              
-              <YAxis 
-                tick={{ fill: '#9CA3AF', fontSize: 12, fontFamily: 'IBM Plex Mono' }} 
+
+              <YAxis
+                tick={{ fill: '#9CA3AF', fontSize: 12, fontFamily: 'IBM Plex Mono' }}
                 axisLine={{ stroke: 'rgba(255,255,255,0.06)' }}
                 tickFormatter={formatValue}
                 tickLine={false}
                 domain={['auto', 'auto']}
               />
-              
-              <Tooltip 
+
+              <Tooltip
                 content={({ active, payload }) => {
                   if (active && payload && payload.length) {
                     return (
@@ -275,7 +274,7 @@ export const VaultPerformanceChart: React.FC<VaultPerformanceChartProps> = ({
                 }}
                 cursor={{ stroke: 'rgba(255,255,255,0.1)' }}
               />
-              
+
               <Area
                 type="monotone"
                 dataKey="value"
@@ -283,10 +282,10 @@ export const VaultPerformanceChart: React.FC<VaultPerformanceChartProps> = ({
                 strokeWidth={2}
                 fillOpacity={1}
                 fill="url(#colorGradient)"
-                animationDuration={animationDuration} 
+                animationDuration={animationDuration}
                 animationEasing="ease"
               />
-              
+
               <Line
                 type="monotone"
                 dataKey="value"
@@ -302,7 +301,7 @@ export const VaultPerformanceChart: React.FC<VaultPerformanceChartProps> = ({
             </LineChart>
           </ResponsiveContainer>
         </div>
-      </CardContent>
-    </Card>
+      </div>
+    </div>
   );
 };

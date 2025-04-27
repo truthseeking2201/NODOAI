@@ -25,7 +25,7 @@ interface ActivityData {
 
 export function AIActivityNotification({ vaultType }: AIActivityNotificationProps) {
   const [showNotification, setShowNotification] = useState(false);
-  const [currentActivity, setCurrentActivity] = useState<ActivityType>('analyze');
+  const [currentActivity, setCurrentActivity] = useState<ActivityType>('optimize');
 
   const getTypeColor = () => {
     switch (vaultType) {
@@ -121,8 +121,8 @@ export function AIActivityNotification({ vaultType }: AIActivityNotificationProp
 
     // Set up interval to show notifications periodically
     const interval = setInterval(() => {
-      // Randomly select a new activity type
-      const activityTypes: ActivityType[] = ['optimize', 'analyze', 'security', 'predict', 'rebalance'];
+      // Randomly select a new activity type (excluding 'analyze' and 'security')
+      const activityTypes: ActivityType[] = ['optimize', 'predict', 'rebalance'];
       const newActivity = activityTypes[Math.floor(Math.random() * activityTypes.length)];
       setCurrentActivity(newActivity);
 

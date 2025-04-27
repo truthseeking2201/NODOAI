@@ -8,12 +8,14 @@ import {
   BarChart3,
   Cpu,
   Zap,
-  LucideIcon
+  LucideIcon,
+  X
 } from "lucide-react";
 
 interface AIPerformanceInsightsProps {
   vaultType: 'nova' | 'orion' | 'emerald';
   apr: number;
+  onClose?: () => void;
 }
 
 interface InsightData {
@@ -28,7 +30,8 @@ interface InsightData {
 
 export function AIPerformanceInsights({
   vaultType,
-  apr
+  apr,
+  onClose
 }: AIPerformanceInsightsProps) {
   const [selectedInsight, setSelectedInsight] = useState<string | null>(null);
   const [aiContribution, setAiContribution] = useState(0);
@@ -79,39 +82,39 @@ export function AIPerformanceInsights({
     const insightsData: InsightData[] = [
       {
         id: "ai-optimization",
-        title: "AI Optimization",
+        title: "Smart Investing",
         value: `+${(apr * (baseContribution / 100)).toFixed(1)}%`,
         change: `+${(Math.random() * 2 + 0.5).toFixed(1)}%`,
         isPositive: true,
         icon: Brain,
-        description: "AI neural networks continuously analyze market conditions and optimize trading strategies to maximize yield."
+        description: "Our AI constantly watches the markets to find the best opportunities for your money, making adjustments that human managers might miss."
       },
       {
         id: "slippage-reduction",
-        title: "Slippage Reduction",
+        title: "Price Protection",
         value: vaultType === 'nova' ? "68%" : vaultType === 'orion' ? "72%" : "78%",
         change: `+${(Math.random() * 3 + 1).toFixed(1)}%`,
         isPositive: true,
         icon: BarChart3,
-        description: "AI algorithms dynamically adjust trade timing and size to minimize slippage and maximize capital efficiency."
+        description: "When buying or selling, our system times the market perfectly to make sure you get the best price possible without overpaying."
       },
       {
         id: "gas-optimization",
-        title: "Gas Optimization",
+        title: "Fee Savings",
         value: `${(Math.random() * 15 + 20).toFixed(1)}%`,
         change: `-${(Math.random() * 3 + 2).toFixed(1)}%`,
         isPositive: true,
         icon: Zap,
-        description: "Smart transaction batching and timing reduces overall gas costs while maintaining optimal position management."
+        description: "Our AI bundles transactions together and picks the right timing to cut down on fees, saving you money while managing your investment."
       },
       {
         id: "computational-power",
-        title: "Computational Power",
+        title: "AI Power",
         value: vaultType === 'nova' ? "128 TPU" : vaultType === 'orion' ? "96 TPU" : "64 TPU",
         change: `+${Math.floor(Math.random() * 8 + 8)}`,
         isPositive: true,
         icon: Cpu,
-        description: "Dedicated tensor processing units power the neural networks that continuously optimize this vault's performance."
+        description: "We use powerful computers dedicated just to making your investment grow. The more computing power, the smarter the investment decisions."
       }
     ];
 
@@ -132,8 +135,8 @@ export function AIPerformanceInsights({
 
   // Simple data for the comparison chart
   const performanceData = [
-    { name: "Traditional", value: apr - (apr * aiContribution / 100) },
-    { name: "AI-Enhanced", value: apr }
+    { name: "Standard", value: apr - (apr * aiContribution / 100) },
+    { name: "With AI", value: apr }
   ];
 
   return (
@@ -142,13 +145,22 @@ export function AIPerformanceInsights({
         <div className={`p-2 rounded-lg bg-gradient-to-br ${colors.bgGradient}`}>
           <PieChart size={18} className={colors.primary} />
         </div>
-        <h3 className="text-lg font-medium text-white">AI Performance Insights</h3>
+        <h3 className="text-lg font-medium text-white">How AI Boosts Your Returns</h3>
+        {onClose && (
+          <button
+            onClick={onClose}
+            className="ml-auto p-1.5 rounded-full hover:bg-white/10 transition-colors"
+            aria-label="Close insights panel"
+          >
+            <X size={16} className="text-white/60 hover:text-white/90" />
+          </button>
+        )}
       </div>
 
       {/* Comparative APR section */}
       <div className="mb-6">
         <div className="flex justify-between items-center mb-2">
-          <span className="text-sm text-white/70">Traditional Yield</span>
+          <span className="text-sm text-white/70">Basic Interest Rate</span>
           <span className="text-sm font-mono">{(apr - (apr * aiContribution / 100)).toFixed(2)}%</span>
         </div>
         <div className="h-2 bg-white/10 rounded-full overflow-hidden mb-4">
@@ -160,7 +172,7 @@ export function AIPerformanceInsights({
 
         <div className="flex justify-between items-center mb-2">
           <div className="flex items-center gap-2">
-            <span className="text-sm text-white/70">AI-Enhanced Yield</span>
+            <span className="text-sm text-white/70">Your AI-Boosted Rate</span>
             <div className={`px-1.5 py-0.5 rounded-full text-xs ${colors.bg} ${colors.primary} flex items-center gap-1`}>
               <Brain size={10} />
               <span>+{aiContribution}%</span>
@@ -183,7 +195,7 @@ export function AIPerformanceInsights({
           <div className="flex items-start gap-2">
             <Brain size={14} className={colors.primary} />
             <span>
-              Neural networks are currently contributing <span className={colors.primary}>+{aiContribution}%</span> additional yield compared to traditional strategies for this vault type.
+              Our smart AI system is adding <span className={colors.primary}>+{aiContribution}%</span> extra interest to your money compared to regular savings options.
             </span>
           </div>
         </div>
@@ -255,7 +267,7 @@ export function AIPerformanceInsights({
             >
               <div className="h-full w-full opacity-20 bg-stripes-white" />
             </div>
-            <div className="mt-2 text-xs text-white/60">Traditional</div>
+            <div className="mt-2 text-xs text-white/60">Standard Rate</div>
             <div className="text-xs font-mono mt-0.5">{performanceData[0].value.toFixed(1)}%</div>
           </div>
 
@@ -271,7 +283,7 @@ export function AIPerformanceInsights({
                 style={{ height: `${100 - (aiContribution / 100) * 100}%` }}
               />
             </div>
-            <div className="mt-2 text-xs text-white/60">AI-Enhanced</div>
+            <div className="mt-2 text-xs text-white/60">AI-Boosted Rate</div>
             <div className="text-xs font-mono mt-0.5 font-medium">{performanceData[1].value.toFixed(1)}%</div>
           </div>
 
