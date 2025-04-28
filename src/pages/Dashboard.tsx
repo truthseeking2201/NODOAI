@@ -12,12 +12,14 @@ import { vaultService } from "@/services/vaultService";
 import { ConnectWalletPrompt } from "@/components/dashboard/ConnectWalletPrompt";
 import { UserInvestment, TransactionHistory } from "@/types/vault";
 import { WithdrawModal } from "@/components/vault/WithdrawModal";
+import { RedeemNODOAIxDrawer } from "@/components/vault/RedeemNODOAIxDrawer";
 import { TxDrawer } from "@/components/dashboard/TxDrawer";
 
 export default function Dashboard() {
   const { isConnected, balance } = useWallet();
   const [selectedInvestment, setSelectedInvestment] = useState<UserInvestment | null>(null);
   const [isWithdrawModalOpen, setIsWithdrawModalOpen] = useState(false);
+  const [isRedeemDrawerOpen, setIsRedeemDrawerOpen] = useState(false);
   const [selectedTx, setSelectedTx] = useState<TransactionHistory | null>(null);
   const [isTxDrawerOpen, setIsTxDrawerOpen] = useState(false);
 
@@ -77,6 +79,11 @@ export default function Dashboard() {
     setIsWithdrawModalOpen(true);
   };
 
+  // Handle redeem NODOAIx click
+  const handleRedeemClick = () => {
+    setIsRedeemDrawerOpen(true);
+  };
+
   // Handle transaction selection
   const handleTxSelect = (tx: TransactionHistory) => {
     setSelectedTx(tx);
@@ -105,7 +112,10 @@ export default function Dashboard() {
         />
 
         {balance?.receiptTokens > 0 && (
-          <ReceiptTokenCard tokens={balance.receiptTokens} />
+          <ReceiptTokenCard
+            tokens={balance.receiptTokens}
+            onRedeem={handleRedeemClick}
+          />
         )}
 
         <PerformanceChart
@@ -142,6 +152,12 @@ export default function Dashboard() {
           investment={selectedInvestment}
         />
       )}
+
+      {/* Redeem NODOAIx Drawer */}
+      <RedeemNODOAIxDrawer
+        open={isRedeemDrawerOpen}
+        onClose={() => setIsRedeemDrawerOpen(false)}
+      />
     </PageContainer>
   );
 }

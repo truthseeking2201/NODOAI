@@ -6,9 +6,7 @@ import { EnhancedHeroSection } from "@/components/vault/EnhancedHeroSection";
 import { EnhancedVaultGrid } from "@/components/vault/EnhancedVaultGrid";
 import { EnhancedActivitySection } from "@/components/vault/EnhancedActivitySection";
 import { EnhancedNeuralActivityTicker } from "@/components/vault/EnhancedNeuralActivityTicker";
-import { AIInsightsModule } from "@/components/vault/AIInsightsModule";
 import { NeuralNetworkBackground } from "@/components/vault/NeuralNetworkBackground";
-import { OptimizationEngineCard } from "@/components/vault/OptimizationEngineCard";
 import { useWallet } from "@/hooks/useWallet";
 import { VaultData } from "@/types/vault";
 import { adaptVaultsToVaultData } from "@/utils/vaultAdapter";
@@ -309,28 +307,6 @@ export default function EnhancedVaultCatalog() {
                 </button>
               </div>
             )}
-          </div>
-        </motion.section>
-
-        {/* AI Insights Module */}
-        <motion.section
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.6, duration: 0.8 }}
-          className="px-4 mb-6"
-        >
-          <AIInsightsModule />
-        </motion.section>
-
-        {/* User-friendly Optimization Engine Section */}
-        <motion.section
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.7, duration: 0.8 }}
-          className="pt-4 pb-8 px-4"
-        >
-          <div className="max-w-screen-lg mx-auto">
-            <OptimizationEngineCard />
           </div>
         </motion.section>
 

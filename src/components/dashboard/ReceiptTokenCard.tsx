@@ -1,14 +1,16 @@
-import { Card, CardHeader, CardTitle, CardContent, CardDescription } from "@/components/ui/card";
+import { Card, CardHeader, CardTitle, CardContent, CardDescription, CardFooter } from "@/components/ui/card";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
-import { InfoIcon, Ticket } from "lucide-react";
+import { InfoIcon, Ticket, ArrowRightCircle } from "lucide-react";
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { Button } from "@/components/ui/button";
 
 interface ReceiptTokenCardProps {
   tokens: number;
+  onRedeem: () => void;
 }
 
-export function ReceiptTokenCard({ tokens }: ReceiptTokenCardProps) {
+export function ReceiptTokenCard({ tokens, onRedeem }: ReceiptTokenCardProps) {
   const [animatedValue, setAnimatedValue] = useState(0);
   const [pulseEffect, setPulseEffect] = useState(false);
 
@@ -117,6 +119,16 @@ export function ReceiptTokenCard({ tokens }: ReceiptTokenCardProps) {
           </div>
         </div>
       </CardContent>
+      <CardFooter>
+        <Button
+          onClick={onRedeem}
+          variant="outline"
+          className="w-full border-amber-500/30 hover:bg-amber-500/10 text-amber-500 flex items-center justify-center gap-2"
+        >
+          Redeem Tokens
+          <ArrowRightCircle className="h-4 w-4" />
+        </Button>
+      </CardFooter>
     </Card>
   );
 }

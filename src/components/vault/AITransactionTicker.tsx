@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
   ArrowUpRight,
   ArrowDownRight,
@@ -9,7 +10,8 @@ import {
   RefreshCw,
   Zap,
   Check,
-  ShieldCheck
+  ShieldCheck,
+  User
 } from "lucide-react";
 
 interface AITransactionTickerProps {
@@ -26,6 +28,7 @@ interface Transaction {
   address: string;
   optimized: boolean;
   aiScore: number;
+  isUserTransaction?: boolean;
 }
 
 export function AITransactionTicker({
@@ -33,7 +36,9 @@ export function AITransactionTicker({
   maxItems = 8
 }: AITransactionTickerProps) {
   const [transactions, setTransactions] = useState<Transaction[]>([]);
+  const [userTransactions, setUserTransactions] = useState<Transaction[]>([]);
   const [latestTransaction, setLatestTransaction] = useState<Transaction | null>(null);
+  const [activeTab, setActiveTab] = useState<string>("all-transactions");
 
   const getTypeColor = () => {
     switch (vaultType) {
@@ -64,9 +69,9 @@ export function AITransactionTicker({
   const colors = getTypeColor();
 
   // Generate a random transaction
-  const generateTransaction = (): Transaction => {
+  const generateTransaction = (isUserTx: boolean = false): Transaction => {
     const types: ('deposit' | 'withdraw' | 'swap' | 'optimize' | 'rebalance' | 'secure')[] =
-      ['deposit', 'withdraw', 'swap', 'optimize', 'rebalance', 'secure'];
+      isUserTx ? ['deposit', 'withdraw'] : ['deposit', 'withdraw', 'swap', 'optimize', 'rebalance', 'secure'];
 
     const randomType = types[Math.floor(Math.random() * types.length)];
 
@@ -77,12 +82,18 @@ export function AITransactionTicker({
     // Generate random wallet address
     const chars = '0123456789abcdef';
     let address = '0x';
-    for (let i = 0; i < 6; i++) {
-      address += chars[Math.floor(Math.random() * chars.length)];
-    }
-    address += '...';
-    for (let i = 0; i < 4; i++) {
-      address += chars[Math.floor(Math.random() * chars.length)];
+
+    // For user transactions, use a consistent address
+    if (isUserTx) {
+      address = '0x7d783c975da6e3b5ff8259436d4f7da675da6';
+    } else {
+      for (let i = 0; i < 6; i++) {
+        address += chars[Math.floor(Math.random() * chars.length)];
+      }
+      address += '...';
+      for (let i = 0; i < 4; i++) {
+        address += chars[Math.floor(Math.random() * chars.length)];
+      }
     }
 
     // Generate random amount based on transaction type
@@ -108,10 +119,11 @@ export function AITransactionTicker({
       type: randomType,
       amount,
       asset,
-      timestamp: new Date(),
+      timestamp: new Date(Date.now() - Math.floor(Math.random() * 10) * 24 * 60 * 60 * 1000), // Random date within last 10 days
       address,
       optimized: Math.random() > 0.3,
-      aiScore: Math.floor(Math.random() * 30) + 70
+      aiScore: Math.floor(Math.random() * 30) + 70,
+      isUserTransaction: isUserTx
     };
   };
 
@@ -123,7 +135,15 @@ export function AITransactionTicker({
       return tx;
     });
 
+    // Generate initial set of user transactions
+    const initialUserTransactions = Array.from({ length: 3 }, (_, index) => {
+      const tx = generateTransaction(true);
+      tx.timestamp = new Date(Date.now() - (index * 3 * 24 * 60 * 60 * 1000)); // Each 3 days older
+      return tx;
+    });
+
     setTransactions(initialTransactions);
+    setUserTransactions(initialUserTransactions);
 
     // Add new transactions periodically
     const interval = setInterval(() => {
@@ -134,6 +154,15 @@ export function AITransactionTicker({
         const updated = [newTransaction, ...prev];
         return updated.slice(0, maxItems);
       });
+
+      // Occasionally add user transactions too (20% chance)
+      if (Math.random() < 0.2) {
+        const newUserTx = generateTransaction(true);
+        setUserTransactions(prev => {
+          const updated = [newUserTx, ...prev];
+          return updated.slice(0, maxItems);
+        });
+      }
     }, 3000 + Math.random() * 5000);
 
     return () => clearInterval(interval);
@@ -177,7 +206,7 @@ export function AITransactionTicker({
           <div className={`p-1.5 rounded-lg ${colors.bg}`}>
             <Zap size={15} className={colors.primary} />
           </div>
-          <h3 className="text-base font-medium text-white">AI-Powered Transactions</h3>
+          <h3 className="text-base font-medium text-white">Transactions</h3>
         </div>
 
         <div className="flex items-center gap-1.5">
@@ -219,78 +248,150 @@ export function AITransactionTicker({
         )}
       </AnimatePresence>
 
-      {/* Transactions list */}
-      <div className="space-y-3 max-h-80 overflow-y-auto custom-scrollbar pr-1">
-        <AnimatePresence>
-          {transactions.map((tx) => (
-            <motion.div
-              key={tx.id}
-              className="bg-white/5 rounded-lg border border-white/10 p-3 flex items-center gap-3"
-              initial={{ opacity: 0, y: -20 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, height: 0, marginBottom: 0 }}
-              transition={{ duration: 0.3 }}
-            >
-              <div className="p-2 rounded-lg bg-white/5">
-                {getTransactionIcon(tx.type)}
-              </div>
+      {/* Tabs for All Transactions and My Transactions */}
+      <Tabs defaultValue="all-transactions" value={activeTab} onValueChange={setActiveTab} className="mt-2">
+        <TabsList className="grid grid-cols-2 bg-black/20 rounded-lg p-1 mb-4">
+          <TabsTrigger
+            value="all-transactions"
+            className={`text-xs data-[state=active]:${colors.bg} data-[state=active]:text-white`}
+          >
+            All Transactions
+          </TabsTrigger>
+          <TabsTrigger
+            value="my-transactions"
+            className={`text-xs data-[state=active]:${colors.bg} data-[state=active]:text-white`}
+          >
+            <User className="h-3 w-3 mr-1" />
+            My Transactions
+          </TabsTrigger>
+        </TabsList>
 
-              <div className="flex-1 min-w-0">
-                <div className="flex items-center gap-1.5">
-                  <div className="text-sm font-medium text-white truncate">
-                    {getTransactionLabel(tx.type)}
-                  </div>
-
-                  {tx.optimized && (
-                    <div className="px-1.5 py-0.5 rounded-full bg-white/10 text-[10px] font-medium flex items-center gap-1 text-white/70">
-                      <Brain size={10} className={colors.primary} />
-                      AI-Optimized
-                    </div>
-                  )}
+        <TabsContent value="all-transactions" className="mt-0 space-y-3 max-h-80 overflow-y-auto custom-scrollbar pr-1">
+          <AnimatePresence>
+            {transactions.map((tx) => (
+              <motion.div
+                key={tx.id}
+                className="bg-white/5 rounded-lg border border-white/10 p-3 flex items-center gap-3"
+                initial={{ opacity: 0, y: -20 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, height: 0, marginBottom: 0 }}
+                transition={{ duration: 0.3 }}
+              >
+                <div className="p-2 rounded-lg bg-white/5">
+                  {getTransactionIcon(tx.type)}
                 </div>
 
-                <div className="flex items-center gap-2 mt-1">
-                  {tx.amount && (
-                    <div className="text-xs font-mono text-white/90">
-                      {tx.type === 'withdraw' ? '-' : ''}{tx.amount} {tx.asset}
+                <div className="flex-1 min-w-0">
+                  <div className="flex items-center gap-1.5">
+                    <div className="text-sm font-medium text-white truncate">
+                      {getTransactionLabel(tx.type)}
                     </div>
-                  )}
 
-                  <div className="text-[10px] text-white/50 truncate">
-                    {tx.address}
+                    {tx.optimized && (
+                      <div className="px-1.5 py-0.5 rounded-full bg-white/10 text-[10px] font-medium flex items-center gap-1 text-white/70">
+                        <Brain size={10} className={colors.primary} />
+                        AI-Optimized
+                      </div>
+                    )}
+                  </div>
+
+                  <div className="flex items-center gap-2 mt-1">
+                    {tx.amount && (
+                      <div className="text-xs font-mono text-white/90">
+                        {tx.type === 'withdraw' ? '-' : ''}{tx.amount} {tx.asset}
+                      </div>
+                    )}
+
+                    <div className="text-[10px] text-white/50 truncate">
+                      {tx.address}
+                    </div>
                   </div>
                 </div>
-              </div>
 
-              <div className="text-[10px] text-white/40">
-                {timeAgo(tx.timestamp)}
-              </div>
-
-              {/* AI Score indicator for certain transactions */}
-              {(tx.type === 'optimize' || tx.type === 'rebalance' || tx.type === 'secure') && (
-                <div className="ml-auto flex flex-col items-end">
-                  <div className="flex items-center gap-1">
-                    <div className={`h-1 w-5 rounded-full relative overflow-hidden bg-white/10`}>
-                      <div
-                        className={`absolute inset-0 ${colors.fill}`}
-                        style={{width: `${tx.aiScore}%`}}
-                      />
-                    </div>
-                    <span className="text-[10px] font-mono text-white/60">{tx.aiScore}</span>
-                  </div>
-                  <div className="text-[8px] text-white/40 mt-0.5">AI Score</div>
+                <div className="text-[10px] text-white/40">
+                  {timeAgo(tx.timestamp)}
                 </div>
-              )}
-            </motion.div>
-          ))}
-        </AnimatePresence>
 
-        {transactions.length === 0 && (
-          <div className="text-center py-8 text-white/40 text-sm">
-            No transactions yet
-          </div>
-        )}
-      </div>
+                {/* AI Score indicator for certain transactions */}
+                {(tx.type === 'optimize' || tx.type === 'rebalance' || tx.type === 'secure') && (
+                  <div className="ml-auto flex flex-col items-end">
+                    <div className="flex items-center gap-1">
+                      <div className={`h-1 w-5 rounded-full relative overflow-hidden bg-white/10`}>
+                        <div
+                          className={`absolute inset-0 ${colors.fill}`}
+                          style={{width: `${tx.aiScore}%`}}
+                        />
+                      </div>
+                      <span className="text-[10px] font-mono text-white/60">{tx.aiScore}</span>
+                    </div>
+                    <div className="text-[8px] text-white/40 mt-0.5">AI Score</div>
+                  </div>
+                )}
+              </motion.div>
+            ))}
+          </AnimatePresence>
+
+          {transactions.length === 0 && (
+            <div className="text-center py-8 text-white/40 text-sm">
+              No transactions yet
+            </div>
+          )}
+        </TabsContent>
+
+        <TabsContent value="my-transactions" className="mt-0 space-y-3 max-h-80 overflow-y-auto custom-scrollbar pr-1">
+          <AnimatePresence>
+            {userTransactions.length > 0 ? (
+              userTransactions.map((tx) => (
+                <motion.div
+                  key={tx.id}
+                  className="bg-white/5 rounded-lg border border-white/10 p-3 flex items-center gap-3"
+                  initial={{ opacity: 0, y: -20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, height: 0, marginBottom: 0 }}
+                  transition={{ duration: 0.3 }}
+                >
+                  <div className="p-2 rounded-lg bg-white/5">
+                    {getTransactionIcon(tx.type)}
+                  </div>
+
+                  <div className="flex-1 min-w-0">
+                    <div className="flex items-center gap-1.5">
+                      <div className="text-sm font-medium text-white truncate">
+                        {getTransactionLabel(tx.type)}
+                      </div>
+
+                      <div className="px-1.5 py-0.5 rounded-full bg-white/10 text-[10px] font-medium flex items-center gap-1 text-white/70">
+                        <User size={10} className="text-white/70" />
+                        Your Transaction
+                      </div>
+                    </div>
+
+                    <div className="flex items-center gap-2 mt-1">
+                      {tx.amount && (
+                        <div className="text-xs font-mono text-white/90">
+                          {tx.type === 'withdraw' ? '-' : ''}{tx.amount} {tx.asset}
+                        </div>
+                      )}
+
+                      <div className="text-[10px] text-white/50 truncate">
+                        {tx.address}
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="text-[10px] text-white/40">
+                    {timeAgo(tx.timestamp)}
+                  </div>
+                </motion.div>
+              ))
+            ) : (
+              <div className="text-center py-8 text-white/40 text-sm">
+                No transactions yet. Deposit or withdraw to see your transactions here.
+              </div>
+            )}
+          </AnimatePresence>
+        </TabsContent>
+      </Tabs>
 
       {/* Status footer */}
       <div className="mt-4 bg-white/5 rounded-lg border border-white/10 p-2 text-xs text-white/60 flex items-center justify-between">
@@ -303,10 +404,12 @@ export function AITransactionTicker({
         </div>
 
         <div className="flex items-center gap-1">
-          <span>AI Tx Count:</span>
-          <span className="font-mono">{transactions.filter(tx =>
-            tx.type === 'optimize' || tx.type === 'rebalance' || tx.type === 'secure' || tx.optimized
-          ).length}</span>
+          <span>{activeTab === "all-transactions" ? "AI Tx Count:" : "Your Tx Count:"}</span>
+          <span className="font-mono">{
+            activeTab === "all-transactions"
+              ? transactions.filter(tx => tx.type === 'optimize' || tx.type === 'rebalance' || tx.type === 'secure' || tx.optimized).length
+              : userTransactions.length
+          }</span>
         </div>
       </div>
     </div>

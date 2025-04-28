@@ -26,6 +26,10 @@ export function WithdrawModal({ open, onClose, investment }: WithdrawModalProps)
     },
     onSuccess: () => {
       setStep('success');
+      // Update wallet balance if needed
+      if (window.updateWalletBalance) {
+        window.updateWalletBalance();
+      }
     },
     onError: (error) => {
       toast({
@@ -60,8 +64,8 @@ export function WithdrawModal({ open, onClose, investment }: WithdrawModalProps)
   };
 
   const formatCurrency = (value: number) => {
-    return new Intl.NumberFormat('en-US', { 
-      style: 'currency', 
+    return new Intl.NumberFormat('en-US', {
+      style: 'currency',
       currency: 'USD',
       minimumFractionDigits: 2,
       maximumFractionDigits: 2
@@ -86,7 +90,7 @@ export function WithdrawModal({ open, onClose, investment }: WithdrawModalProps)
 
   const handleConfirmWithdraw = () => {
     if (!amount) return;
-    
+
     withdrawMutation.mutate({
       investmentId: investment.vaultId,
       amount: parseFloat(amount)
@@ -134,8 +138,8 @@ export function WithdrawModal({ open, onClose, investment }: WithdrawModalProps)
               </div>
               {amount && !isAmountValid && (
                 <p className="text-red-500 text-xs">
-                  {amountNum > investment.currentValue 
-                    ? "Insufficient balance" 
+                  {amountNum > investment.currentValue
+                    ? "Insufficient balance"
                     : "Please enter a valid amount"}
                 </p>
               )}
@@ -177,7 +181,7 @@ export function WithdrawModal({ open, onClose, investment }: WithdrawModalProps)
               <Button variant="outline" className="bg-white/5 border-white/20" onClick={onClose}>
                 Cancel
               </Button>
-              <Button 
+              <Button
                 onClick={handleWithdrawClick}
                 disabled={!isAmountValid}
                 className={`${styles.gradientBg} ${styles.shadow}`}
@@ -223,15 +227,15 @@ export function WithdrawModal({ open, onClose, investment }: WithdrawModalProps)
             </div>
 
             <div className="flex justify-end space-x-2">
-              <Button 
-                variant="outline" 
+              <Button
+                variant="outline"
                 className="bg-white/5 border-white/20"
                 disabled={withdrawMutation.isPending}
                 onClick={() => setStep('amount')}
               >
                 Back
               </Button>
-              <Button 
+              <Button
                 onClick={handleConfirmWithdraw}
                 disabled={withdrawMutation.isPending}
                 className={`${styles.gradientBg} ${styles.shadow}`}
@@ -272,7 +276,7 @@ export function WithdrawModal({ open, onClose, investment }: WithdrawModalProps)
               </div>
             </div>
 
-            <Button 
+            <Button
               onClick={onClose}
               className={`w-full ${styles.gradientBg} ${styles.shadow}`}
             >

@@ -323,6 +323,17 @@ export class VaultService {
     return Promise.resolve(transaction);
   }
 
+  // Withdraw method compatible with the WithdrawModal component
+  async withdraw(investmentId: string, amount: number): Promise<Transaction> {
+    // For NODOAIx tokens, use the redeemNODOAIxTokens method
+    if (investmentId === 'nodoaix-tokens') {
+      return this.redeemNODOAIxTokens(amount);
+    }
+
+    // For other vaults, use the withdrawFromVault method
+    return this.withdrawFromVault(investmentId, amount);
+  }
+
   // Withdraw from a vault
   async withdrawFromVault(vaultId: string, amount: number): Promise<Transaction> {
     const vault = this.vaults.find(v => v.id === vaultId);
@@ -346,6 +357,22 @@ export class VaultService {
 
     // Update TVL
     vault.tvl -= amount;
+
+    return Promise.resolve(transaction);
+  }
+
+  // Redeem NODOAIx tokens
+  async redeemNODOAIxTokens(amount: number): Promise<Transaction> {
+    // For NODOAIx token redemption, create a special transaction
+    const transaction: Transaction = {
+      id: `tx-${Math.random().toString(36).substr(2, 9)}`,
+      type: 'withdraw',
+      amount,
+      timestamp: new Date(),
+      vaultName: 'NODOAIx Tokens'
+    };
+
+    this.transactions.push(transaction);
 
     return Promise.resolve(transaction);
   }

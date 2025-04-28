@@ -251,5 +251,6 @@ export const useWallet = () => {
 declare global {
   interface Window {
     signatureComplete?: () => void;
+    updateWalletBalance?: () => void;
   }
 }
