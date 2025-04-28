@@ -683,10 +683,10 @@ export default function VaultDetail() {
                         </div>
                         <div className="flex-1">
                           <CardTitle className="text-xl font-bold flex items-center justify-between">
-                            <span>Your Investment Receipt</span>
+                            <span>Your Magic Money Ticket ✨</span>
                           </CardTitle>
                           <CardDescription className="text-sm text-white/60">
-                            Smart tokens that grow with your money
+                            Tokens that grow while you chill
                           </CardDescription>
                         </div>
                         <TooltipProvider>
@@ -697,12 +697,12 @@ export default function VaultDetail() {
                               </button>
                             </TooltipTrigger>
                             <TooltipContent className="max-w-[300px] p-4 bg-[#0c0c10]/95 border border-white/20 text-white">
-                              <h4 className="font-medium text-sm mb-2 text-amber-500">About Your Investment Receipt</h4>
+                              <h4 className="font-medium text-sm mb-2 text-amber-500">About Your Magic Money Ticket 🪄</h4>
                               <p className="text-sm text-white/80">
-                                When you deposit money, you get these digital receipts that show how much you've invested.
-                                These aren't just regular receipts - they're smart! Our AI helps them grow in value over time.
-                                When you want your money back, just redeem these receipts. They're connected to your personal
-                                wallet and can't be transferred to anyone else, keeping your investment secure.
+                                Think of this as your golden ticket! When you deposit money, you get these special
+                                digital tickets that show your share. Best part? Our AI helps them grow in value automatically -
+                                you just sit back and relax! When you want your cash back, just trade in your tickets.
+                                They're stored in your personal wallet and super secure.
                               </p>
                             </TooltipContent>
                           </Tooltip>
@@ -713,19 +713,19 @@ export default function VaultDetail() {
                     <CardContent className="p-6 pt-0 space-y-5">
                       <div className="grid grid-cols-2 gap-4 mb-1">
                         <div className="bg-white/5 p-3 rounded-xl border border-white/10">
-                          <p className="text-xs text-white/60 mb-1">Principal</p>
+                          <p className="text-xs text-white/60 mb-1">Money In</p>
                           <p className="text-base font-medium font-mono">$1000.00</p>
                         </div>
                         <div className="bg-white/5 p-3 rounded-xl border border-white/10">
-                          <p className="text-xs text-white/60 mb-1">Protocol Fees</p>
+                          <p className="text-xs text-white/60 mb-1">Tiny Fee</p>
                           <p className="text-base font-medium font-mono">$12.30</p>
                         </div>
                       </div>
 
                       <div className="space-y-2 bg-white/5 p-3 rounded-xl border border-white/10">
                         <div className="flex justify-between items-center">
-                          <p className="text-xs text-white/60">Unlock in {Math.ceil((unlockTime.getTime() - Date.now()) / (1000 * 60 * 60 * 24))} days</p>
-                          <p className="text-xs font-medium font-mono">{unlockProgress}%</p>
+                          <p className="text-xs text-white/60">Freedom Day: <span className="text-white/80">{Math.ceil((unlockTime.getTime() - Date.now()) / (1000 * 60 * 60 * 24))} days left</span></p>
+                          <p className="text-xs font-medium font-mono">{unlockProgress}% complete</p>
                         </div>
                         <div className="h-1.5 bg-white/20 rounded-full overflow-hidden">
                           <motion.div
@@ -774,7 +774,7 @@ export default function VaultDetail() {
                               {animatedValue.toFixed(2)}
                             </div>
                             <div className="text-xs text-white/60">
-                              1 token ≈ 1 USDC
+                              1 ticket = $1 of awesome
                             </div>
                           </div>
                         </div>
@@ -782,11 +782,11 @@ export default function VaultDetail() {
 
                       <div className="bg-white/5 p-3 rounded-xl border border-white/10 space-y-2">
                         <div className="flex justify-between text-xs">
-                          <span className="text-white/60">Holders</span>
+                          <span className="text-white/60">Happy Investors</span>
                           <span className="font-mono">1,203</span>
                         </div>
                         <div className="flex justify-between text-xs">
-                          <span className="text-white/60">Contract</span>
+                          <span className="text-white/60">Magic Address</span>
                           <span className="font-mono text-white/80 flex items-center">
                             0xAB12...3456
                             <ExternalLink className="ml-1 h-3 w-3 text-white/60" />

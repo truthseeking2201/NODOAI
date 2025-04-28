@@ -349,33 +349,30 @@ export default function EnhancedVaultCatalog() {
               <div>
                 <div className="flex items-center gap-2 mb-3">
                   <Brain size={16} className="text-nova" />
-                  <h3 className="text-sm font-medium">AI-Powered Security</h3>
+                  <h3 className="text-sm font-medium">Super-Smart Security</h3>
                 </div>
                 <p className="text-xs text-white/50">
-                  NODO's neural security framework continuously monitors for market anomalies and protocol risks,
-                  automatically implementing protective measures to safeguard your crypto assets.
+                  Our AI watches your money 24/7, spots trouble before it happens, and keeps your crypto safe. Like having a tireless guardian for your assets!
                 </p>
               </div>
 
               <div>
                 <div className="flex items-center gap-2 mb-3">
                   <Network size={16} className="text-orion" />
-                  <h3 className="text-sm font-medium">Neural Optimization</h3>
+                  <h3 className="text-sm font-medium">Money-Making Brain</h3>
                 </div>
                 <p className="text-xs text-white/50">
-                  Our advanced neural networks analyze over 500,000 on-chain data points daily to
-                  optimize yield-generating strategies with 97.2% accuracy, constantly adapting to market conditions.
+                  Our AI crunches massive data to find the best profits for you. It's like having a financial genius working non-stop to maximize your earnings!
                 </p>
               </div>
 
               <div>
                 <div className="flex items-center gap-2 mb-3">
                   <Lock size={16} className="text-emerald" />
-                  <h3 className="text-sm font-medium">Smart Risk Management</h3>
+                  <h3 className="text-sm font-medium">Sleep-Easy Protection</h3>
                 </div>
                 <p className="text-xs text-white/50">
-                  NODO employs multi-layered risk assessment models to dynamically balance risk and reward,
-                  giving you the confidence to earn optimal yields with predictable risk parameters.
+                  Balance risk and reward perfectly with our smart system. Choose how adventurous you want to be, and our AI handles the rest. No stress, just results!
                 </p>
               </div>
             </div>

@@ -144,7 +144,7 @@ export function EnhancedVaultCard({
               {/* Chip with AI indicator */}
               <div className={`relative px-2 py-1 rounded-full flex items-center gap-1.5 text-xs font-medium bg-white/5 border border-white/10`}>
                 <Brain size={11} className={getVaultTypeColor(vault.type)} />
-                <span className="text-white/80">AI Optimized</span>
+                <span className="text-white/80">AI Boosted</span>
                 <motion.div
                   className={`absolute right-1 top-1 h-1.5 w-1.5 rounded-full ${vault.type === 'nova' ? 'bg-nova' : vault.type === 'orion' ? 'bg-orion' : 'bg-emerald'}`}
                   animate={{ scale: [1, 1.5, 1], opacity: [0.7, 1, 0.7] }}
@@ -218,7 +218,7 @@ export function EnhancedVaultCard({
           <div className="flex justify-between items-center mb-1.5">
             <div className="text-xs text-white/60 flex items-center gap-1.5">
               <Sparkles size={10} className={getVaultTypeColor(vault.type)} />
-              <span>AI Optimization Probability</span>
+              <span>AI Magic Level</span>
             </div>
             <div className="text-xs font-medium flex items-center gap-1">
               <span className={`${getVaultTypeColor(vault.type)}`}>{aiOptimizationLevel}%</span>
@@ -250,7 +250,7 @@ export function EnhancedVaultCard({
         >
           <div className="text-xs text-white/60 mb-2 flex items-center gap-1.5">
             <TrendingUp size={10} className={getVaultTypeColor(vault.type)} />
-            <span>Projected 12-Month Returns on $10,000</span>
+            <span>Your $10K could earn this in a year! 🚀</span>
           </div>
           <div className="flex justify-between items-center">
             <div className="text-base font-mono font-medium text-white">
