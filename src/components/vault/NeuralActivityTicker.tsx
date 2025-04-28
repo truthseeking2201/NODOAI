@@ -1,218 +1,132 @@
-import { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { useQuery } from "@tanstack/react-query";
-import { vaultService } from "@/services/vaultService";
-import { Brain, Clock, TrendingUp } from "lucide-react";
-import { TooltipProvider, Tooltip, TooltipTrigger, TooltipContent } from "@/components/ui/tooltip";
+import { Brain, Sparkles, Zap } from "lucide-react";
 
-interface NeuralActivity {
-  id: string;
+interface AIAction {
+  action: string;
+  result: string;
   timestamp: Date;
-  message: string;
-  type: 'rebalance' | 'prediction' | 'optimization' | 'insight';
-  impact: {
-    value: number;
-    metric: string;
-  };
-  vault: string;
 }
 
-interface NeuralActivityTickerProps {
-  variant?: 'default' | 'compact';
-}
-
-export function NeuralActivityTicker({ variant = 'default' }: NeuralActivityTickerProps) {
-  const [activities, setActivities] = useState<NeuralActivity[]>([]);
+export function NeuralActivityTicker() {
+  const [actions, setActions] = useState<AIAction[]>([]);
   const [currentIndex, setCurrentIndex] = useState(0);
-  const [isVisible, setIsVisible] = useState(true);
   const [isPaused, setIsPaused] = useState(false);
-  const tickerRef = useRef<HTMLDivElement>(null);
 
-  const { data: vaults } = useQuery({
-    queryKey: ['vaults'],
-    queryFn: vaultService.getAllVaults,
-  });
+  // Generate simulated AI actions
+  useEffect(() => {
+    const aiActions = [
+      {
+        action: "Optimizing liquidity position range",
+        result: "+0.3% APR gain",
+        timestamp: new Date(Date.now() - 35000)
+      },
+      {
+        action: "Analyzing price volatility patterns",
+        result: "Adjusted risk models",
+        timestamp: new Date(Date.now() - 95000)
+      },
+      {
+        action: "Rebalancing token exposure",
+        result: "Mitigated impermanent loss",
+        timestamp: new Date(Date.now() - 170000)
+      },
+      {
+        action: "Monitoring market sentiment",
+        result: "Updated position thresholds",
+        timestamp: new Date(Date.now() - 320000)
+      },
+      {
+        action: "Analyzing pool depth fluctuations",
+        result: "Optimized fee capture",
+        timestamp: new Date(Date.now() - 480000)
+      }
+    ];
 
-  useEffect(() => {
-    if (!vaults || vaults.length === 0) return;
-    
-    const generateActivities = () => {
-      const types = ['rebalance', 'prediction', 'optimization', 'insight'] as const;
-      const mockActivities: NeuralActivity[] = [];
-      
-      vaults.forEach(vault => {
-        const type = types[Math.floor(Math.random() * types.length)];
-        const timestamp = new Date(Date.now() - Math.floor(Math.random() * 15) * 60000);
-        
-        let message = '';
-        let impact = { value: 0, metric: '' };
-        
-        switch (type) {
-          case 'rebalance':
-            const aprChange = (Math.random() * 0.3).toFixed(2);
-            const fees = Math.floor(Math.random() * 300) + 50;
-            message = `Just rebalanced: ${vault.name}, improved APR by +${aprChange}%, earned +$${fees} in fees`;
-            impact = { value: parseFloat(aprChange), metric: 'APR' };
-            break;
-          case 'prediction':
-            const projection = (Math.random() * 1.5).toFixed(1);
-            message = `Forecast: ${vault.name} APR projected +${projection}% in the next 7 days`;
-            impact = { value: parseFloat(projection), metric: 'projected APR' };
-            break;
-          case 'optimization':
-            const riskReduction = Math.floor(Math.random() * 7) + 2;
-            message = `AI Optimization: ${vault.name}, reduced IL risk by ${riskReduction}%`;
-            impact = { value: riskReduction, metric: 'risk reduction' };
-            break;
-          case 'insight':
-            const performance = (Math.random() * 4).toFixed(1);
-            message = `Insight: Users who entered ${vault.name} vault 2 weeks ago are up +${performance}% already`;
-            impact = { value: parseFloat(performance), metric: 'performance' };
-            break;
-        }
-        
-        mockActivities.push({
-          id: `${vault.id}-${type}-${Date.now()}`,
-          timestamp,
-          message,
-          type,
-          impact,
-          vault: vault.id
-        });
-      });
-      
-      return mockActivities.sort(() => Math.random() - 0.5).slice(0, 5);
-    };
-    
-    setActivities(generateActivities());
-    
-    const interval = setInterval(() => {
-      setActivities(generateActivities());
-    }, 120000);
-    
-    return () => clearInterval(interval);
-  }, [vaults]);
-
-  useEffect(() => {
-    if (activities.length === 0 || isPaused) return;
-    
-    const interval = setInterval(() => {
-      setCurrentIndex(prev => (prev + 1) % activities.length);
-    }, 8000);
-    
-    return () => clearInterval(interval);
-  }, [activities.length, isPaused]);
-  
-  useEffect(() => {
-    const hideTimeout = setTimeout(() => {
-      setIsVisible(false);
-    }, 120000);
-    
-    return () => clearTimeout(hideTimeout);
+    setActions(aiActions);
   }, []);
 
-  if (!isVisible || activities.length === 0) return null;
-  
-  const currentActivity = activities[currentIndex];
-  
-  const getIconByType = (type: string) => {
-    switch (type) {
-      case 'rebalance': return <Brain size={18} className="text-nova" />;
-      case 'prediction': return <TrendingUp size={18} className="text-emerald" />;
-      case 'optimization': return <Brain size={18} className="text-orion" />;
-      case 'insight': return <Clock size={18} className="text-emerald" />;
-      default: return <Brain size={18} />;
-    }
-  };
-  
-  const getTimeAgo = (timestamp: Date): string => {
-    const seconds = Math.floor((new Date().getTime() - timestamp.getTime()) / 1000);
+  // Auto-rotate the actions
+  useEffect(() => {
+    if (actions.length === 0) return;
+    
+    const interval = setInterval(() => {
+      if (!isPaused) {
+        setCurrentIndex(prev => (prev + 1) % actions.length);
+      }
+    }, 3500);
+    
+    return () => clearInterval(interval);
+  }, [actions.length, isPaused]);
+
+  if (actions.length === 0) return null;
+
+  const getTimeAgo = (date: Date): string => {
+    const seconds = Math.floor((new Date().getTime() - date.getTime()) / 1000);
+    
     if (seconds < 60) return `${seconds}s ago`;
     const minutes = Math.floor(seconds / 60);
-    return `${minutes}m ago`;
+    if (minutes < 60) return `${minutes}m ago`;
+    const hours = Math.floor(minutes / 60);
+    if (hours < 24) return `${hours}h ago`;
+    return `${Math.floor(hours / 24)}d ago`;
   };
-
-  if (variant === 'compact') {
-    return (
-      <div className="space-y-4">
-        <AnimatePresence mode="wait">
-          {activities.map((activity, index) => (
-            <motion.div
-              key={activity.id}
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -10 }}
-              transition={{ duration: 0.5, delay: index * 0.1 }}
-              className="flex items-start justify-between gap-4 text-sm"
-            >
-              <div className="flex-1">
-                <div className="flex items-center gap-2 mb-1">
-                  {getIconByType(activity.type)}
-                  <span className="font-medium text-white/90">{activity.vault}</span>
-                </div>
-                <p className="text-white/70">{activity.message}</p>
-                {activity.impact && (
-                  <div className="mt-1 flex items-center gap-2">
-                    <span className="text-emerald font-mono">
-                      +{activity.impact.value.toFixed(2)}% {activity.impact.metric}
-                    </span>
-                  </div>
-                )}
-              </div>
-              <span className="text-xs text-white/40 whitespace-nowrap">
-                {getTimeAgo(activity.timestamp)}
-              </span>
-            </motion.div>
-          ))}
-        </AnimatePresence>
-      </div>
-    );
-  }
 
   return (
     <div 
-      ref={tickerRef}
-      className="w-full relative mx-auto mb-6"
+      className="w-full max-w-2xl mx-auto"
       onMouseEnter={() => setIsPaused(true)}
       onMouseLeave={() => setIsPaused(false)}
     >
-      <TooltipProvider>
-        <div className="neural-orange-gradient h-[2px] w-full rounded-full opacity-50 mb-1"></div>
-        <div className="flex items-center mb-1">
-          <div className="relative">
-            <div className="h-2 w-2 bg-nova rounded-full absolute -top-1 -right-1 animate-pulse"></div>
-            <Brain size={16} className="text-nova mr-1" />
+      <div className="bg-black/20 backdrop-blur-md rounded-full border border-white/10 h-12 px-4 flex items-center overflow-hidden">
+        <div className="flex items-center space-x-2 text-nova">
+          <div className="relative flex-shrink-0">
+            <Brain size={18} className="opacity-80" />
+            <motion.div 
+              className="absolute -top-0.5 -right-0.5 h-2 w-2 bg-emerald rounded-full" 
+              animate={{ scale: [1, 1.5, 1] }}
+              transition={{ duration: 2, repeat: Infinity, repeatType: "reverse" }}
+            />
           </div>
-          <span className="text-xs font-medium text-white/70">NODO AI ENGINE</span>
+          <div className="text-xs uppercase tracking-wider font-medium">NODO AI</div>
+          <div className="h-5 w-px bg-white/10" />
         </div>
         
-        <div className="min-h-[24px] relative">
+        <div className="flex-1 relative overflow-hidden px-2">
           <AnimatePresence mode="wait">
             <motion.div
-              key={currentActivity?.id}
-              initial={{ opacity: 0, y: 10 }}
+              key={currentIndex}
+              initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -10 }}
+              exit={{ opacity: 0, y: -20 }}
               transition={{ duration: 0.5 }}
-              className="flex items-center space-x-2"
+              className="flex items-center justify-between w-full text-sm"
             >
-              <span className="text-sm font-medium text-glow-emerald">
-                {currentActivity?.message}
-              </span>
-              <Tooltip>
-                <TooltipTrigger asChild>
-                  <span className="text-xs text-white/40">
-                    {getTimeAgo(currentActivity?.timestamp)}
-                  </span>
-                </TooltipTrigger>
-                <TooltipContent>
-                  <p className="text-xs">AI activity from {currentActivity?.timestamp.toLocaleTimeString()}</p>
-                </TooltipContent>
-              </Tooltip>
+              <div className="flex items-center space-x-2">
+                <Sparkles size={14} className="text-nova" />
+                <span className="text-white/80">{actions[currentIndex].action}</span>
+                <span className="rounded-full px-2 py-0.5 bg-emerald/10 text-emerald text-xs font-medium">
+                  {actions[currentIndex].result}
+                </span>
+              </div>
+              <div className="text-white/50 text-xs font-mono">
+                {getTimeAgo(actions[currentIndex].timestamp)}
+              </div>
             </motion.div>
           </AnimatePresence>
         </div>
-      </TooltipProvider>
+        
+        <div className="flex items-center space-x-2 pl-2">
+          <div className="h-5 w-px bg-white/10" />
+          <motion.div 
+            animate={{ scale: [1, 1.1, 1] }}
+            transition={{ duration: 1.5, repeat: Infinity }}
+            className="w-6 h-6 rounded-full bg-nova/10 flex items-center justify-center"
+          >
+            <Zap size={12} className="text-nova" />
+          </motion.div>
+        </div>
+      </div>
     </div>
   );
 }
