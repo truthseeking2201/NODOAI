@@ -442,9 +442,9 @@ export default function VaultDetail() {
                           'text-emerald'} />
                       </div>
                       <div>
-                        <CardTitle className="text-xl font-bold mb-0.5">How Your Money Grows Safely</CardTitle>
+                        <CardTitle className="text-xl font-bold mb-0.5">How Your Investment Works</CardTitle>
                         <CardDescription className="text-sm text-white/60">
-                          Smart AI approach with extra safety features
+                          Investment strategy and security features
                         </CardDescription>
                       </div>
                     </div>
@@ -481,7 +481,7 @@ export default function VaultDetail() {
                               vault.type === 'orion' ? 'text-orion' :
                               'text-emerald'
                             } />
-                            Smart Money Growth Approach
+                            Investment Strategy
                           </h3>
                           <p className="text-text-secondary text-sm leading-relaxed">
                             {vault.strategy}
@@ -495,13 +495,13 @@ export default function VaultDetail() {
                                   vault.type === 'orion' ? 'text-orion' :
                                   'text-emerald'
                                 } />
-                                AI Power Level
+                                Processing Power
                               </div>
                               <div className="text-base font-mono font-medium">
                                 {vault.type === 'nova' ? '24' : vault.type === 'orion' ? '18' : '12'} Layers
                               </div>
                               <div className="mt-1 text-[10px] text-white/50">
-                                More layers means smarter money management
+                                Advanced analysis capabilities
                               </div>
                             </div>
 
@@ -512,13 +512,13 @@ export default function VaultDetail() {
                                   vault.type === 'orion' ? 'text-orion' :
                                   'text-emerald'
                                 } />
-                                AI Speed
+                                System Speed
                               </div>
                               <div className="text-base font-mono font-medium">
                                 {vault.type === 'nova' ? '128' : vault.type === 'orion' ? '96' : '64'} Units
                               </div>
                               <div className="mt-1 text-[10px] text-white/50">
-                                More units means faster decision-making
+                                Faster processing for better results
                               </div>
                             </div>
                           </div>
@@ -531,7 +531,7 @@ export default function VaultDetail() {
                               vault.type === 'orion' ? 'text-orion' :
                               'text-emerald'
                             } />
-                            Investment Comfort Level
+                            Risk Assessment
                           </h3>
                           <div className="flex items-center gap-4">
                             <span className={`
@@ -560,14 +560,14 @@ export default function VaultDetail() {
                                 vault.type === 'orion' ? 'text-orion' :
                                 'text-emerald'
                               } />
-                              <span className="text-sm font-medium text-white">How We Keep Your Money Safe</span>
+                              <span className="text-sm font-medium text-white">Security Approach</span>
                             </div>
                             <p className="text-xs text-white/70">
                               {vault.type === 'nova' ?
-                                'Our AI constantly watches the market for any sudden changes or problems. If anything unusual happens, it can react in less than a second to protect your money.' :
+                                'Our system monitors market conditions continuously and responds quickly to protect your investment during market volatility.' :
                                 vault.type === 'orion' ?
-                                'Our smart system adjusts how it invests based on market conditions. It predicts market changes and adapts quickly to keep your investment growing safely.' :
-                                'This vault puts safety first. If the market looks risky, our AI can pause trading completely until things settle down, keeping your money protected.'
+                                'This vault adapts investment strategies based on market conditions, balancing growth potential with appropriate risk management.' :
+                                'This conservative vault prioritizes capital preservation first, automatically adjusting positions to minimize risk during uncertain markets.'
                               }
                             </p>
                           </div>
@@ -649,10 +649,10 @@ export default function VaultDetail() {
                         </div>
                         <div className="flex-1">
                           <CardTitle className="text-xl font-bold flex items-center justify-between">
-                            <span>Your Magic Money Ticket ✨</span>
+                            <span>Your Vault Tokens</span>
                           </CardTitle>
                           <CardDescription className="text-sm text-white/60">
-                            Tokens that grow while you chill
+                            Investment position tracking
                           </CardDescription>
                         </div>
                         <TooltipProvider>
@@ -663,12 +663,9 @@ export default function VaultDetail() {
                               </button>
                             </TooltipTrigger>
                             <TooltipContent className="max-w-[300px] p-4 bg-[#0c0c10]/95 border border-white/20 text-white">
-                              <h4 className="font-medium text-sm mb-2 text-amber-500">About Your Magic Money Ticket 🪄</h4>
+                              <h4 className="font-medium text-sm mb-2 text-amber-500">About Your Vault Tokens</h4>
                               <p className="text-sm text-white/80">
-                                Think of this as your golden ticket! When you deposit money, you get these special
-                                digital tickets that show your share. Best part? Our AI helps them grow in value automatically -
-                                you just sit back and relax! When you want your cash back, just trade in your tickets.
-                                They're stored in your personal wallet and super secure.
+                                These tokens represent your share of the vault. They're stored securely in your wallet and their value increases as the vault generates returns. You can redeem them anytime to withdraw your funds.
                               </p>
                             </TooltipContent>
                           </Tooltip>
@@ -679,18 +676,18 @@ export default function VaultDetail() {
                     <CardContent className="p-6 pt-0 space-y-5">
                       <div className="grid grid-cols-2 gap-4 mb-1">
                         <div className="bg-white/5 p-3 rounded-xl border border-white/10">
-                          <p className="text-xs text-white/60 mb-1">Money In</p>
+                          <p className="text-xs text-white/60 mb-1">Deposit</p>
                           <p className="text-base font-medium font-mono">$1000.00</p>
                         </div>
                         <div className="bg-white/5 p-3 rounded-xl border border-white/10">
-                          <p className="text-xs text-white/60 mb-1">Tiny Fee</p>
+                          <p className="text-xs text-white/60 mb-1">Fee</p>
                           <p className="text-base font-medium font-mono">$12.30</p>
                         </div>
                       </div>
 
                       <div className="space-y-2 bg-white/5 p-3 rounded-xl border border-white/10">
                         <div className="flex justify-between items-center">
-                          <p className="text-xs text-white/60">Freedom Day: <span className="text-white/80">{Math.ceil((unlockTime.getTime() - Date.now()) / (1000 * 60 * 60 * 24))} days left</span></p>
+                          <p className="text-xs text-white/60">Unlock Period: <span className="text-white/80">{Math.ceil((unlockTime.getTime() - Date.now()) / (1000 * 60 * 60 * 24))} days left</span></p>
                           <p className="text-xs font-medium font-mono">{unlockProgress}% complete</p>
                         </div>
                         <div className="h-1.5 bg-white/20 rounded-full overflow-hidden">
@@ -740,7 +737,7 @@ export default function VaultDetail() {
                               {animatedValue.toFixed(2)}
                             </div>
                             <div className="text-xs text-white/60">
-                              1 ticket = $1 of awesome
+                              Token balance
                             </div>
                           </div>
                         </div>
@@ -748,11 +745,11 @@ export default function VaultDetail() {
 
                       <div className="bg-white/5 p-3 rounded-xl border border-white/10 space-y-2">
                         <div className="flex justify-between text-xs">
-                          <span className="text-white/60">Happy Investors</span>
+                          <span className="text-white/60">Total Users</span>
                           <span className="font-mono">1,203</span>
                         </div>
                         <div className="flex justify-between text-xs">
-                          <span className="text-white/60">Magic Address</span>
+                          <span className="text-white/60">Contract Address</span>
                           <span className="font-mono text-white/80 flex items-center">
                             0xAB12...3456
                             <ExternalLink className="ml-1 h-3 w-3 text-white/60" />

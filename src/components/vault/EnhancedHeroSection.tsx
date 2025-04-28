@@ -74,7 +74,7 @@ export function EnhancedHeroSection() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.3 }}
         >
-          <span className="text-transparent bg-clip-text bg-gradient-to-r from-nova via-amber-500 to-orange-500">Smart Investing</span>
+          <span className="text-transparent bg-clip-text bg-gradient-to-r from-nova via-amber-500 to-orange-500">Smart Yield Vaults</span>
         </motion.h1>
 
         <motion.p
@@ -83,7 +83,7 @@ export function EnhancedHeroSection() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.4 }}
         >
-          AI-powered vaults that grow your crypto while you sleep
+          Optimize your crypto returns with advanced technology
         </motion.p>
 
         {/* Stats row */}

@@ -204,10 +204,10 @@ export default function EnhancedVaultCatalog() {
                 </div>
                 <div>
                   <h2 className="text-2xl font-bold text-white mb-0.5">
-                    AI-Powered <span className="text-transparent bg-clip-text bg-gradient-to-r from-nova via-amber-500 to-orange-500">Yield Vaults</span>
+                    <span className="text-transparent bg-clip-text bg-gradient-to-r from-nova via-amber-500 to-orange-500">Yield Vaults</span>
                   </h2>
                   <p className="text-white/60 text-sm">
-                    Neural networks optimizing crypto yields 24/7
+                    Technology-optimized returns for your assets
                   </p>
                 </div>
               </div>
@@ -258,72 +258,68 @@ export default function EnhancedVaultCatalog() {
               </div>
             </div>
 
-            {/* Vault Grid with Loading and Error States */}
-            {isLoading ? (
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {Array.from({ length: 6 }).map((_, index) => (
-                  <LoadingState
-                    key={index}
-                    type="card"
-                    height={360}
-                    className="w-full"
-                  />
-                ))}
-              </div>
-            ) : error ? (
-              <ErrorState
-                type="error"
-                title="Unable to Load Vaults"
-                message="We encountered an issue while loading the vaults. Please try again later."
-                onRetry={() => refetch()}
-              />
-            ) : filteredVaults.length > 0 ? (
-              <EnhancedVaultGrid
-                vaults={filteredVaults}
-                isConnected={isConnected}
-                balance={balance}
-                activeVaultId={activeVaultId}
-                onVaultHover={handleVaultHover}
-              />
-            ) : (
-              <div className="bg-black/30 border border-white/10 rounded-xl p-10 text-center">
-                <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-white/5 flex items-center justify-center">
-                  <Search size={24} className="text-white/40" />
+            {/* Main Vault Catalog Grid */}
+            <div className="mt-2">
+              {isLoading ? (
+                <LoadingState type="inline" className="flex justify-center py-12" />
+              ) : error ? (
+                <ErrorState
+                  type="error"
+                  title="Unable to Load Vaults"
+                  message="We're experiencing technical difficulties. Please try again later."
+                  onRetry={refetch}
+                />
+              ) : filteredVaults.length === 0 ? (
+                <div className="text-center py-12">
+                  <p className="text-white/70 mb-4">No vaults match your filters</p>
+                  <button
+                    onClick={() => {
+                      setActiveFilter('All');
+                      setSearchQuery('');
+                    }}
+                    className="px-4 py-2 text-sm bg-white/10 hover:bg-white/20 rounded-lg transition-colors text-white"
+                  >
+                    Reset filters
+                  </button>
                 </div>
-                <h3 className="text-xl font-medium mb-2">No Vaults Found</h3>
-                <p className="text-white/60 max-w-md mx-auto mb-6">
-                  {searchQuery
-                    ? `No vaults match your search query "${searchQuery}". Try a different search term.`
-                    : "There are no vaults available with the selected filters. Please try different criteria."
-                  }
-                </p>
-                <button
-                  onClick={() => {
-                    setSearchQuery("");
-                    setActiveFilter("All");
-                  }}
-                  className="px-4 py-2 bg-white/10 hover:bg-white/20 rounded-lg text-white/90 transition-colors"
-                >
-                  Reset Filters
-                </button>
-              </div>
-            )}
+              ) : (
+                <EnhancedVaultGrid
+                  vaults={filteredVaults}
+                  isConnected={isConnected}
+                  balance={balance}
+                  activeVaultId={activeVaultId}
+                  onVaultHover={handleVaultHover}
+                />
+              )}
+            </div>
 
-            {/* NODOAIx Token Promotional Banner */}
-            <div className="mt-12 mb-8">
+            {/* NODOAIx Promo Banner */}
+            <div className="mt-12 px-4">
               <NODOAIxPromoBanner />
             </div>
           </div>
         </motion.section>
 
-        {/* Activity Feed Section */}
+        {/* Activity Section - with neuron visualization */}
         <motion.section
+          className="py-12 px-4 mt-4"
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.8, duration: 0.8 }}
-          className="pb-12 px-4"
+          transition={{ delay: 0.5, duration: 0.8 }}
         >
           <div className="max-w-screen-xl mx-auto">
+            <div className="flex items-center gap-3 mb-6">
+              <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-nova/20 to-transparent flex items-center justify-center">
+                <Zap size={20} className="text-nova" />
+              </div>
+              <div>
+                <h2 className="text-2xl font-bold text-white">Latest Activities</h2>
+                <p className="text-white/60 text-sm">
+                  Recent transactions in the vaults
+                </p>
+              </div>
+            </div>
+
             <EnhancedActivitySection />
           </div>
         </motion.section>
