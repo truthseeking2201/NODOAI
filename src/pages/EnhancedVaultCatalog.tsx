@@ -345,51 +345,51 @@ export default function EnhancedVaultCatalog() {
               <div>
                 <div className="flex items-center gap-2 mb-3">
                   <Brain size={16} className="text-nova" />
-                  <h3 className="text-sm font-medium">Super-Smart Security</h3>
+                  <h3 className="text-sm font-medium">Advanced Security</h3>
                 </div>
                 <p className="text-xs text-white/50">
-                  Our AI watches your money 24/7, spots trouble before it happens, and keeps your crypto safe. Like having a tireless guardian for your assets!
+                  Our system continuously monitors investments and market conditions to identify potential risks before they impact performance, providing robust protection for your assets.
                 </p>
               </div>
 
               <div>
                 <div className="flex items-center gap-2 mb-3">
                   <Network size={16} className="text-orion" />
-                  <h3 className="text-sm font-medium">Money-Making Brain</h3>
+                  <h3 className="text-sm font-medium">Optimized Returns</h3>
                 </div>
                 <p className="text-xs text-white/50">
-                  Our AI crunches massive data to find the best profits for you. It's like having a financial genius working non-stop to maximize your earnings!
+                  Our technology analyzes market data to identify opportunities for maximizing yields. The system works continuously to optimize investment strategies for better returns.
                 </p>
               </div>
 
               <div>
                 <div className="flex items-center gap-2 mb-3">
                   <Lock size={16} className="text-emerald" />
-                  <h3 className="text-sm font-medium">Sleep-Easy Protection</h3>
+                  <h3 className="text-sm font-medium">Risk Management</h3>
                 </div>
                 <p className="text-xs text-white/50">
-                  Balance risk and reward perfectly with our smart system. Choose how adventurous you want to be, and our AI handles the rest. No stress, just results!
+                  We balance risk and reward with a sophisticated approach to investments. Select your preferred risk profile and our system will manage positions accordingly to match your strategy.
                 </p>
               </div>
             </div>
 
             <div className="text-center border-t border-white/5 pt-6">
               <p className="text-xs text-white/40 max-w-xl mx-auto">
-                NODO AI optimizes yield performance through advanced neural networks and machine learning algorithms.
-                Past performance is not indicative of future results. The AI models continuously adapt to changing market conditions.
+                NODO optimizes yield performance through advanced technology and algorithmic strategies.
+                Past performance is not indicative of future results. Our systems continuously adapt to changing market conditions.
               </p>
               <div className="flex items-center justify-center mt-4 space-x-4">
                 <div className="text-[10px] text-white/30 flex items-center gap-1">
                   <div className="w-2 h-2 rounded-full bg-nova/50"></div>
-                  <span>AI Model v2.4</span>
+                  <span>System v2.4</span>
                 </div>
                 <div className="text-[10px] text-white/30 flex items-center gap-1">
                   <div className="w-2 h-2 rounded-full bg-orion/50"></div>
-                  <span>Neural Optimizer</span>
+                  <span>Optimization Engine</span>
                 </div>
                 <div className="text-[10px] text-white/30 flex items-center gap-1">
                   <div className="w-2 h-2 rounded-full bg-emerald/50"></div>
-                  <span>Risk Engine v1.8</span>
+                  <span>Risk Framework v1.8</span>
                 </div>
               </div>
             </div>
