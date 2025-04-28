@@ -18,6 +18,8 @@ import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { formatDistanceToNow } from "date-fns";
+import { TransactionHistory } from "@/types/vault";
+import { TxDrawer } from "@/components/dashboard/TxDrawer";
 
 interface AIActivity {
   id: string;
@@ -48,6 +50,10 @@ export function EnhancedActivitySection() {
   const [aiActivities] = useState<AIActivity[]>(generateMockAIActivities());
   const [userActivities] = useState<UserActivity[]>(generateMockUserActivities());
   const detailsRef = useRef<HTMLDivElement>(null);
+
+  // Transaction drawer state
+  const [selectedTx, setSelectedTx] = useState<TransactionHistory | null>(null);
+  const [isTxDrawerOpen, setIsTxDrawerOpen] = useState(false);
 
   // Close details panel when clicking outside
   useEffect(() => {
@@ -171,6 +177,19 @@ export function EnhancedActivitySection() {
     ];
 
     return activities;
+  }
+
+  // Convert UserActivity to TransactionHistory format for TxDrawer compatibility
+  function convertToTransactionHistory(activity: UserActivity): TransactionHistory {
+    return {
+      id: activity.id,
+      type: activity.type,
+      amount: activity.amount,
+      vaultId: activity.vault.toLowerCase().replace('-', '-'),
+      vaultName: activity.vault,
+      timestamp: activity.timestamp.toISOString(),
+      status: activity.status
+    };
   }
 
   function getTimeAgo(date: Date): string {
@@ -340,10 +359,15 @@ export function EnhancedActivitySection() {
                     {userActivities.map((activity, index) => (
                       <motion.div
                         key={activity.id}
-                        className="p-3 rounded-lg bg-white/5 border border-white/10 hover:bg-white/10 transition-colors"
+                        className="p-3 rounded-lg bg-white/5 border border-white/10 hover:bg-white/10 transition-colors cursor-pointer"
                         initial={{ opacity: 0, y: 10 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ delay: index * 0.05, duration: 0.3 }}
+                        onClick={() => {
+                          const tx = convertToTransactionHistory(activity);
+                          setSelectedTx(tx);
+                          setIsTxDrawerOpen(true);
+                        }}
                       >
                         <div className="flex justify-between items-start">
                           <div className="flex items-start gap-3">
@@ -370,6 +394,7 @@ export function EnhancedActivitySection() {
                               </div>
                             </div>
                           </div>
+                          <ChevronRight size={16} className="text-white/30 mt-2" />
                         </div>
                       </motion.div>
                     ))}
@@ -514,6 +539,13 @@ export function EnhancedActivitySection() {
           }}
         />
       </div>
+
+      {/* Transaction Details Drawer */}
+      <TxDrawer
+        tx={selectedTx}
+        open={isTxDrawerOpen}
+        onClose={() => setIsTxDrawerOpen(false)}
+      />
     </div>
   );
 }

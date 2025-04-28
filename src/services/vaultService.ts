@@ -123,8 +123,46 @@ const mockUserInvestments: UserInvestment[] = [
   }
 ];
 
-// Mock transaction history - Remove NODOAIx transactions
+// Mock transaction history - Enhanced with more recent transactions for better demo
 const mockTransactions: TransactionHistory[] = [
+  // Recent transactions (matching those in EnhancedActivitySection)
+  {
+    id: "user-1",
+    type: "deposit",
+    amount: 5000,
+    vaultId: "deep-sui",
+    vaultName: "DEEP-SUI",
+    timestamp: new Date(Date.now() - 2 * 60 * 60 * 1000).toISOString(),
+    status: "completed"
+  },
+  {
+    id: "user-2",
+    type: "deposit",
+    amount: 2500,
+    vaultId: "cetus-sui",
+    vaultName: "CETUS-SUI",
+    timestamp: new Date(Date.now() - 5 * 60 * 60 * 1000).toISOString(),
+    status: "completed"
+  },
+  {
+    id: "user-3",
+    type: "withdraw",
+    amount: 1200,
+    vaultId: "sui-usdc",
+    vaultName: "SUI-USDC",
+    timestamp: new Date(Date.now() - 48 * 60 * 60 * 1000).toISOString(),
+    status: "completed"
+  },
+  {
+    id: "user-4",
+    type: "deposit",
+    amount: 3000,
+    vaultId: "sui-usdc",
+    vaultName: "SUI-USDC",
+    timestamp: new Date(Date.now() - 72 * 60 * 60 * 1000).toISOString(),
+    status: "completed"
+  },
+  // Older transactions
   {
     id: "tx1",
     type: "deposit",
@@ -214,50 +252,8 @@ export class VaultService {
     }
   ];
 
-  private transactions: Transaction[] = [
-    {
-      id: 'tx-1',
-      type: 'deposit',
-      amount: 3500,
-      timestamp: new Date('2023-11-20T10:30:00'),
-      vaultName: 'DEEP-SUI'
-    },
-    {
-      id: 'tx-2',
-      type: 'deposit',
-      amount: 5000,
-      timestamp: new Date('2023-11-15T14:20:00'),
-      vaultName: 'CETUS-SUI'
-    },
-    {
-      id: 'tx-3',
-      type: 'withdraw',
-      amount: 1200,
-      timestamp: new Date('2023-11-10T09:45:00'),
-      vaultName: 'SUI-USDC'
-    },
-    {
-      id: 'tx-4',
-      type: 'deposit',
-      amount: 2500,
-      timestamp: new Date('2023-11-05T16:15:00'),
-      vaultName: 'DEEP-SUI'
-    },
-    {
-      id: 'tx-5',
-      type: 'withdraw',
-      amount: 1800,
-      timestamp: new Date('2023-10-28T11:30:00'),
-      vaultName: 'CETUS-SUI'
-    },
-    {
-      id: 'tx-6',
-      type: 'deposit',
-      amount: 7500,
-      timestamp: new Date('2023-10-20T13:10:00'),
-      vaultName: 'SUI-USDC'
-    }
-  ];
+  // Use the shared mockTransactions for consistency between Vault Catalog and Dashboard
+  private sharedTransactionHistory: TransactionHistory[] = mockTransactions;
 
   // Get all vaults
   async getVaults(): Promise<Vault[]> {
@@ -293,10 +289,10 @@ export class VaultService {
   // Get transaction history for a specific vault
   async getTransactionHistory(vaultId?: string): Promise<TransactionHistory[]> {
     if (!vaultId) {
-      return Promise.resolve(mockTransactions);
+      return Promise.resolve(this.sharedTransactionHistory);
     }
 
-    const filteredTransactions = mockTransactions.filter(tx => tx.vaultId === vaultId);
+    const filteredTransactions = this.sharedTransactionHistory.filter(tx => tx.vaultId === vaultId);
     return Promise.resolve(filteredTransactions);
   }
 
@@ -307,15 +303,32 @@ export class VaultService {
       throw new Error('Vault not found');
     }
 
+    // Generate unique transaction ID
+    const txId = `tx-${Math.random().toString(36).substr(2, 9)}`;
+    const now = new Date();
+
+    // Create transaction for legacy API
     const transaction: Transaction = {
-      id: `tx-${Math.random().toString(36).substr(2, 9)}`,
+      id: txId,
       type: 'deposit',
       amount,
-      timestamp: new Date(),
+      timestamp: now,
       vaultName: vault.name
     };
 
-    this.transactions.push(transaction);
+    // Also create a TransactionHistory record for the shared history
+    const txHistory: TransactionHistory = {
+      id: txId,
+      type: 'deposit',
+      amount,
+      vaultId: vaultId,
+      vaultName: vault.name,
+      timestamp: now.toISOString(),
+      status: 'completed'
+    };
+
+    // Add to shared transaction history
+    this.sharedTransactionHistory.unshift(txHistory);
 
     // Update TVL
     vault.tvl += amount;
@@ -345,15 +358,32 @@ export class VaultService {
       throw new Error('Insufficient funds in vault');
     }
 
+    // Generate unique transaction ID
+    const txId = `tx-${Math.random().toString(36).substr(2, 9)}`;
+    const now = new Date();
+
+    // Create transaction for legacy API
     const transaction: Transaction = {
-      id: `tx-${Math.random().toString(36).substr(2, 9)}`,
+      id: txId,
       type: 'withdraw',
       amount,
-      timestamp: new Date(),
+      timestamp: now,
       vaultName: vault.name
     };
 
-    this.transactions.push(transaction);
+    // Also create a TransactionHistory record for the shared history
+    const txHistory: TransactionHistory = {
+      id: txId,
+      type: 'withdraw',
+      amount,
+      vaultId: vaultId,
+      vaultName: vault.name,
+      timestamp: now.toISOString(),
+      status: 'completed'
+    };
+
+    // Add to shared transaction history
+    this.sharedTransactionHistory.unshift(txHistory);
 
     // Update TVL
     vault.tvl -= amount;
@@ -363,16 +393,32 @@ export class VaultService {
 
   // Redeem NODOAIx tokens
   async redeemNODOAIxTokens(amount: number): Promise<Transaction> {
-    // For NODOAIx token redemption, create a special transaction
+    // Generate unique transaction ID
+    const txId = `tx-${Math.random().toString(36).substr(2, 9)}`;
+    const now = new Date();
+
+    // Create transaction for legacy API
     const transaction: Transaction = {
-      id: `tx-${Math.random().toString(36).substr(2, 9)}`,
+      id: txId,
       type: 'withdraw',
       amount,
-      timestamp: new Date(),
+      timestamp: now,
       vaultName: 'NODOAIx Tokens'
     };
 
-    this.transactions.push(transaction);
+    // Also create a TransactionHistory record for the shared history
+    const txHistory: TransactionHistory = {
+      id: txId,
+      type: 'withdraw',
+      amount,
+      vaultId: 'nodoaix-tokens',
+      vaultName: 'NODOAIx Tokens',
+      timestamp: now.toISOString(),
+      status: 'completed'
+    };
+
+    // Add to shared transaction history
+    this.sharedTransactionHistory.unshift(txHistory);
 
     return Promise.resolve(transaction);
   }

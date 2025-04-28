@@ -7,6 +7,7 @@ import { EnhancedVaultGrid } from "@/components/vault/EnhancedVaultGrid";
 import { EnhancedActivitySection } from "@/components/vault/EnhancedActivitySection";
 import { EnhancedNeuralActivityTicker } from "@/components/vault/EnhancedNeuralActivityTicker";
 import { NeuralNetworkBackground } from "@/components/vault/NeuralNetworkBackground";
+import { NODOAIxPromoBanner } from "@/components/vault/NODOAIxPromoBanner";
 import { useWallet } from "@/hooks/useWallet";
 import { VaultData } from "@/types/vault";
 import { adaptVaultsToVaultData } from "@/utils/vaultAdapter";
@@ -307,6 +308,11 @@ export default function EnhancedVaultCatalog() {
                 </button>
               </div>
             )}
+
+            {/* NODOAIx Token Promotional Banner */}
+            <div className="mt-12 mb-8">
+              <NODOAIxPromoBanner />
+            </div>
           </div>
         </motion.section>
 
