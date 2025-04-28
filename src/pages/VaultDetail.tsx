@@ -20,11 +20,8 @@ import { VaultSecurityInfo } from "@/components/vault/VaultSecurityInfo";
 import { VaultData } from "@/types/vault";
 import { motion, useScroll, useTransform, AnimatePresence } from "framer-motion";
 import { NeuralNetworkBackground } from "@/components/vault/NeuralNetworkBackground";
-import { AIOptimizationVisualizer } from "@/components/vault/AIOptimizationVisualizer";
-import { AIMetricsPanel } from "@/components/vault/AIMetricsPanel";
 import { AITransactionTicker } from "@/components/vault/AITransactionTicker";
 import { AIStrategyVisualizer } from "@/components/vault/AIStrategyVisualizer";
-import { AIPerformanceInsights } from "@/components/vault/AIPerformanceInsights";
 import { AIQueryAssistant } from "@/components/vault/AIQueryAssistant";
 import { AIActivityNotification } from "@/components/vault/AIActivityNotification";
 import {
@@ -63,16 +60,6 @@ export default function VaultDetail() {
   const [wasManuallyClosedRef, setWasManuallyClosedRef] = useState(false);
   const [aiInsight, setAiInsight] = useState<string | null>(null);
   const [showAiInsight, setShowAiInsight] = useState(false);
-  const [showAiPerformanceInsights, setShowAiPerformanceInsights] = useState(() => {
-    // Check localStorage for saved preference, default to true if not found
-    const savedPreference = localStorage.getItem('showAiInsightsPanel');
-    return savedPreference === null ? true : savedPreference === 'true';
-  });
-
-  // Save AI insights panel visibility preference to localStorage
-  useEffect(() => {
-    localStorage.setItem('showAiInsightsPanel', showAiPerformanceInsights.toString());
-  }, [showAiPerformanceInsights]);
 
   // Animation effect for NODOAIx Token count
   useEffect(() => {
@@ -629,33 +616,12 @@ export default function VaultDetail() {
                 </div>
               </motion.div>
 
-              {/* AI Optimization Visualizer */}
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.5, duration: 0.8 }}
-              >
-                <AIOptimizationVisualizer
-                  vaultType={vault.type}
-                  onOptimizationEvent={handleOptimizationEvent}
-                />
-              </motion.div>
-
-              {/* AI Metrics Panel */}
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.6, duration: 0.8 }}
-              >
-                <AIMetricsPanel vaultType={vault.type} />
-              </motion.div>
-
               {/* NODOAIx Token Card */}
               <motion.div
                 ref={nodoaixCardRef}
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.7, duration: 0.8 }}
+                transition={{ delay: 0.5, duration: 0.8 }}
                 className="relative overflow-hidden rounded-xl border border-white/20 shadow-lg"
               >
                 {/* Gradient background based on vault type */}
@@ -802,27 +768,6 @@ export default function VaultDetail() {
         </motion.div>
       </div>
 
-      {/* Add AIPerformanceInsights before the Performance section */}
-      {showAiPerformanceInsights && (
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          exit={{ opacity: 0, y: 20 }}
-          transition={{ delay: 0.9, duration: 0.8 }}
-          className={`fixed bottom-20 right-20 z-50 w-96 hidden lg:block ${
-            vault.type === 'nova' ? 'neural-glow-nova' :
-            vault.type === 'orion' ? 'neural-glow-orion' :
-            'neural-glow-emerald'
-          } rounded-xl`}
-        >
-          <AIPerformanceInsights
-            vaultType={vault.type}
-            apr={vault.apr}
-            onClose={() => setShowAiPerformanceInsights(false)}
-          />
-        </motion.div>
-      )}
-
       {/* Add AI Activity Notifications */}
       <AIActivityNotification
         vaultType={vault.type}
@@ -839,24 +784,6 @@ export default function VaultDetail() {
         styles={styles}
         onActionClick={handleActionClick}
       />
-
-      {/* Button to re-show AI Insights panel if hidden */}
-      {!showAiPerformanceInsights && (
-        <motion.button
-          initial={{ opacity: 0, scale: 0.9 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 0.3 }}
-          onClick={() => setShowAiPerformanceInsights(true)}
-          className={`fixed bottom-20 right-6 z-40 p-3 rounded-full ${
-            vault.type === 'nova' ? 'bg-nova hover:bg-nova/90' :
-            vault.type === 'orion' ? 'bg-orion hover:bg-orion/90' :
-            'bg-emerald hover:bg-emerald/90'
-          } text-white shadow-lg`}
-          aria-label="Show AI insights"
-        >
-          <Brain size={20} />
-        </motion.button>
-      )}
 
       <DepositDrawer
         open={isDepositDrawerOpen}
